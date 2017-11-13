@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "9413062845",
+    "firebase_url": "https://idlegame-fec0b.firebaseio.com",
+    "project_id": "idlegame-fec0b",
+    "storage_bucket": "idlegame-fec0b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:9413062845:android:637670a993b0af73",
+        "android_client_info": {
+          "package_name": "com.example.alucardc.idlegame"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "9413062845-v0rr86kl2l6ufo29ikh888mpovch70fp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.alucardc.idlegame",
+            "certificate_hash": "bfe4268751e5b9b1d1f33ecbb19e67f40556ef95"
+          }
+        },
+        {
+          "client_id": "9413062845-434c8q4clqi8ijo92n3i9r52vupmf3av.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDV_LWYNzOSCSE2V95epYr3nlTsLVljsXQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "9413062845-434c8q4clqi8ijo92n3i9r52vupmf3av.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
