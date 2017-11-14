@@ -21,7 +21,7 @@ public class mobs {
 
     class mobs002{
         String[] name = {"Orc","獸人"};
-        int healthPoint = 20;               //需要點擊次數
+        int healthPoint = 30;               //需要點擊次數
         int actionBarTime = 5000;           //動作條時間,毫秒
         int guardPoint = 1;                 //破防需要次數
         int elementTypes = 2;               //題目屬性種類
@@ -35,7 +35,7 @@ public class mobs {
 
     class mobs003{
         String[] name = {"Peco","大嘴鳥"};
-        int healthPoint = 10;               //需要點擊次數
+        int healthPoint = 15;               //需要點擊次數
         int actionBarTime = 5000;           //動作條時間,毫秒
         int guardPoint = 1;                 //破防需要次數
         int elementTypes = 2;               //題目屬性種類
