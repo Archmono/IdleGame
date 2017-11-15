@@ -1,19 +1,14 @@
 package com.example.alucardc.idlegame;
 
-import android.animation.Animator;
-import android.animation.ObjectAnimator;
-import android.app.ProgressDialog;
-import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.WindowManager;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
     ProgressBar PB;
     int i =5;
@@ -30,7 +25,6 @@ public class MainActivity extends AppCompatActivity {
 
         GameTest gameTest = new GameTest(30,2,6,R.drawable.mobs1002);
         gameTest.count();
-        test();
 
         //IEnumerator & yield 之前C#做時間漸變的關鍵字
     }

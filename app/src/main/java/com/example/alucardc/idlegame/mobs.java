@@ -7,14 +7,7 @@ import android.support.v7.app.AppCompatActivity;
  * Created by auser on 2017/11/14.
  */
 
-public class mobs extends AppCompatActivity {
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.mobs);
-
-    }
+public class mobs {
 
 
     public static class Mobs001{
