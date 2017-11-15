@@ -1,14 +1,19 @@
 package com.example.alucardc.idlegame;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
+import android.app.ProgressDialog;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.WindowManager;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
 
     ProgressBar PB;
     int i =5;
@@ -25,6 +30,7 @@ public class MainActivity extends AppCompatActivity{
 
         GameTest gameTest = new GameTest(30,2,6,R.drawable.mobs1002);
         gameTest.count();
+//        test();
 
         //IEnumerator & yield 之前C#做時間漸變的關鍵字
     }
@@ -50,9 +56,9 @@ public class MainActivity extends AppCompatActivity{
             for (int i=0; i < setTypes.length; i++) {
                 int tamp = elementTypesCons[i];
                 int randMob = (int) (Math.random() * 6 + 1);
-                setTypes[i] = elementTypesCons[randMob];
-                elementTypesCons[randMob] = tamp;
-                //Log.d("count",setTypes[i]+"");
+                setTypes[i] = elementTypesCons[randMob-1];
+                elementTypesCons[randMob-1] = tamp;
+//                Log.d("count",setTypes[i]+"");
             }
             for (int i=0; i < elementQuestionRange; i++)
             {
@@ -63,26 +69,26 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
-    void test()
-    {
-        int randMob = (int)(Math.random()*3+1);
-
-        switch (randMob) {
-            case 1:
-                mobs.Mobs001 mobs001 = new mobs.Mobs001();
-                mobsImage.setImageResource(mobs001.image);
-                mobsName.setText(mobs001.name[1]);
-                break;
-            case 2:
-                mobs.Mobs002 mobs002 = new mobs.Mobs002();
-                mobsImage.setImageResource(mobs002.image);
-                mobsName.setText(mobs002.name[1]);
-                break;
-            case 3:
-                mobs.Mobs003 mobs003 = new mobs.Mobs003();
-                mobsImage.setImageResource(mobs003.image);
-                mobsName.setText(mobs003.name[1]);
-                break;
-        }
-    }
+//    void test()
+//    {
+//        int randMob = (int)(Math.random()*3+1);
+//
+//        switch (randMob) {
+//            case 1:
+//                mobs.Mobs001 mobs001 = new mobs.Mobs001();
+//                mobsImage.setImageResource(mobs001.image);
+//                mobsName.setText(mobs001.name[1]);
+//                break;
+//            case 2:
+//                mobs.Mobs002 mobs002 = new mobs.Mobs002();
+//                mobsImage.setImageResource(mobs002.image);
+//                mobsName.setText(mobs002.name[1]);
+//                break;
+//            case 3:
+//                mobs.Mobs003 mobs003 = new mobs.Mobs003();
+//                mobsImage.setImageResource(mobs003.image);
+//                mobsName.setText(mobs003.name[1]);
+//                break;
+//        }
+//    }
 }
