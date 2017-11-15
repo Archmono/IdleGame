@@ -1,11 +1,23 @@
 package com.example.alucardc.idlegame;
 
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+
 /**
  * Created by auser on 2017/11/14.
  */
 
-public class mobs {
-    class mobs001{
+public class mobs extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.mobs);
+
+    }
+
+
+    public static class Mobs001{
         String[] name = {"Poring","波利"};
         int healthPoint = 10;               //需要點擊次數
         int actionBarTime = 5000;           //動作條時間,毫秒
@@ -17,9 +29,10 @@ public class mobs {
         double differenceRange = 0.1;       //個體差異程度,正負 min(基礎值*(1-差異度)) max(基礎*(1+差異度))
         int weakPointEffect = 2000;         //弱點屬性對於暈眩時間增加幅度,毫秒
         double damage = 1;                  //對玩家傷害
+        int image = R.drawable.mobs1002;
     }
 
-    class mobs002{
+    public static class Mobs002{
         String[] name = {"Orc","獸人"};
         int healthPoint = 30;               //需要點擊次數
         int actionBarTime = 5000;           //動作條時間,毫秒
@@ -31,9 +44,10 @@ public class mobs {
         double differenceRange = 0.2;       //個體差異程度,正負 min(基礎值*(1-差異度)) max(基礎*(1+差異度))
         int weakPointEffect = 1000;         //弱點屬性對於暈眩時間增加幅度,毫秒
         double damage = 3;                  //對玩家傷害
+        int image = R.drawable.mobs1241;
     }
 
-    class mobs003{
+    public static class Mobs003{
         String[] name = {"Peco","大嘴鳥"};
         int healthPoint = 15;               //需要點擊次數
         int actionBarTime = 5000;           //動作條時間,毫秒
@@ -45,6 +59,6 @@ public class mobs {
         double differenceRange = 0.1;       //個體差異程度,正負 min(基礎值*(1-差異度)) max(基礎*(1+差異度))
         int weakPointEffect = 1500;         //弱點屬性對於暈眩時間增加幅度,毫秒
         double damage = 2;                  //對玩家傷害
+        int image = R.drawable.mobs1019;
     }
-
 }
