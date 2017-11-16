@@ -98,7 +98,8 @@
         android:layout_height="match_parent">
 
         <include
-            layout="@layout/mobs"
+            android:id="@+id/mobs1"
+            layout="@layout/activity_mobs_test"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="51dp"
@@ -107,7 +108,8 @@
             android:layout_marginTop="292dp" />
 
         <include
-            layout="@layout/mobs"
+            android:id="@+id/mobs2"
+            layout="@layout/activity_mobs_test"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
@@ -116,7 +118,8 @@
             app:layout_constraintLeft_toLeftOf="parent" />
 
         <include
-            layout="@layout/mobs"
+            android:id="@+id/mobs3"
+            layout="@layout/activity_mobs_test"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
