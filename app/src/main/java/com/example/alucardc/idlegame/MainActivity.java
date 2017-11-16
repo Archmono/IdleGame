@@ -13,12 +13,15 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class MainActivity extends AppCompatActivity {
 
     ProgressBar PB;
-    int i =5;
     ImageView mobsImage;
     TextView mobsName;
+    int i = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,12 +31,28 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         PB = (ProgressBar)findViewById(R.id.pbtest);
 
+        Timer timer01 = new Timer();
+
+        timer01.schedule(task, 0, 100);
+
+
         GameTest gameTest = new GameTest(30,2,6,R.drawable.mobs1002);
         gameTest.count();
 //        test();
 
         //IEnumerator & yield 之前C#做時間漸變的關鍵字
     }
+
+    private TimerTask task = new TimerTask(){
+        @Override
+        public void run() {
+            if(i <= 100) {
+                PB.setProgress(i);
+                i++;
+                Log.d("timer","i:" + i);
+            }
+        }
+    };
 
     public class GameTest{
         int healthPoint;               //需要點擊次數;
