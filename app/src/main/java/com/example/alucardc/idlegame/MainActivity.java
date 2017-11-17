@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -19,9 +20,11 @@ import java.util.TimerTask;
 public class MainActivity extends AppCompatActivity {
 
     ProgressBar PB;
-    ImageView mobsImage;
-    TextView mobsName;
+    ImageView mobsImage,mobsImage2,mobsImage3;
+    TextView mobsName,mobsName2,mobsName3;
+    LinearLayout mobs1,mobs2,mobs3;
     int i = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +33,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         PB = (ProgressBar)findViewById(R.id.pbtest);
+        mobs1 = (LinearLayout) findViewById(R.id.mobs1);
+        mobs2 = (LinearLayout) findViewById(R.id.mobs2);
+        mobs3 = (LinearLayout) findViewById(R.id.mobs3);
+        mobsName =  mobs1.findViewById(R.id.mobsName);
+        mobsImage =  mobs1.findViewById(R.id.mobsImage);
+        mobsName2 =  mobs2.findViewById(R.id.mobsName);
+        mobsImage2 =  mobs2.findViewById(R.id.mobsImage);
+        mobsName3 =  mobs3.findViewById(R.id.mobsName);
+        mobsImage3 =  mobs3.findViewById(R.id.mobsImage);
 
         Timer timer01 = new Timer();
 
@@ -38,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
         GameTest gameTest = new GameTest(30,2,6,R.drawable.mobs1002);
         gameTest.count();
-//        test();
+        test();
 
         //IEnumerator & yield 之前C#做時間漸變的關鍵字
     }
@@ -74,9 +86,9 @@ public class MainActivity extends AppCompatActivity {
             int[] setTypes = new int[elementTypes];
             for (int i=0; i < setTypes.length; i++) {
                 int tamp = elementTypesCons[i];
-                int randMob = (int) (Math.random() * 6 + 1);
-                setTypes[i] = elementTypesCons[randMob-1];
-                elementTypesCons[randMob-1] = tamp;
+                int randMob = (int) (Math.random() * 6);
+                setTypes[i] = elementTypesCons[randMob];
+                elementTypesCons[randMob] = tamp;
 //                Log.d("count",setTypes[i]+"");
             }
             for (int i=0; i < elementQuestionRange; i++)
@@ -84,30 +96,18 @@ public class MainActivity extends AppCompatActivity {
                 int random = (int) (Math.random() * elementTypes);
                 Log.d("count",setTypes[random]+"");
             }
-
         }
     }
 
-//    void test()
-//    {
-//        int randMob = (int)(Math.random()*3+1);
-//
-//        switch (randMob) {
-//            case 1:
-//                mobs.Mobs001 mobs001 = new mobs.Mobs001();
-//                mobsImage.setImageResource(mobs001.image);
-//                mobsName.setText(mobs001.name[1]);
-//                break;
-//            case 2:
-//                mobs.Mobs002 mobs002 = new mobs.Mobs002();
-//                mobsImage.setImageResource(mobs002.image);
-//                mobsName.setText(mobs002.name[1]);
-//                break;
-//            case 3:
-//                mobs.Mobs003 mobs003 = new mobs.Mobs003();
-//                mobsImage.setImageResource(mobs003.image);
-//                mobsName.setText(mobs003.name[1]);
-//                break;
-//        }
-//    }
+    void test()
+    {
+            mobsImage.setImageResource(R.drawable.mobs1002);
+            mobsName.setText("波利");
+
+            mobsImage2.setImageResource(R.drawable.mobs1241);
+            mobsName2.setText("獸人");
+
+            mobsImage3.setImageResource(R.drawable.mobs1019);
+            mobsName3.setText("大嘴鳥");
+    }
 }
