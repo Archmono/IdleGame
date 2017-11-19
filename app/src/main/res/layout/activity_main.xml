@@ -31,25 +31,13 @@
         />
 
     <LinearLayout
-        android:id="@+id/questionLayout"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_weight="1"
-        android:layout_gravity="bottom"
-        android:layout_marginBottom="100dp"
-        android:orientation="horizontal"
-        android:gravity="center">
-
-    </LinearLayout>
-
-    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="bottom"
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/playerCtrB1"
+            android:id="@+id/imageView2"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_margin="8dp"
@@ -57,7 +45,7 @@
             app:srcCompat="@drawable/fire" />
 
         <ImageView
-            android:id="@+id/playerCtrB2"
+            android:id="@+id/imageView3"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_margin="6dp"
@@ -65,7 +53,7 @@
             app:srcCompat="@drawable/water" />
 
         <ImageView
-            android:id="@+id/playerCtrB3"
+            android:id="@+id/imageView4"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_margin="6dp"
@@ -73,7 +61,7 @@
             app:srcCompat="@drawable/wood" />
 
         <ImageView
-            android:id="@+id/playerCtrB4"
+            android:id="@+id/imageView5"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_margin="6dp"
@@ -81,7 +69,7 @@
             app:srcCompat="@drawable/light" />
 
         <ImageView
-            android:id="@+id/playerCtrB5"
+            android:id="@+id/imageView6"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_margin="6dp"
@@ -89,7 +77,7 @@
             app:srcCompat="@drawable/dark" />
 
         <ImageView
-            android:id="@+id/playerCtrB6"
+            android:id="@+id/imageView7"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_margin="6dp"
@@ -98,75 +86,72 @@
 
     </LinearLayout>
 
-    <ProgressBar
-        android:id="@+id/pbtest"
-        style="?android:attr/progressBarStyleHorizontal"
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="65dp"
-        android:layout_weight="1" />
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/mobs1"
+            layout="@layout/mobs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="94dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="78dp"
+            android:layout_marginStart="94dp" />
+
+        <include
+            android:id="@+id/mobs2"
+            layout="@layout/mobs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="159dp"
+            android:layout_marginLeft="178dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginStart="178dp" />
+
+        <include
+            android:id="@+id/mobs3"
+            layout="@layout/mobs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="106dp"
+            android:layout_marginRight="47dp"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginEnd="47dp" />
+
+    </android.support.constraint.ConstraintLayout>
 
     <LinearLayout
+        android:id="@+id/fightBlockView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:background="#9c000000"
+        android:gravity="center"
+        android:orientation="horizontal"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="33dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+        <TextView
+            android:id="@+id/tvPrepareFight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#fff"
+            android:textSize="80px"
+            android:text="點擊開始戰鬥倒數" />
 
-            <include
-                android:id="@+id/mobs1"
-                layout="@layout/mobs"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                 />
-
-            <include
-                android:id="@+id/mobs2"
-                layout="@layout/mobs"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_weight="1" />
-
-            <include
-                android:id="@+id/mobs3"
-                layout="@layout/mobs"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <include
-                android:id="@+id/mobs4"
-                layout="@layout/mobs"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"/>
-
-            <include
-                android:id="@+id/mobs5"
-                layout="@layout/mobs"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_weight="1" />
-
-            <include
-                android:id="@+id/mobs6"
-                layout="@layout/mobs"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-        </LinearLayout>
 
     </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/pbtest"
+        android:layout_gravity="center"
+        android:visibility="invisible"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="65dp" />
 
 </FrameLayout>
