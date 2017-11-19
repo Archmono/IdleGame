@@ -123,6 +123,39 @@
             app:layout_constraintRight_toRightOf="parent"
             android:layout_marginEnd="47dp" />
 
+        <include
+            android:id="@+id/mobs4"
+            layout="@layout/mobs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="64dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="348dp"
+            android:layout_marginStart="64dp" />
+
+        <include
+            android:id="@+id/mobs5"
+            layout="@layout/mobs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="299dp"
+            android:layout_marginLeft="178dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginStart="178dp" />
+
+        <include
+            android:id="@+id/mobs6"
+            layout="@layout/mobs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="396dp"
+            android:layout_marginRight="47dp"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginEnd="47dp" />
+
     </android.support.constraint.ConstraintLayout>
 
     <LinearLayout

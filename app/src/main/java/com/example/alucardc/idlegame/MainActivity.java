@@ -19,9 +19,9 @@ import java.util.logging.LogRecord;
 public class MainActivity extends AppCompatActivity {
 
     ProgressBar PB;
-    ImageView mobsImage,mobsImage2,mobsImage3;
-    TextView tvPrepareFight,mobsName,mobsName2,mobsName3;
-    LinearLayout mobs1,mobs2,mobs3,blockView;
+    ImageView mobsImage,mobsImage2,mobsImage3,mobsImage4,mobsImage5,mobsImage6;
+    TextView tvPrepareFight,mobsName,mobsName2,mobsName3,mobsName4,mobsName5,mobsName6;
+    LinearLayout blockView,mobs1,mobs2,mobs3,mobs4,mobs5,mobs6;
     int prepareTime = 100;
     boolean introFight = true;
     Timer timer01 = new Timer();
@@ -47,29 +47,73 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         findViews();
+        mobsSetOnClickListener();
 
         blockView.setOnClickListener(blockListener);
 
         GameTest gameTest = new GameTest(30,2,6,R.drawable.mobs1002);
         gameTest.count();
-        test();
+        popMobsTest();
 
         //IEnumerator & yield 之前C#做時間漸變的關鍵字
     }
 
     void findViews(){
         PB = (ProgressBar)findViewById(R.id.pbtest);
+        blockView = (LinearLayout)findViewById(R.id.fightBlockView);
+        tvPrepareFight = (TextView)findViewById(R.id.tvPrepareFight);
+
         mobs1 = (LinearLayout) findViewById(R.id.mobs1);
         mobs2 = (LinearLayout) findViewById(R.id.mobs2);
         mobs3 = (LinearLayout) findViewById(R.id.mobs3);
+        mobs4 = (LinearLayout) findViewById(R.id.mobs4);
+        mobs5 = (LinearLayout) findViewById(R.id.mobs5);
+        mobs6 = (LinearLayout) findViewById(R.id.mobs6);
         mobsName =  mobs1.findViewById(R.id.mobsName);
         mobsImage =  mobs1.findViewById(R.id.mobsImage);
         mobsName2 =  mobs2.findViewById(R.id.mobsName);
         mobsImage2 =  mobs2.findViewById(R.id.mobsImage);
         mobsName3 =  mobs3.findViewById(R.id.mobsName);
         mobsImage3 =  mobs3.findViewById(R.id.mobsImage);
-        blockView = (LinearLayout)findViewById(R.id.fightBlockView);
-        tvPrepareFight = (TextView)findViewById(R.id.tvPrepareFight);
+    }
+
+    void mobsSetOnClickListener(){
+        mobs1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+        mobs2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+        mobs3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+        mobs4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+        mobs5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+        mobs6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 
 
@@ -106,16 +150,26 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    void test()
+    void popMobsTest()
     {
-            mobsImage.setImageResource(R.drawable.mobs1002);
-            mobsName.setText("波利");
 
-            mobsImage2.setImageResource(R.drawable.mobs1241);
-            mobsName2.setText("獸人");
+        mobsImage.setImageResource(R.drawable.mobs1002);
+        mobsName.setText("波利");
 
-            mobsImage3.setImageResource(R.drawable.mobs1019);
-            mobsName3.setText("大嘴鳥");
+        mobsImage2.setImageResource(R.drawable.mobs1241);
+        mobsName2.setText("獸人");
+
+        mobsImage3.setImageResource(R.drawable.mobs1019);
+        mobsName3.setText("大嘴鳥");
+
+        mobsImage.setImageResource(R.drawable.mobs1002);
+        mobsName.setText("波利");
+
+        mobsImage2.setImageResource(R.drawable.mobs1241);
+        mobsName2.setText("獸人");
+
+        mobsImage3.setImageResource(R.drawable.mobs1019);
+        mobsName3.setText("大嘴鳥");
     }
 
     public View.OnClickListener blockListener = new View.OnClickListener(){
@@ -125,6 +179,7 @@ public class MainActivity extends AppCompatActivity {
                 tvPrepareFight.setText("");
                 timer01.schedule(battlePrepare, 500, 100);
                 introFight = false;
+                Log.d("Click test", "view block is clicked");
             }
         }
     };
