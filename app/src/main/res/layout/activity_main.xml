@@ -86,13 +86,6 @@
 
     </LinearLayout>
 
-    <ProgressBar
-        android:id="@+id/pbtest"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="match_parent"
-        android:layout_height="65dp"
-        android:layout_weight="1" />
-
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -102,10 +95,11 @@
             layout="@layout/mobs"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="51dp"
+            android:layout_marginLeft="94dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="292dp" />
+            android:layout_marginTop="78dp"
+            android:layout_marginStart="94dp" />
 
         <include
             android:id="@+id/mobs2"
@@ -113,9 +107,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="62dp"
-            android:layout_marginLeft="62dp"
-            app:layout_constraintLeft_toLeftOf="parent" />
+            android:layout_marginTop="159dp"
+            android:layout_marginLeft="178dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginStart="178dp" />
 
         <include
             android:id="@+id/mobs3"
@@ -123,9 +118,40 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="114dp"
-            android:layout_marginRight="38dp"
-            app:layout_constraintRight_toRightOf="parent" />
+            android:layout_marginTop="106dp"
+            android:layout_marginRight="47dp"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginEnd="47dp" />
+
     </android.support.constraint.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/fightBlockView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#9c000000"
+        android:gravity="center"
+        android:orientation="horizontal"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="33dp">
+
+        <TextView
+            android:id="@+id/tvPrepareFight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#fff"
+            android:textSize="80px"
+            android:text="點擊開始戰鬥倒數" />
+
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/pbtest"
+        android:layout_gravity="center"
+        android:visibility="invisible"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="65dp" />
 
 </FrameLayout>

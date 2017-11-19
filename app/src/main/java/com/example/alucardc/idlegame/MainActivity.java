@@ -1,14 +1,12 @@
 package com.example.alucardc.idlegame;
 
-import android.animation.Animator;
-import android.animation.ObjectAnimator;
-import android.app.ProgressDialog;
-import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.WindowManager;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -16,15 +14,31 @@ import android.widget.TextView;
 
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.LogRecord;
 
 public class MainActivity extends AppCompatActivity {
 
     ProgressBar PB;
     ImageView mobsImage,mobsImage2,mobsImage3;
-    TextView mobsName,mobsName2,mobsName3;
-    LinearLayout mobs1,mobs2,mobs3;
-    int i = 0;
+    TextView tvPrepareFight,mobsName,mobsName2,mobsName3;
+    LinearLayout mobs1,mobs2,mobs3,blockView;
+    int prepareTime = 100;
+    boolean introFight = true;
+    Timer timer01 = new Timer();
 
+    Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            if(msg.what == 1){
+                PB.setVisibility(View.VISIBLE);
+            }else if(msg.what == 2){
+                tvPrepareFight.setVisibility(View.GONE);
+                PB.setVisibility(View.GONE);
+                blockView.setVisibility(View.GONE);
+            }
+            super.handleMessage(msg);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +46,18 @@ public class MainActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        findViews();
+
+        blockView.setOnClickListener(blockListener);
+
+        GameTest gameTest = new GameTest(30,2,6,R.drawable.mobs1002);
+        gameTest.count();
+        test();
+
+        //IEnumerator & yield 之前C#做時間漸變的關鍵字
+    }
+
+    void findViews(){
         PB = (ProgressBar)findViewById(R.id.pbtest);
         mobs1 = (LinearLayout) findViewById(R.id.mobs1);
         mobs2 = (LinearLayout) findViewById(R.id.mobs2);
@@ -42,29 +68,10 @@ public class MainActivity extends AppCompatActivity {
         mobsImage2 =  mobs2.findViewById(R.id.mobsImage);
         mobsName3 =  mobs3.findViewById(R.id.mobsName);
         mobsImage3 =  mobs3.findViewById(R.id.mobsImage);
-
-        Timer timer01 = new Timer();
-
-        timer01.schedule(task, 0, 100);
-
-
-        GameTest gameTest = new GameTest(30,2,6,R.drawable.mobs1002);
-        gameTest.count();
-        test();
-
-        //IEnumerator & yield 之前C#做時間漸變的關鍵字
+        blockView = (LinearLayout)findViewById(R.id.fightBlockView);
+        tvPrepareFight = (TextView)findViewById(R.id.tvPrepareFight);
     }
 
-    private TimerTask task = new TimerTask(){
-        @Override
-        public void run() {
-            if(i <= 100) {
-                PB.setProgress(i);
-                i++;
-                Log.d("timer","i:" + i);
-            }
-        }
-    };
 
     public class GameTest{
         int healthPoint;               //需要點擊次數;
@@ -110,4 +117,32 @@ public class MainActivity extends AppCompatActivity {
             mobsImage3.setImageResource(R.drawable.mobs1019);
             mobsName3.setText("大嘴鳥");
     }
+
+    public View.OnClickListener blockListener = new View.OnClickListener(){
+        @Override
+        public void onClick(View view) {
+            if(introFight == true){
+                tvPrepareFight.setText("");
+                timer01.schedule(battlePrepare, 500, 100);
+                introFight = false;
+            }
+        }
+    };
+    private TimerTask battlePrepare = new TimerTask(){
+        @Override
+        public void run() {
+            if(prepareTime > 0) {
+                Message msg = mHandler.obtainMessage();
+                msg.what = 1;
+                msg.sendToTarget();
+                PB.setProgress(prepareTime);
+                prepareTime--;
+                Log.d("timer","time" + prepareTime);
+            }else{
+                Message msg = mHandler.obtainMessage();
+                msg.what = 2;
+                msg.sendToTarget();
+            }
+        }
+    };
 }
