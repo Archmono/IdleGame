@@ -31,10 +31,14 @@ public class MainActivity extends AppCompatActivity {
     int prepareTime = 10;
     boolean introFight = true;
     Timer timer01 = new Timer();
+    Timer mobsTimer01 = new Timer();
+    int playerCurrentHP = 100;
 
     ImageView mobsImage1,mobsImage2,mobsImage3,mobsImage4,mobsImage5,mobsImage6;
-    TextView tvPrepareFight,mobsName1,mobsName2,mobsName3,mobsName4,mobsName5,mobsName6;
+    TextView tvPrepareFight,playerHP,mobsName1,mobsName2,mobsName3,mobsName4,mobsName5,mobsName6;
     LinearLayout questionLayout,blockView,mobs1,mobs2,mobs3,mobs4,mobs5,mobs6;
+    ProgressBar actionbar1,actionbar2,actionbar3,actionbar4,actionbar5,actionbar6;
+    int currentActionTime;
     ImageView[] questionImg;
     ImageView[] playerCtrBut;
     int[] mobsQid = {R.drawable.fire,R.drawable.water,R.drawable.wood,R.drawable.light,R.drawable.dark,R.drawable.heart};
@@ -45,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     int mobsCurrentHP1,mobsCurrentHP2,mobsCurrentHP3,mobsCurrentHP4,mobsCurrentHP5,mobsCurrentHP6;
     int mobsATK1,mobsATK2,mobsATK3,mobsATK4,mobsATK5,mobsATK6;
     int mobsSpeed1,mobsSpeed2,mobsSpeed3,mobsSpeed4,mobsSpeed5,mobsSpeed6;
+
     Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -78,6 +83,8 @@ public class MainActivity extends AppCompatActivity {
         blockView = (LinearLayout)findViewById(R.id.fightBlockView);
         tvPrepareFight = (TextView)findViewById(R.id.tvPrepareFight);
         questionLayout = (LinearLayout)findViewById(R.id.questionLayout);
+        playerHP = (TextView)findViewById(R.id.healthPointCounts);
+
 
         mobs1 = (LinearLayout) findViewById(R.id.mobs1);
         mobs2 = (LinearLayout) findViewById(R.id.mobs2);
@@ -100,9 +107,15 @@ public class MainActivity extends AppCompatActivity {
         mobsImage5 =  mobs5.findViewById(R.id.mobsImage);
         mobsImage6 =  mobs6.findViewById(R.id.mobsImage);
 
+        actionbar1 = mobs1.findViewById(R.id.progressBarAction);
+        actionbar2 = mobs2.findViewById(R.id.progressBarAction);
+        actionbar3 = mobs3.findViewById(R.id.progressBarAction);
+        actionbar4 = mobs4.findViewById(R.id.progressBarAction);
+        actionbar5 = mobs5.findViewById(R.id.progressBarAction);
+        actionbar6 = mobs6.findViewById(R.id.progressBarAction);
+
         questionImg = new ImageView[6];
         playerCtrBut = new ImageView[6];
-
 
         for (int i = 0; i < 6; i++)
         {
@@ -283,7 +296,26 @@ public class MainActivity extends AppCompatActivity {
                 Message msg = mHandler.obtainMessage();
                 msg.what = 2;
                 msg.sendToTarget();
+                timer01.cancel();
+                mobsTimer01.schedule(mob1ActionTimer,1000,1000);
             }
+        }
+    };
+
+    private TimerTask mob1ActionTimer = new TimerTask() {
+        @Override
+        public void run() {
+            if(currentActionTime > 0) {
+                actionbar1.setProgress(currentActionTime*100/mobsSpeed1);
+                currentActionTime -= 1000;
+                Log.d("MobsTime", ""+ currentActionTime);
+            }else{
+                actionbar1.setProgress(currentActionTime*100/mobsSpeed1);
+                currentActionTime = mobsSpeed1;
+                playerCurrentHP --;
+                playerHP.setText("HP : " + playerCurrentHP);
+            }
+
         }
     };
 
@@ -321,6 +353,9 @@ public class MainActivity extends AppCompatActivity {
             mobsImage1.setImageResource(mobs_1_img_resID);
             mobsMaxHP1 = mobs_1_HP;
             mobsCurrentHP1 = mobs_1_HP;
+            mobsSpeed1 = mobs_1_actionbarDuration;
+            currentActionTime = mobsSpeed1;
+
             Log.d("Mobs HP Load",mobsMaxHP1 + " " +mobsCurrentHP1);
 
             gameTest = new GameTest(mobs_1_elementTypes,mobs_1_elementQRange);
