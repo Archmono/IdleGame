@@ -1,7 +1,9 @@
 package com.example.alucardc.idlegame;
 
+import android.content.DialogInterface;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +20,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.LogRecord;
@@ -27,10 +30,15 @@ public class MainActivity extends AppCompatActivity {
     ProgressBar PB;
     ImageView mobsImage1,mobsImage2,mobsImage3,mobsImage4,mobsImage5,mobsImage6;
     TextView tvPrepareFight,mobsName1,mobsName2,mobsName3,mobsName4,mobsName5,mobsName6;
-    LinearLayout blockView,mobs1,mobs2,mobs3,mobs4,mobs5,mobs6;
-    int prepareTime = 100;
+    LinearLayout questionLayout,blockView,mobs1,mobs2,mobs3,mobs4,mobs5,mobs6;
+    ImageView[] questionImg;
+    ImageView[] playerCtrBut;
+    int[] mobsQid = {R.drawable.fire,R.drawable.water,R.drawable.wood,R.drawable.light,R.drawable.dark,R.drawable.heart};
+    int[] playerCtrB = {R.id.playerCtrB1,R.id.playerCtrB2,R.id.playerCtrB3,R.id.playerCtrB4,R.id.playerCtrB5,R.id.playerCtrB6};
+    int prepareTime = 20;
     boolean introFight = true;
     Timer timer01 = new Timer();
+    GameTest gameTest;
 
     Handler mHandler = new Handler(){
         @Override
@@ -56,18 +64,15 @@ public class MainActivity extends AppCompatActivity {
         mobsSetOnClickListener();
 
         blockView.setOnClickListener(blockListener);
-
-        GameTest gameTest = new GameTest(30,2,6,R.drawable.mobs1002);
-        gameTest.count();
         loadData();
 
-        //IEnumerator & yield 之前C#做時間漸變的關鍵字
     }
 
     void findViews(){
         PB = (ProgressBar)findViewById(R.id.pbtest);
         blockView = (LinearLayout)findViewById(R.id.fightBlockView);
         tvPrepareFight = (TextView)findViewById(R.id.tvPrepareFight);
+        questionLayout = (LinearLayout)findViewById(R.id.questionLayout);
 
         mobs1 = (LinearLayout) findViewById(R.id.mobs1);
         mobs2 = (LinearLayout) findViewById(R.id.mobs2);
@@ -89,13 +94,25 @@ public class MainActivity extends AppCompatActivity {
         mobsImage4 =  mobs4.findViewById(R.id.mobsImage);
         mobsImage5 =  mobs5.findViewById(R.id.mobsImage);
         mobsImage6 =  mobs6.findViewById(R.id.mobsImage);
+
+        questionImg = new ImageView[6];
+        playerCtrBut = new ImageView[6];
+
+
+        for (int i = 0; i < 6; i++)
+        {
+            questionImg[i] = new ImageView(this);
+            playerCtrBut[i] = (ImageView)findViewById(playerCtrB[i]);
+            playerCtrBut[i].setOnClickListener(playerCtrListener);
+        }
     }
 
     void mobsSetOnClickListener(){
         mobs1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                now = 0;
+                gameTest.count();
             }
         });
         mobs2.setOnClickListener(new View.OnClickListener() {
@@ -132,37 +149,99 @@ public class MainActivity extends AppCompatActivity {
 
 
     public class GameTest{
-        int healthPoint;               //需要點擊次數;
-        int elementTypes;               //題目屬性種類
-        int elementQuestionRange;       //題目難度,屬性球數量3-6
-        int imgId;
 
-        public GameTest(int healthPoint, int elementTypes, int elementQuestionRange, int imgId)
+        int HP;               //需要點擊次數;
+        int elementTypes;               //題目屬性種類
+        int elementQRange;       //題目難度,屬性球數量3-6
+
+        public GameTest(int HP, int elementTypes, int elementQRange)
         {
-            this.healthPoint = healthPoint;
+            this.HP = HP;
             this.elementTypes = elementTypes;
-            this.elementQuestionRange = elementQuestionRange;
-            this.imgId = imgId;
+            this.elementQRange = elementQRange;
         }
 
         void count()
         {
-            int[] elementTypesCons = {1,2,3,4,5,6};
+            int[] elementTypesCons = {0,1,2,3,4,5};
             int[] setTypes = new int[elementTypes];
             for (int i=0; i < setTypes.length; i++) {
                 int tamp = elementTypesCons[i];
                 int randMob = (int) (Math.random() * 6);
                 setTypes[i] = elementTypesCons[randMob];
                 elementTypesCons[randMob] = tamp;
-//                Log.d("count",setTypes[i]+"");
             }
-            for (int i=0; i < elementQuestionRange; i++)
-            {
-                int random = (int) (Math.random() * elementTypes);
-                Log.d("count",setTypes[random]+"");
+            if (questionLayout.getChildCount() == 0) {
+                for (int i = 0; i < elementQRange; i++) {
+                    int random = (int) (Math.random() * elementTypes);
+                    qte.add(i, (setTypes[random]));
+                    questionImg[i].setImageResource(mobsQid[qte.get(i)]);
+                    questionLayout.addView(questionImg[i]);
+                    Log.d("qte", qte.toString());
+                }
             }
         }
     }
+
+
+
+    public boolean right ;
+    public ArrayList<Integer> qte = new ArrayList<>();
+    int now = 0;
+    int ans;
+
+    View.OnClickListener playerCtrListener = new View.OnClickListener () {
+        @Override
+        public void onClick(View v) {
+
+            switch (v.getId()) {
+                case R.id.playerCtrB1 :
+                    ans = 0;
+                    break;
+                case R.id.playerCtrB2 :
+                    ans = 1;
+                    break;
+                case R.id.playerCtrB3 :
+                    ans = 2;
+                    break;
+                case R.id.playerCtrB4 :
+                    ans = 3;
+                    break;
+                case R.id.playerCtrB5 :
+                    ans = 4;
+                    break;
+                case R.id.playerCtrB6 :
+                    ans = 5;
+                    break;
+            }
+            Log.d("now","now = " + now);
+            if(now < gameTest.elementQRange) {
+                if (ans == qte.get(now)) {
+                    right = true;
+                    now++;
+                } else {
+                    right = false;
+                    now = 0;
+                }
+
+                if (right && questionLayout.getChildCount() > 0) {
+                    questionLayout.removeViewAt(0);
+                } else if (right && questionLayout.getChildCount() == 0) {
+                    now = 0;
+                    //接入怪物可被攻擊狀態
+                } else { //答錯
+                    now = 0;
+                    questionLayout.removeAllViews();
+                    for (int i = 0; i < gameTest.elementQRange; i++) {
+                        questionImg[i].setImageResource(mobsQid[qte.get(i)]);
+                        questionLayout.addView(questionImg[i]);
+                        //qte.add(i, qte.get(i));
+                    }
+                }
+            }
+        }
+    };
+
 
     public View.OnClickListener blockListener = new View.OnClickListener(){
         @Override
@@ -217,6 +296,8 @@ public class MainActivity extends AppCompatActivity {
             String mobs_1_img1 = mobs_pics.getString("pic1");
 
             int mobs_1_HP = mobs_1.getInt("HP");
+            int mobs_1_elementTypes = mobs_1.getInt("elementTypes");
+            int mobs_1_elementQRange = mobs_1.getInt("elementQRange");
             int mobs_1_actionbarDuration = mobs_1.getInt("actionbarDuration");
             int mobs_1_img_resID = getResources().getIdentifier(mobs_1_img1,"drawable", getPackageName());
             mobs_1_info_test = mobs_1_id + "\n" + mobs_1_HP + "\n" + mobs_1_actionbarDuration;
@@ -226,13 +307,41 @@ public class MainActivity extends AppCompatActivity {
 //            mobsInfo1.setText(mobs_1_info_test);
             mobsImage1.setImageResource(mobs_1_img_resID);
 
+            gameTest = new GameTest(mobs_1_HP,mobs_1_elementTypes,mobs_1_elementQRange);
+            gameTest.count();
+
         } catch (IOException e) {
             e.printStackTrace();
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
+    }
 
 
+    @Override
+    public void onBackPressed() {  //返回鍵事件
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("確認視窗");
+        builder.setMessage("確定要結束應用程式嗎?");
+        builder.setIcon(R.mipmap.ic_launcher);
+        builder.setPositiveButton("確定",
+                new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                });
+        builder.setNegativeButton("取消",
+                new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // TODO Auto-generated method stub
+
+                    }
+                });
+        builder.show();
     }
 }
