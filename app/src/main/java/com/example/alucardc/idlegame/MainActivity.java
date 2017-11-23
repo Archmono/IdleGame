@@ -12,6 +12,12 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.LogRecord;
@@ -19,8 +25,8 @@ import java.util.logging.LogRecord;
 public class MainActivity extends AppCompatActivity {
 
     ProgressBar PB;
-    ImageView mobsImage,mobsImage2,mobsImage3,mobsImage4,mobsImage5,mobsImage6;
-    TextView tvPrepareFight,mobsName,mobsName2,mobsName3,mobsName4,mobsName5,mobsName6;
+    ImageView mobsImage1,mobsImage2,mobsImage3,mobsImage4,mobsImage5,mobsImage6;
+    TextView tvPrepareFight,mobsName1,mobsName2,mobsName3,mobsName4,mobsName5,mobsName6;
     LinearLayout blockView,mobs1,mobs2,mobs3,mobs4,mobs5,mobs6;
     int prepareTime = 100;
     boolean introFight = true;
@@ -53,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
         GameTest gameTest = new GameTest(30,2,6,R.drawable.mobs1002);
         gameTest.count();
-        popMobsTest();
+        loadData();
 
         //IEnumerator & yield 之前C#做時間漸變的關鍵字
     }
@@ -69,12 +75,20 @@ public class MainActivity extends AppCompatActivity {
         mobs4 = (LinearLayout) findViewById(R.id.mobs4);
         mobs5 = (LinearLayout) findViewById(R.id.mobs5);
         mobs6 = (LinearLayout) findViewById(R.id.mobs6);
-        mobsName =  mobs1.findViewById(R.id.mobsName);
-        mobsImage =  mobs1.findViewById(R.id.mobsImage);
+
+        mobsName1 =  mobs1.findViewById(R.id.mobsName);
         mobsName2 =  mobs2.findViewById(R.id.mobsName);
-        mobsImage2 =  mobs2.findViewById(R.id.mobsImage);
         mobsName3 =  mobs3.findViewById(R.id.mobsName);
+        mobsName4 =  mobs4.findViewById(R.id.mobsName);
+        mobsName5 =  mobs5.findViewById(R.id.mobsName);
+        mobsName6 =  mobs6.findViewById(R.id.mobsName);
+
+        mobsImage1 =  mobs1.findViewById(R.id.mobsImage);
+        mobsImage2 =  mobs2.findViewById(R.id.mobsImage);
         mobsImage3 =  mobs3.findViewById(R.id.mobsImage);
+        mobsImage4 =  mobs4.findViewById(R.id.mobsImage);
+        mobsImage5 =  mobs5.findViewById(R.id.mobsImage);
+        mobsImage6 =  mobs6.findViewById(R.id.mobsImage);
     }
 
     void mobsSetOnClickListener(){
@@ -150,28 +164,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    void popMobsTest()
-    {
-
-        mobsImage.setImageResource(R.drawable.mobs1002);
-        mobsName.setText("波利");
-
-        mobsImage2.setImageResource(R.drawable.mobs1241);
-        mobsName2.setText("獸人");
-
-        mobsImage3.setImageResource(R.drawable.mobs1019);
-        mobsName3.setText("大嘴鳥");
-
-        mobsImage.setImageResource(R.drawable.mobs1002);
-        mobsName.setText("波利");
-
-        mobsImage2.setImageResource(R.drawable.mobs1241);
-        mobsName2.setText("獸人");
-
-        mobsImage3.setImageResource(R.drawable.mobs1019);
-        mobsName3.setText("大嘴鳥");
-    }
-
     public View.OnClickListener blockListener = new View.OnClickListener(){
         @Override
         public void onClick(View view) {
@@ -200,4 +192,47 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     };
+
+    void loadData()
+    {
+
+        try {
+            String mobs_1_info_test;
+            InputStream is = this.getResources().openRawResource(R.raw.mobsdata);
+            byte[] buffer = new byte[is.available()];
+            is.read(buffer);
+            //讀取json到buffer中
+            String json = new String(buffer, "UTF-8");
+            //轉換編碼
+            JSONObject jsonObject = new JSONObject(json);
+            //把json丟到jsonObject中
+            JSONArray array = jsonObject.getJSONArray("mobsdata");
+            //取出"mobsdata"中的資料,放入JSONArray array
+
+            JSONObject mobs_1 = array.getJSONObject(1);
+            String mobs_1_id = mobs_1.getString("_id");
+            String mobs_1_name = mobs_1.getString("name");
+
+            JSONObject mobs_pics = mobs_1.getJSONObject("pics");
+            String mobs_1_img1 = mobs_pics.getString("pic1");
+
+            int mobs_1_HP = mobs_1.getInt("HP");
+            int mobs_1_actionbarDuration = mobs_1.getInt("actionbarDuration");
+            int mobs_1_img_resID = getResources().getIdentifier(mobs_1_img1,"drawable", getPackageName());
+            mobs_1_info_test = mobs_1_id + "\n" + mobs_1_HP + "\n" + mobs_1_actionbarDuration;
+
+
+            mobsName1.setText(mobs_1_name);
+//            mobsInfo1.setText(mobs_1_info_test);
+            mobsImage1.setImageResource(mobs_1_img_resID);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+
+    }
 }
