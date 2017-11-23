@@ -1,44 +1,19 @@
 package com.example.alucardc.idlegame;
 
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.logging.LogRecord;
-
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
     ProgressBar PB;
-    ImageView mobsImage,mobsImage2,mobsImage3,mobsImage4,mobsImage5,mobsImage6;
-    TextView tvPrepareFight,mobsName,mobsName2,mobsName3,mobsName4,mobsName5,mobsName6;
-    LinearLayout blockView,mobs1,mobs2,mobs3,mobs4,mobs5,mobs6;
-    int prepareTime = 100;
-    boolean introFight = true;
-    Timer timer01 = new Timer();
-
-    Handler mHandler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            if(msg.what == 1){
-                PB.setVisibility(View.VISIBLE);
-            }else if(msg.what == 2){
-                tvPrepareFight.setVisibility(View.GONE);
-                PB.setVisibility(View.GONE);
-                blockView.setVisibility(View.GONE);
-            }
-            super.handleMessage(msg);
-        }
-    };
+    int i =5;
+    ImageView mobsImage;
+    TextView mobsName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,76 +21,13 @@ public class MainActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        findViews();
-        mobsSetOnClickListener();
+        PB = (ProgressBar)findViewById(R.id.pbtest);
 
-        blockView.setOnClickListener(blockListener);
-
-        GameTest gameTest = new GameTest(30,2,6,R.drawable.mobs1002);
+        GameTest gameTest = new GameTest(30,3,12,R.drawable.mobs1002);
         gameTest.count();
-        popMobsTest();
 
         //IEnumerator & yield 之前C#做時間漸變的關鍵字
     }
-
-    void findViews(){
-        PB = (ProgressBar)findViewById(R.id.pbtest);
-        blockView = (LinearLayout)findViewById(R.id.fightBlockView);
-        tvPrepareFight = (TextView)findViewById(R.id.tvPrepareFight);
-
-        mobs1 = (LinearLayout) findViewById(R.id.mobs1);
-        mobs2 = (LinearLayout) findViewById(R.id.mobs2);
-        mobs3 = (LinearLayout) findViewById(R.id.mobs3);
-        mobs4 = (LinearLayout) findViewById(R.id.mobs4);
-        mobs5 = (LinearLayout) findViewById(R.id.mobs5);
-        mobs6 = (LinearLayout) findViewById(R.id.mobs6);
-        mobsName =  mobs1.findViewById(R.id.mobsName);
-        mobsImage =  mobs1.findViewById(R.id.mobsImage);
-        mobsName2 =  mobs2.findViewById(R.id.mobsName);
-        mobsImage2 =  mobs2.findViewById(R.id.mobsImage);
-        mobsName3 =  mobs3.findViewById(R.id.mobsName);
-        mobsImage3 =  mobs3.findViewById(R.id.mobsImage);
-    }
-
-    void mobsSetOnClickListener(){
-        mobs1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-        mobs2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-        mobs3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-        mobs4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-        mobs5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-        mobs6.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-    }
-
 
     public class GameTest{
         int healthPoint;               //需要點擊次數;
@@ -137,67 +49,40 @@ public class MainActivity extends AppCompatActivity {
             int[] setTypes = new int[elementTypes];
             for (int i=0; i < setTypes.length; i++) {
                 int tamp = elementTypesCons[i];
-                int randMob = (int) (Math.random() * 6);
-                setTypes[i] = elementTypesCons[randMob];
-                elementTypesCons[randMob] = tamp;
-//                Log.d("count",setTypes[i]+"");
+                int randMob = (int) (Math.random() * 6 + 1);
+                setTypes[i] = elementTypesCons[randMob-1];
+                elementTypesCons[randMob-1] = tamp;
+                //Log.d("count",setTypes[i]+"");
             }
             for (int i=0; i < elementQuestionRange; i++)
             {
                 int random = (int) (Math.random() * elementTypes);
                 Log.d("count",setTypes[random]+"");
             }
+
         }
     }
 
-    void popMobsTest()
+    void test()
     {
+        int randMob = (int)(Math.random()*3+1);
 
-        mobsImage.setImageResource(R.drawable.mobs1002);
-        mobsName.setText("波利");
-
-        mobsImage2.setImageResource(R.drawable.mobs1241);
-        mobsName2.setText("獸人");
-
-        mobsImage3.setImageResource(R.drawable.mobs1019);
-        mobsName3.setText("大嘴鳥");
-
-        mobsImage.setImageResource(R.drawable.mobs1002);
-        mobsName.setText("波利");
-
-        mobsImage2.setImageResource(R.drawable.mobs1241);
-        mobsName2.setText("獸人");
-
-        mobsImage3.setImageResource(R.drawable.mobs1019);
-        mobsName3.setText("大嘴鳥");
+        switch (randMob) {
+            case 1:
+                mobs.Mobs001 mobs001 = new mobs.Mobs001();
+                mobsImage.setImageResource(mobs001.image);
+                mobsName.setText(mobs001.name[1]);
+                break;
+            case 2:
+                mobs.Mobs002 mobs002 = new mobs.Mobs002();
+                mobsImage.setImageResource(mobs002.image);
+                mobsName.setText(mobs002.name[1]);
+                break;
+            case 3:
+                mobs.Mobs003 mobs003 = new mobs.Mobs003();
+                mobsImage.setImageResource(mobs003.image);
+                mobsName.setText(mobs003.name[1]);
+                break;
+        }
     }
-
-    public View.OnClickListener blockListener = new View.OnClickListener(){
-        @Override
-        public void onClick(View view) {
-            if(introFight == true){
-                tvPrepareFight.setText("");
-                timer01.schedule(battlePrepare, 500, 100);
-                introFight = false;
-                Log.d("Click test", "view block is clicked");
-            }
-        }
-    };
-    private TimerTask battlePrepare = new TimerTask(){
-        @Override
-        public void run() {
-            if(prepareTime > 0) {
-                Message msg = mHandler.obtainMessage();
-                msg.what = 1;
-                msg.sendToTarget();
-                PB.setProgress(prepareTime);
-                prepareTime--;
-                Log.d("timer","time" + prepareTime);
-            }else{
-                Message msg = mHandler.obtainMessage();
-                msg.what = 2;
-                msg.sendToTarget();
-            }
-        }
-    };
 }
