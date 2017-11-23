@@ -10,9 +10,13 @@ public class RandomTest {
 
     String TAG = "RandomTest";
     int rand,sum = 0;
-    int[] mobsRarity = {0,1,1,200};
+    int[] mobsRarity;
     int cId;
 
+    public RandomTest (int[] mobsRarity) {
+        this.mobsRarity = new int[mobsRarity.length];
+        this.mobsRarity = mobsRarity;
+    }
     void randomTest() {
 
         for (int i = 0; i < mobsRarity.length; i++) {
@@ -33,7 +37,6 @@ public class RandomTest {
                 break;
             }
         }
-
         Log.d(TAG, "cId : " + cId);
 
     }

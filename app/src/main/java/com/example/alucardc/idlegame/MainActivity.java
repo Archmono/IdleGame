@@ -28,6 +28,10 @@ import java.util.logging.LogRecord;
 public class MainActivity extends AppCompatActivity {
 
     ProgressBar PB;
+    int prepareTime = 10;
+    boolean introFight = true;
+    Timer timer01 = new Timer();
+
     ImageView mobsImage1,mobsImage2,mobsImage3,mobsImage4,mobsImage5,mobsImage6;
     TextView tvPrepareFight,mobsName1,mobsName2,mobsName3,mobsName4,mobsName5,mobsName6;
     LinearLayout questionLayout,blockView,mobs1,mobs2,mobs3,mobs4,mobs5,mobs6;
@@ -35,11 +39,12 @@ public class MainActivity extends AppCompatActivity {
     ImageView[] playerCtrBut;
     int[] mobsQid = {R.drawable.fire,R.drawable.water,R.drawable.wood,R.drawable.light,R.drawable.dark,R.drawable.heart};
     int[] playerCtrB = {R.id.playerCtrB1,R.id.playerCtrB2,R.id.playerCtrB3,R.id.playerCtrB4,R.id.playerCtrB5,R.id.playerCtrB6};
-    int prepareTime = 20;
-    boolean introFight = true;
-    Timer timer01 = new Timer();
     GameTest gameTest;
-
+    ImageView mobsHPbar1,mobsHPbar2,mobsHPbar3,mobsHPbar4,mobsHPbar5,mobsHPbar6;
+    int mobsMaxHP1,mobsMaxHP2,mobsMaxHP3,mobsMaxHP4,mobsMaxHP5,mobsMaxHP6;
+    int mobsCurrentHP1,mobsCurrentHP2,mobsCurrentHP3,mobsCurrentHP4,mobsCurrentHP5,mobsCurrentHP6;
+    int mobsATK1,mobsATK2,mobsATK3,mobsATK4,mobsATK5,mobsATK6;
+    int mobsSpeed1,mobsSpeed2,mobsSpeed3,mobsSpeed4,mobsSpeed5,mobsSpeed6;
     Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -105,14 +110,34 @@ public class MainActivity extends AppCompatActivity {
             playerCtrBut[i] = (ImageView)findViewById(playerCtrB[i]);
             playerCtrBut[i].setOnClickListener(playerCtrListener);
         }
+        mobsHPbar1 = mobs1.findViewById(R.id.imageViewBarHP);
+        mobsHPbar2 = mobs2.findViewById(R.id.imageViewBarHP);
+        mobsHPbar3 = mobs3.findViewById(R.id.imageViewBarHP);
+        mobsHPbar4 = mobs4.findViewById(R.id.imageViewBarHP);
+        mobsHPbar5 = mobs5.findViewById(R.id.imageViewBarHP);
+        mobsHPbar6 = mobs6.findViewById(R.id.imageViewBarHP);
     }
 
     void mobsSetOnClickListener(){
         mobs1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                now = 0;
-                gameTest.count();
+
+                if (attackable) {
+                    mobsCurrentHP1--;   //-玩家攻擊力
+                    if (mobsCurrentHP1 > 0) {
+                        float HPscale = ((float) mobsCurrentHP1 / (float) mobsMaxHP1);
+                        Log.d("Mobs HP Load", mobsMaxHP1 + " " + mobsCurrentHP1);
+                        mobsHPbar1.setScaleX(HPscale);
+                        float mobs1HPbarLocateX = mobsHPbar1.getX();
+                        mobsHPbar1.setPivotX(mobs1HPbarLocateX);
+                        Log.d("MOBS1 HP:", "" + HPscale);
+                    } else {
+                        mobs1.setVisibility(View.GONE);
+                    }
+                } else if (now == 0) {
+                        gameTest.count();
+                }
             }
         });
         mobs2.setOnClickListener(new View.OnClickListener() {
@@ -150,13 +175,11 @@ public class MainActivity extends AppCompatActivity {
 
     public class GameTest{
 
-        int HP;               //需要點擊次數;
         int elementTypes;               //題目屬性種類
         int elementQRange;       //題目難度,屬性球數量3-6
 
-        public GameTest(int HP, int elementTypes, int elementQRange)
+        public GameTest(int elementTypes, int elementQRange)
         {
-            this.HP = HP;
             this.elementTypes = elementTypes;
             this.elementQRange = elementQRange;
         }
@@ -166,10 +189,10 @@ public class MainActivity extends AppCompatActivity {
             int[] elementTypesCons = {0,1,2,3,4,5};
             int[] setTypes = new int[elementTypes];
             for (int i=0; i < setTypes.length; i++) {
-                int tamp = elementTypesCons[i];
+                int temp = elementTypesCons[i];
                 int randMob = (int) (Math.random() * 6);
                 setTypes[i] = elementTypesCons[randMob];
-                elementTypesCons[randMob] = tamp;
+                elementTypesCons[randMob] = temp;
             }
             if (questionLayout.getChildCount() == 0) {
                 for (int i = 0; i < elementQRange; i++) {
@@ -183,8 +206,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-
+    public boolean attackable = false;
     public boolean right ;
     public ArrayList<Integer> qte = new ArrayList<>();
     int now = 0;
@@ -195,24 +217,12 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View v) {
 
             switch (v.getId()) {
-                case R.id.playerCtrB1 :
-                    ans = 0;
-                    break;
-                case R.id.playerCtrB2 :
-                    ans = 1;
-                    break;
-                case R.id.playerCtrB3 :
-                    ans = 2;
-                    break;
-                case R.id.playerCtrB4 :
-                    ans = 3;
-                    break;
-                case R.id.playerCtrB5 :
-                    ans = 4;
-                    break;
-                case R.id.playerCtrB6 :
-                    ans = 5;
-                    break;
+                case R.id.playerCtrB1 : ans = 0; break;
+                case R.id.playerCtrB2 : ans = 1; break;
+                case R.id.playerCtrB3 : ans = 2; break;
+                case R.id.playerCtrB4 : ans = 3; break;
+                case R.id.playerCtrB5 : ans = 4; break;
+                case R.id.playerCtrB6 : ans = 5; break;
             }
             Log.d("now","now = " + now);
             if(now < gameTest.elementQRange) {
@@ -224,12 +234,17 @@ public class MainActivity extends AppCompatActivity {
                     now = 0;
                 }
 
-                if (right && questionLayout.getChildCount() > 0) {
+                if (right && questionLayout.getChildCount() > 1) {
                     questionLayout.removeViewAt(0);
-                } else if (right && questionLayout.getChildCount() == 0) {
-                    now = 0;
+                    Log.d("attackable",questionLayout.getChildCount()+"");
+                } else if (right && questionLayout.getChildCount() == 1) {
                     //接入怪物可被攻擊狀態
+                    Log.d("attackable",attackable+"");
+                    questionLayout.removeViewAt(0);
+                    attackable = true;
+                    now = 0;
                 } else { //答錯
+                    Log.d("attackable",questionLayout.getChildCount()+"");
                     now = 0;
                     questionLayout.removeAllViews();
                     for (int i = 0; i < gameTest.elementQRange; i++) {
@@ -276,7 +291,6 @@ public class MainActivity extends AppCompatActivity {
     {
 
         try {
-            String mobs_1_info_test;
             InputStream is = this.getResources().openRawResource(R.raw.mobsdata);
             byte[] buffer = new byte[is.available()];
             is.read(buffer);
@@ -289,6 +303,7 @@ public class MainActivity extends AppCompatActivity {
             //取出"mobsdata"中的資料,放入JSONArray array
 
             JSONObject mobs_1 = array.getJSONObject(1);
+            //設置mobs_1變數放入JSON中對應位置的資料;
             String mobs_1_id = mobs_1.getString("_id");
             String mobs_1_name = mobs_1.getString("name");
 
@@ -300,15 +315,15 @@ public class MainActivity extends AppCompatActivity {
             int mobs_1_elementQRange = mobs_1.getInt("elementQRange");
             int mobs_1_actionbarDuration = mobs_1.getInt("actionbarDuration");
             int mobs_1_img_resID = getResources().getIdentifier(mobs_1_img1,"drawable", getPackageName());
-            mobs_1_info_test = mobs_1_id + "\n" + mobs_1_HP + "\n" + mobs_1_actionbarDuration;
-
+            //設置變數存取mobs_1中對應標籤""的資料
 
             mobsName1.setText(mobs_1_name);
-//            mobsInfo1.setText(mobs_1_info_test);
             mobsImage1.setImageResource(mobs_1_img_resID);
+            mobsMaxHP1 = mobs_1_HP;
+            mobsCurrentHP1 = mobs_1_HP;
+            Log.d("Mobs HP Load",mobsMaxHP1 + " " +mobsCurrentHP1);
 
-            gameTest = new GameTest(mobs_1_HP,mobs_1_elementTypes,mobs_1_elementQRange);
-            gameTest.count();
+            gameTest = new GameTest(mobs_1_elementTypes,mobs_1_elementQRange);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -317,8 +332,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-
-
     @Override
     public void onBackPressed() {  //返回鍵事件
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
