@@ -24,20 +24,27 @@
             android:layout_height="wrap_content"
             app:srcCompat="@mipmap/ic_launcher" />
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="60dp"
             android:layout_height="10dp"
-            android:background="@drawable/hp_background">
-
-            <ImageView
+            android:gravity="left"
+            android:background="@drawable/hp_background_full"
+            >
+                        <ImageView
                 android:id="@+id/imageViewBarHP"
-                android:layout_width="60dp"
-                android:layout_height="10dp"
-                android:adjustViewBounds="false"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:padding="1dp"
                 android:scaleType="fitXY"
                 app:srcCompat="@drawable/hp_front" />
-        </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/hp_background">
+
+            </LinearLayout>
+        </RelativeLayout>
 
         <ProgressBar
             android:id="@+id/progressBarAction"

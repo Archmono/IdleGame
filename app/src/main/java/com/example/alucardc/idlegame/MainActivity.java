@@ -25,12 +25,18 @@ import java.util.logging.LogRecord;
 public class MainActivity extends AppCompatActivity {
 
     ProgressBar PB;
+    int prepareTime = 10;
+    boolean introFight = true;
+    Timer timer01 = new Timer();
+
     ImageView mobsImage1,mobsImage2,mobsImage3,mobsImage4,mobsImage5,mobsImage6;
     TextView tvPrepareFight,mobsName1,mobsName2,mobsName3,mobsName4,mobsName5,mobsName6;
     LinearLayout blockView,mobs1,mobs2,mobs3,mobs4,mobs5,mobs6;
-    int prepareTime = 100;
-    boolean introFight = true;
-    Timer timer01 = new Timer();
+    ImageView mobsHPbar1,mobsHPbar2,mobsHPbar3,mobsHPbar4,mobsHPbar5,mobsHPbar6;
+    int mobsMaxHP1,mobsMaxHP2,mobsMaxHP3,mobsMaxHP4,mobsMaxHP5,mobsMaxHP6;
+    int mobsCurrentHP1,mobsCurrentHP2,mobsCurrentHP3,mobsCurrentHP4,mobsCurrentHP5,mobsCurrentHP6;
+    int mobsATK1,mobsATK2,mobsATK3,mobsATK4,mobsATK5,mobsATK6;
+    int mobsSpeed1,mobsSpeed2,mobsSpeed3,mobsSpeed4,mobsSpeed5,mobsSpeed6;
 
     Handler mHandler = new Handler(){
         @Override
@@ -89,13 +95,30 @@ public class MainActivity extends AppCompatActivity {
         mobsImage4 =  mobs4.findViewById(R.id.mobsImage);
         mobsImage5 =  mobs5.findViewById(R.id.mobsImage);
         mobsImage6 =  mobs6.findViewById(R.id.mobsImage);
+
+        mobsHPbar1 = mobs1.findViewById(R.id.imageViewBarHP);
+        mobsHPbar2 = mobs2.findViewById(R.id.imageViewBarHP);
+        mobsHPbar3 = mobs3.findViewById(R.id.imageViewBarHP);
+        mobsHPbar4 = mobs4.findViewById(R.id.imageViewBarHP);
+        mobsHPbar5 = mobs5.findViewById(R.id.imageViewBarHP);
+        mobsHPbar6 = mobs6.findViewById(R.id.imageViewBarHP);
     }
 
     void mobsSetOnClickListener(){
         mobs1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                mobsCurrentHP1--;   //-玩家攻擊力
+                if(mobsCurrentHP1 > 0) {
+                    float HPscale = ((float) mobsCurrentHP1 / (float) mobsMaxHP1);
+                    Log.d("Mobs HP Load", mobsMaxHP1 + " " + mobsCurrentHP1);
+                    mobsHPbar1.setScaleX(HPscale);
+                    float mobs1HPbarLocateX = mobsHPbar1.getX();
+                    mobsHPbar1.setPivotX(mobs1HPbarLocateX);
+                    Log.d("MOBS1 HP:", "" + HPscale);
+                }else{
+                    mobs1.setVisibility(View.GONE);
+                }
             }
         });
         mobs2.setOnClickListener(new View.OnClickListener() {
@@ -197,7 +220,6 @@ public class MainActivity extends AppCompatActivity {
     {
 
         try {
-            String mobs_1_info_test;
             InputStream is = this.getResources().openRawResource(R.raw.mobsdata);
             byte[] buffer = new byte[is.available()];
             is.read(buffer);
@@ -210,6 +232,7 @@ public class MainActivity extends AppCompatActivity {
             //取出"mobsdata"中的資料,放入JSONArray array
 
             JSONObject mobs_1 = array.getJSONObject(1);
+            //設置mobs_1變數放入JSON中對應位置的資料;
             String mobs_1_id = mobs_1.getString("_id");
             String mobs_1_name = mobs_1.getString("name");
 
@@ -219,19 +242,19 @@ public class MainActivity extends AppCompatActivity {
             int mobs_1_HP = mobs_1.getInt("HP");
             int mobs_1_actionbarDuration = mobs_1.getInt("actionbarDuration");
             int mobs_1_img_resID = getResources().getIdentifier(mobs_1_img1,"drawable", getPackageName());
-            mobs_1_info_test = mobs_1_id + "\n" + mobs_1_HP + "\n" + mobs_1_actionbarDuration;
-
+            //設置變數存取mobs_1中對應標籤""的資料
 
             mobsName1.setText(mobs_1_name);
-//            mobsInfo1.setText(mobs_1_info_test);
             mobsImage1.setImageResource(mobs_1_img_resID);
+            mobsMaxHP1 = mobs_1_HP;
+            mobsCurrentHP1 = mobs_1_HP;
+            Log.d("Mobs HP Load",mobsMaxHP1 + " " +mobsCurrentHP1);
 
         } catch (IOException e) {
             e.printStackTrace();
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
 
 
     }
