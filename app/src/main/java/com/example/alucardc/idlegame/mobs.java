@@ -3,14 +3,23 @@ package com.example.alucardc.idlegame;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.InputStream;
+
 /**
  * Created by auser on 2017/11/14.
  */
 
 public class mobs {
 
+    JSONArray mobsDataArray = new JSONArray();
+    JSONObject mobsData = new JSONObject();
 
-    public static class Mobs001{
+    String json3 = "[{\"name\":\"sam\",\"age\":\"18\"},{\"name\":\"leo\",\"age\":\"19\"},{\"name\":\"sky\", \"age\":\"20\"}]";
+
+    class Mobs001{
         String[] name = {"Poring","波利"};
         int healthPoint = 10;               //需要點擊次數
         int actionBarTime = 5000;           //動作條時間,毫秒
@@ -25,7 +34,7 @@ public class mobs {
         int image = R.drawable.mobs1002;
     }
 
-    public static class Mobs002{
+    class Mobs002{
         String[] name = {"Orc","獸人"};
         int healthPoint = 30;               //需要點擊次數
         int actionBarTime = 5000;           //動作條時間,毫秒
@@ -40,7 +49,7 @@ public class mobs {
         int image = R.drawable.mobs1241;
     }
 
-    public static class Mobs003{
+    class Mobs003{
         String[] name = {"Peco","大嘴鳥"};
         int healthPoint = 15;               //需要點擊次數
         int actionBarTime = 5000;           //動作條時間,毫秒

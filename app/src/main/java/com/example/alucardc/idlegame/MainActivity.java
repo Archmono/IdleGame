@@ -3,6 +3,7 @@ package com.example.alucardc.idlegame;
 import android.content.DialogInterface;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,23 +30,24 @@ import java.util.logging.LogRecord;
 public class MainActivity extends AppCompatActivity {
 
     ProgressBar PB;
-    int prepareTime = 10;
+    int prepareTime = 3;
     boolean introFight = true;
     Timer timer01 = new Timer();
     Timer mobsTimer01 = new Timer();
-    int playerCurrentHP = 100;
-
-    ImageView mobsImage1,mobsImage2,mobsImage3,mobsImage4,mobsImage5,mobsImage6;
-    TextView tvPrepareFight,playerHP,mobsName1,mobsName2,mobsName3,mobsName4,mobsName5,mobsName6;
-    LinearLayout questionLayout,blockView,mobs1,mobs2,mobs3,mobs4,mobs5,mobs6;
-    ProgressBar actionbar1,actionbar2,actionbar3,actionbar4,actionbar5,actionbar6;
+    int playerCurrentHP = 100;  //暫時設定的玩家HP值,待完成
     int currentActionTime;
-    ImageView[] questionImg;
-    ImageView[] playerCtrBut;
+
+    TextView tvPrepareFight,playerHP;
+    LinearLayout questionLayout,blockView;
+    LinearLayout[] mobs;
+    ProgressBar[] actionbar;
+    ImageView[] playerCtrBut,questionImg,mobsImage,mobsHPbar;
+    TextView[] mobsName;
     int[] mobsQid = {R.drawable.fire,R.drawable.water,R.drawable.wood,R.drawable.light,R.drawable.dark,R.drawable.heart};
     int[] playerCtrB = {R.id.playerCtrB1,R.id.playerCtrB2,R.id.playerCtrB3,R.id.playerCtrB4,R.id.playerCtrB5,R.id.playerCtrB6};
+    int[] mobsInclude = {R.id.mobsInclude1,R.id.mobsInclude2,R.id.mobsInclude3,R.id.mobsInclude4,R.id.mobsInclude5,R.id.mobsInclude6};
     GameTest gameTest;
-    ImageView mobsHPbar1,mobsHPbar2,mobsHPbar3,mobsHPbar4,mobsHPbar5,mobsHPbar6;
+
     int mobsMaxHP1,mobsMaxHP2,mobsMaxHP3,mobsMaxHP4,mobsMaxHP5,mobsMaxHP6;
     int mobsCurrentHP1,mobsCurrentHP2,mobsCurrentHP3,mobsCurrentHP4,mobsCurrentHP5,mobsCurrentHP6;
     int mobsATK1,mobsATK2,mobsATK3,mobsATK4,mobsATK5,mobsATK6;
@@ -59,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
                 tvPrepareFight.setVisibility(View.GONE);
                 PB.setVisibility(View.GONE);
                 blockView.setVisibility(View.GONE);
+            }else if(msg.what == 3){
+                playerHP.setText("HP : " + playerCurrentHP);
             }
             super.handleMessage(msg);
         }
@@ -85,99 +90,75 @@ public class MainActivity extends AppCompatActivity {
         questionLayout = (LinearLayout)findViewById(R.id.questionLayout);
         playerHP = (TextView)findViewById(R.id.healthPointCounts);
 
-
-        mobs1 = (LinearLayout) findViewById(R.id.mobs1);
-        mobs2 = (LinearLayout) findViewById(R.id.mobs2);
-        mobs3 = (LinearLayout) findViewById(R.id.mobs3);
-        mobs4 = (LinearLayout) findViewById(R.id.mobs4);
-        mobs5 = (LinearLayout) findViewById(R.id.mobs5);
-        mobs6 = (LinearLayout) findViewById(R.id.mobs6);
-
-        mobsName1 =  mobs1.findViewById(R.id.mobsName);
-        mobsName2 =  mobs2.findViewById(R.id.mobsName);
-        mobsName3 =  mobs3.findViewById(R.id.mobsName);
-        mobsName4 =  mobs4.findViewById(R.id.mobsName);
-        mobsName5 =  mobs5.findViewById(R.id.mobsName);
-        mobsName6 =  mobs6.findViewById(R.id.mobsName);
-
-        mobsImage1 =  mobs1.findViewById(R.id.mobsImage);
-        mobsImage2 =  mobs2.findViewById(R.id.mobsImage);
-        mobsImage3 =  mobs3.findViewById(R.id.mobsImage);
-        mobsImage4 =  mobs4.findViewById(R.id.mobsImage);
-        mobsImage5 =  mobs5.findViewById(R.id.mobsImage);
-        mobsImage6 =  mobs6.findViewById(R.id.mobsImage);
-
-        actionbar1 = mobs1.findViewById(R.id.progressBarAction);
-        actionbar2 = mobs2.findViewById(R.id.progressBarAction);
-        actionbar3 = mobs3.findViewById(R.id.progressBarAction);
-        actionbar4 = mobs4.findViewById(R.id.progressBarAction);
-        actionbar5 = mobs5.findViewById(R.id.progressBarAction);
-        actionbar6 = mobs6.findViewById(R.id.progressBarAction);
-
+        mobs = new LinearLayout[6];
+        mobsName = new TextView[6];
+        mobsImage = new ImageView[6];
+        actionbar = new ProgressBar[6];
+        mobsHPbar = new ImageView[6];
         questionImg = new ImageView[6];
         playerCtrBut = new ImageView[6];
 
+
         for (int i = 0; i < 6; i++)
         {
+            mobs[i] = (LinearLayout)findViewById(mobsInclude[i]);
+            Log.d("mobs", ""+mobsInclude[i]);
             questionImg[i] = new ImageView(this);
             playerCtrBut[i] = (ImageView)findViewById(playerCtrB[i]);
             playerCtrBut[i].setOnClickListener(playerCtrListener);
+            mobsName[i] = mobs[i].findViewById(R.id.mobsName);
+            mobsImage[i] = mobs[i].findViewById(R.id.mobsImage);
+            actionbar[i] = mobs[i].findViewById(R.id.progressBarAction);
+            mobsHPbar[i] = mobs[i].findViewById(R.id.imageViewBarHP);
         }
-        mobsHPbar1 = mobs1.findViewById(R.id.imageViewBarHP);
-        mobsHPbar2 = mobs2.findViewById(R.id.imageViewBarHP);
-        mobsHPbar3 = mobs3.findViewById(R.id.imageViewBarHP);
-        mobsHPbar4 = mobs4.findViewById(R.id.imageViewBarHP);
-        mobsHPbar5 = mobs5.findViewById(R.id.imageViewBarHP);
-        mobsHPbar6 = mobs6.findViewById(R.id.imageViewBarHP);
+
     }
 
     void mobsSetOnClickListener(){
-        mobs1.setOnClickListener(new View.OnClickListener() {
+        mobs[0].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 if (attackable) {
                     mobsCurrentHP1--;   //-玩家攻擊力
                     if (mobsCurrentHP1 > 0) {
-                        float HPscale = ((float) mobsCurrentHP1 / (float) mobsMaxHP1);
-                        Log.d("Mobs HP Load", mobsMaxHP1 + " " + mobsCurrentHP1);
-                        mobsHPbar1.setScaleX(HPscale);
-                        float mobs1HPbarLocateX = mobsHPbar1.getX();
-                        mobsHPbar1.setPivotX(mobs1HPbarLocateX);
-                        Log.d("MOBS1 HP:", "" + HPscale);
+                        mobsHPbar[0].setScaleX((float) mobsCurrentHP1 / (float) mobsMaxHP1);
+                        float mobs1HPbarLocateX = mobsHPbar[0].getX();
+                        mobsHPbar[0].setPivotX(mobs1HPbarLocateX);
                     } else {
-                        mobs1.setVisibility(View.GONE);
+                        mobs[0].setVisibility(View.GONE);
+                        mob1ActionTimer.cancel();
                     }
                 } else if (now == 0) {
                         gameTest.count();
                 }
             }
         });
-        mobs2.setOnClickListener(new View.OnClickListener() {
+        mobs[1].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
             }
         });
-        mobs3.setOnClickListener(new View.OnClickListener() {
+        mobs[2].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
             }
         });
-        mobs4.setOnClickListener(new View.OnClickListener() {
+        mobs[3].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
             }
         });
-        mobs5.setOnClickListener(new View.OnClickListener() {
+        mobs[4].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
             }
         });
-        mobs6.setOnClickListener(new View.OnClickListener() {
+        mobs[5].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -252,11 +233,12 @@ public class MainActivity extends AppCompatActivity {
                     Log.d("attackable",questionLayout.getChildCount()+"");
                 } else if (right && questionLayout.getChildCount() == 1) {
                     //接入怪物可被攻擊狀態
-                    Log.d("attackable",attackable+"");
+                    Log.d("attackable", attackable + "");
                     questionLayout.removeViewAt(0);
                     attackable = true;
                     now = 0;
-                } else { //答錯
+
+                } else if(!attackable){ //答錯
                     Log.d("attackable",questionLayout.getChildCount()+"");
                     now = 0;
                     questionLayout.removeAllViews();
@@ -276,7 +258,7 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View view) {
             if(introFight == true){
                 tvPrepareFight.setText("");
-                timer01.schedule(battlePrepare, 500, 100);
+                timer01.schedule(battlePrepare, 500, 1000);
                 introFight = false;
                 Log.d("Click test", "view block is clicked");
             }
@@ -291,13 +273,13 @@ public class MainActivity extends AppCompatActivity {
                 msg.sendToTarget();
                 PB.setProgress(prepareTime);
                 prepareTime--;
-                Log.d("timer","time" + prepareTime);
+                Log.d("timer","" + prepareTime);
             }else{
                 Message msg = mHandler.obtainMessage();
                 msg.what = 2;
                 msg.sendToTarget();
                 timer01.cancel();
-                mobsTimer01.schedule(mob1ActionTimer,1000,1000);
+                mobsTimer01.schedule(mob1ActionTimer,500,1000);
             }
         }
     };
@@ -306,14 +288,16 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void run() {
             if(currentActionTime > 0) {
-                actionbar1.setProgress(currentActionTime*100/mobsSpeed1);
+                actionbar[0].setProgress(currentActionTime*100/mobsSpeed1);
                 currentActionTime -= 1000;
                 Log.d("MobsTime", ""+ currentActionTime);
             }else{
-                actionbar1.setProgress(currentActionTime*100/mobsSpeed1);
+                actionbar[0].setProgress(currentActionTime*100/mobsSpeed1);
                 currentActionTime = mobsSpeed1;
                 playerCurrentHP --;
-                playerHP.setText("HP : " + playerCurrentHP);
+                Message msg = mHandler.obtainMessage();
+                msg.what = 3;
+                msg.sendToTarget();
             }
 
         }
@@ -349,8 +333,8 @@ public class MainActivity extends AppCompatActivity {
             int mobs_1_img_resID = getResources().getIdentifier(mobs_1_img1,"drawable", getPackageName());
             //設置變數存取mobs_1中對應標籤""的資料
 
-            mobsName1.setText(mobs_1_name);
-            mobsImage1.setImageResource(mobs_1_img_resID);
+            mobsName[0].setText(mobs_1_name);
+            mobsImage[0].setImageResource(mobs_1_img_resID);
             mobsMaxHP1 = mobs_1_HP;
             mobsCurrentHP1 = mobs_1_HP;
             mobsSpeed1 = mobs_1_actionbarDuration;
