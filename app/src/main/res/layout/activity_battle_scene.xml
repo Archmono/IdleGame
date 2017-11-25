@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.alucardc.idlegame.battle_scene">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
+        android:background="@drawable/bg001"
+        android:scaleType="centerCrop"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/healthPointCounts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="65dp"
+        android:layout_marginLeft="10dp"
+        android:text="HP:XXXX"
+        android:textSize="30sp"
+        android:textColor="#000"
+        />
+
+    <LinearLayout
+        android:id="@+id/questionLayout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_weight="1"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="100dp"
+        android:orientation="horizontal">
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/playerCtrB1"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/fire" />
+
+        <ImageView
+            android:id="@+id/playerCtrB2"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="6dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/water" />
+
+        <ImageView
+            android:id="@+id/playerCtrB3"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="6dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/wood" />
+
+        <ImageView
+            android:id="@+id/playerCtrB4"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="6dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/light" />
+
+        <ImageView
+            android:id="@+id/playerCtrB5"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="6dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/dark" />
+
+        <ImageView
+            android:id="@+id/playerCtrB6"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="6dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/heart" />
+
+    </LinearLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/mobsInclude1"
+            layout="@layout/mobs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="54dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="78dp" />
+
+        <include
+            android:id="@+id/mobsInclude2"
+            layout="@layout/mobs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="159dp"
+            android:layout_marginLeft="178dp"
+            app:layout_constraintLeft_toLeftOf="parent" />
+
+        <include
+            android:id="@+id/mobsInclude3"
+            layout="@layout/mobs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="106dp"
+            android:layout_marginRight="37dp"
+            app:layout_constraintRight_toRightOf="parent" />
+
+        <include
+            android:id="@+id/mobsInclude4"
+            layout="@layout/mobs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="64dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="348dp"
+            android:layout_marginStart="64dp" />
+
+        <include
+            android:id="@+id/mobsInclude5"
+            layout="@layout/mobs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="299dp"
+            android:layout_marginLeft="178dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginStart="178dp" />
+
+        <include
+            android:id="@+id/mobsInclude6"
+            layout="@layout/mobs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="396dp"
+            android:layout_marginRight="47dp"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginEnd="47dp" />
+
+    </android.support.constraint.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/fightBlockView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#9c000000"
+        android:gravity="center"
+        android:orientation="horizontal"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="33dp">
+
+        <TextView
+            android:id="@+id/tvPrepareFight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#fff"
+            android:textSize="80px"
+            android:text="點擊開始戰鬥倒數" />
+
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/pbtest"
+        android:layout_gravity="center"
+        android:visibility="invisible"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:max="3"
+        android:layout_width="match_parent"
+        android:layout_height="65dp" />
+
+</FrameLayout>
