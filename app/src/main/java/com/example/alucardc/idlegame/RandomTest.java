@@ -10,8 +10,8 @@ public class RandomTest {
 
     String TAG = "RandomTest";
     int rand,sum = 0;
-    int[] mobsRarity;
-    int cId;
+    int[] mobsRarity = new int[4];
+    public static int cId;
 
     public RandomTest (int[] mobsRarity) {
         this.mobsRarity = new int[mobsRarity.length];

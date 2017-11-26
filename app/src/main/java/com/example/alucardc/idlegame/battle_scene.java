@@ -305,7 +305,7 @@ public class battle_scene extends AppCompatActivity {
 
     void loadData()
     {
-
+        int mobsId = RandomTest.cId;
         try {
             InputStream is = this.getResources().openRawResource(R.raw.mobsdata);
             byte[] buffer = new byte[is.available()];
@@ -318,7 +318,7 @@ public class battle_scene extends AppCompatActivity {
             JSONArray array = jsonObject.getJSONArray("mobsdata");
             //取出"mobsdata"中的資料,放入JSONArray array
 
-            JSONObject mobs_1 = array.getJSONObject(1);
+            JSONObject mobs_1 = array.getJSONObject(mobsId);
             //設置mobs_1變數放入JSON中對應位置的資料;
             String mobs_1_id = mobs_1.getString("_id");
             String mobs_1_name = mobs_1.getString("name");
