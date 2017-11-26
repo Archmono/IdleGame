@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
         Intent it = new Intent();
         it.setClass(MainActivity.this,pre_battle_scene.class);
         startActivity(it);
-//        this.finish();
     }
 
 
