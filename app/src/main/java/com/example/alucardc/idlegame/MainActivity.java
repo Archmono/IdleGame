@@ -2,6 +2,7 @@ package com.example.alucardc.idlegame;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.ActionBar;
@@ -30,6 +31,8 @@ import java.util.logging.LogRecord;
 
 public class MainActivity extends AppCompatActivity {
 
+    private GameDBHelper helper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,  //隱藏狀態列
@@ -37,6 +40,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         loadData();
+
+        loadTest();// 測試sqlite讀取資料
+        getData1();
+
     }
     public void enter_scene_1(View view){
         Intent it = new Intent();
@@ -73,5 +80,24 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+    }
+
+    private void loadTest(){
+        helper = new GameDBHelper(this, "idlegame.db", null, 1);
+    }
+    public void getData1(){
+        String[] column = { "_id", "name", "healthPoint"};
+        Cursor c = helper.getReadableDatabase().query("mobsdata", null, null, null, null, null, null);
+
+        c.moveToFirst();
+        for (int i = 0; i < c.getCount(); i++) {
+            String id = c.getString(c.getColumnIndex("_id"));
+            String name = c.getString(c.getColumnIndex("name"));
+            int hp = c.getInt(c.getColumnIndex("healthPoint"));
+
+            c.moveToNext();
+            Log.d("datatest", ""+ id + ", " + name + ", " + hp);
+        }
+        c.close();
     }
 }
