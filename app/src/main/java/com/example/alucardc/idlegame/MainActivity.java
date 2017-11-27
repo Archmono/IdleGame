@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         loadData();
 
         loadTest();// 測試sqlite讀取資料
-        getData1();
+        getData1("1003");
 
     }
     public void enter_scene_1(View view){
@@ -85,9 +85,9 @@ public class MainActivity extends AppCompatActivity {
     private void loadTest(){
         helper = new GameDBHelper(this, "idlegame.db", null, 1);
     }
-    public void getData1(){
+    public void getData1(String searchMobsID){
         String[] column = { "_id", "name", "healthPoint"};
-        Cursor c = helper.getReadableDatabase().query("mobsdata", null, null, null, null, null, null);
+        Cursor c = helper.getReadableDatabase().query("mobsdata", column, "_id=?", new String[]{searchMobsID}, null, null, null);
 
         c.moveToFirst();
         for (int i = 0; i < c.getCount(); i++) {
