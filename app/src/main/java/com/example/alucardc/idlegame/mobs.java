@@ -17,7 +17,6 @@ public class mobs {
     JSONArray mobsDataArray = new JSONArray();
     JSONObject mobsData = new JSONObject();
 
-    String json3 = "[{\"name\":\"sam\",\"age\":\"18\"},{\"name\":\"leo\",\"age\":\"19\"},{\"name\":\"sky\", \"age\":\"20\"}]";
 
     class Mobs001{
         String[] name = {"Poring","波利"};

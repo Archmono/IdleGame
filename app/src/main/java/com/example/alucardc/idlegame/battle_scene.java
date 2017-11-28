@@ -1,6 +1,7 @@
 package com.example.alucardc.idlegame;
 
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.ActionBar;
@@ -29,6 +30,8 @@ import java.util.logging.LogRecord;
 
 public class battle_scene extends AppCompatActivity {
 
+    public GameDBHelper helper;
+    int showHP;
     ProgressBar PB;
     int prepareTime = 3;
     boolean introFight = true;
@@ -81,6 +84,26 @@ public class battle_scene extends AppCompatActivity {
         blockView.setOnClickListener(blockListener);
         loadData();
 
+        getData("1001");
+        Log.d("showHP", ""+showHP);
+    }
+
+    public void getData(String searchMobsID){
+        helper = new GameDBHelper(this, "idlegame.db", null, 1);
+        String[] column = { "_id", "name", "healthPoint"};
+        Cursor c = helper.getReadableDatabase().query("mobsdata", column, "_id=?", new String[]{searchMobsID}, null, null, null);
+
+        c.moveToFirst();
+        for (int i = 0; i < c.getCount(); i++) {
+            String id = c.getString(c.getColumnIndex("_id"));
+            String name = c.getString(c.getColumnIndex("name"));
+            int hp = c.getInt(c.getColumnIndex("healthPoint"));
+            c.moveToNext();
+            Log.d("datatest", id + ", " + name + ", " + hp);
+            String[] ad = {id , name};
+            showHP = hp;
+        }
+        c.close();
     }
 
     void findViews(){

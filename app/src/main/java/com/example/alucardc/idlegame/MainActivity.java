@@ -1,37 +1,22 @@
 package com.example.alucardc.idlegame;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.os.Handler;
-import android.os.Message;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
-
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.logging.LogRecord;
 
 public class MainActivity extends AppCompatActivity {
 
-    private GameDBHelper helper;
+    public GameDBHelper helper;
+    int showHP;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +27,12 @@ public class MainActivity extends AppCompatActivity {
         loadData();
 
         loadTest();// 測試sqlite讀取資料
-        getData1("1003");
+        getData("1001");
+        Log.d("showHP", ""+showHP);
+        getData("1002");
+        Log.d("showHP", ""+showHP);
+        getData("1101");
+        Log.d("showHP", ""+showHP);
 
     }
     public void enter_scene_1(View view){
@@ -83,9 +73,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadTest(){
-        helper = new GameDBHelper(this, "idlegame.db", null, 1);
+//        helper = new GameDBHelper(this, "idlegame.db", null, 1);
     }
-    public void getData1(String searchMobsID){
+    public void getData(String searchMobsID){
+        helper = new GameDBHelper(this, "idlegame.db", null, 1);
         String[] column = { "_id", "name", "healthPoint"};
         Cursor c = helper.getReadableDatabase().query("mobsdata", column, "_id=?", new String[]{searchMobsID}, null, null, null);
 
@@ -94,10 +85,12 @@ public class MainActivity extends AppCompatActivity {
             String id = c.getString(c.getColumnIndex("_id"));
             String name = c.getString(c.getColumnIndex("name"));
             int hp = c.getInt(c.getColumnIndex("healthPoint"));
-
             c.moveToNext();
-            Log.d("datatest", ""+ id + ", " + name + ", " + hp);
+            Log.d("datatest", id + ", " + name + ", " + hp);
+            String[] ad = {id , name};
+            showHP = hp;
         }
+
         c.close();
     }
 }
