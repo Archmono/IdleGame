@@ -15,8 +15,7 @@ import java.io.InputStream;
 
 public class MainActivity extends AppCompatActivity {
 
-    public GameDBHelper helper;
-    int showHP;
+    int showHP[] = new int[10];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,13 +25,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         loadData();
 
-        loadTest();// 測試sqlite讀取資料
-        getData("1001");
-        Log.d("showHP", ""+showHP);
-        getData("1002");
-        Log.d("showHP", ""+showHP);
-        getData("1101");
-        Log.d("showHP", ""+showHP);
+        getData();
+        for(int i =0 ;i<10; i++){
+            Log.d("showHP", "" + showHP[i]);
+        }
 
     }
     public void enter_scene_1(View view){
@@ -72,13 +68,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void loadTest(){
-//        helper = new GameDBHelper(this, "idlegame.db", null, 1);
-    }
-    public void getData(String searchMobsID){
-        helper = new GameDBHelper(this, "idlegame.db", null, 1);
+    public void getData(){
+        GameDBHelper helper = GameDBHelper.getInstance(this);
         String[] column = { "_id", "name", "healthPoint"};
-        Cursor c = helper.getReadableDatabase().query("mobsdata", column, "_id=?", new String[]{searchMobsID}, null, null, null);
+        Cursor c = helper.getReadableDatabase().query("mobsdata", column, "healthPoint>?", new String[]{"10"}, null, null, null);
 
         c.moveToFirst();
         for (int i = 0; i < c.getCount(); i++) {
@@ -87,8 +80,7 @@ public class MainActivity extends AppCompatActivity {
             int hp = c.getInt(c.getColumnIndex("healthPoint"));
             c.moveToNext();
             Log.d("datatest", id + ", " + name + ", " + hp);
-            String[] ad = {id , name};
-            showHP = hp;
+            showHP[i] = hp;
         }
 
         c.close();

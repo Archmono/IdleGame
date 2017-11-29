@@ -10,7 +10,15 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class GameDBHelper extends SQLiteOpenHelper{
 
-    public GameDBHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+    private static GameDBHelper instance = null;
+    public static GameDBHelper getInstance(Context ctx){
+        if(instance == null){
+            instance = new GameDBHelper(ctx, "idlegame.db", null, 1);
+        }
+        return instance;
+    }
+
+    private GameDBHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
     }
 
