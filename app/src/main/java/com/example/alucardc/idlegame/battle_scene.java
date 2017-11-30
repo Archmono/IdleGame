@@ -30,8 +30,6 @@ import java.util.logging.LogRecord;
 
 public class battle_scene extends AppCompatActivity {
 
-    public GameDBHelper helper;
-    int showHP;
     ProgressBar PB;
     int prepareTime = 3;
     boolean introFight = true;

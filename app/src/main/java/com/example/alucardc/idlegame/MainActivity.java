@@ -12,10 +12,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    int showHP[] = new int[10];
+    String TAG = "Main Data Test";
+    ArrayList idList = new ArrayList();
+    ArrayList nameList = new ArrayList();
+    ArrayList healthPointList = new ArrayList();
+    ArrayList rarityList = new ArrayList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,10 +30,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         loadData();
 
-        getData();
-        for(int i =0 ;i<10; i++){
-            Log.d("showHP", "" + showHP[i]);
-        }
+//        getData();
+        getRarityData("1","0");
+
+        Log.d(TAG, idList.toString());
+        Log.d(TAG, nameList.toString());
+        Log.d(TAG, healthPointList.toString());
+        Log.d(TAG, rarityList.toString());
 
     }
     public void enter_scene_1(View view){
@@ -79,10 +87,28 @@ public class MainActivity extends AppCompatActivity {
             String name = c.getString(c.getColumnIndex("name"));
             int hp = c.getInt(c.getColumnIndex("healthPoint"));
             c.moveToNext();
-            Log.d("datatest", id + ", " + name + ", " + hp);
-            showHP[i] = hp;
+            idList.add(id);
+            nameList.add(name);
+            healthPointList.add(hp);
         }
+        c.close();
+    }
 
+    public void getRarityData(String scene1, String scene2){
+        GameDBHelper helper = GameDBHelper.getInstance(this);
+        String[] column = { "_id", "rareWeight","scene_1", "scene_2"};
+        Cursor c = helper.getReadableDatabase().query("mobsdata", column, "scene_1=? AND scene_2=?", new String[]{scene1,scene2}, null, null, null);
+
+        c.moveToFirst();
+        for (int i = 0; i < c.getCount(); i++) {
+            String id = c.getString(c.getColumnIndex("_id"));
+//            Log.d(TAG, "id"+id);
+            int rarity = c.getInt(c.getColumnIndex("rareWeight"));
+//            Log.d(TAG, "rarity"+rarity);
+            idList.add(id);
+            rarityList.add(rarity);
+            c.moveToNext();
+        }
         c.close();
     }
 }
