@@ -10,8 +10,13 @@ import android.view.WindowManager;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -28,6 +33,10 @@ public class MainActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        DBInfo.DB_FILE = getDatabasePath("idlegame.db")+"";    //database的絕對路徑
+        copyDBFile();
+
         loadData();
 
 //        getData();
@@ -110,5 +119,29 @@ public class MainActivity extends AppCompatActivity {
             c.moveToNext();
         }
         c.close();
+    }
+
+    public void copyDBFile()
+    {
+        try {
+            File f = new File(DBInfo.DB_FILE);
+            Log.d("GameDBHelper", ""+DBInfo.DB_FILE);
+            if (! f.exists())
+            {
+                InputStream is = getResources().openRawResource(R.raw.idlegame);
+                OutputStream os = new FileOutputStream(DBInfo.DB_FILE);
+                int read;
+                while ((read = is.read()) != -1)
+                {
+                    os.write(read);
+                }
+                os.close();
+                is.close();
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
