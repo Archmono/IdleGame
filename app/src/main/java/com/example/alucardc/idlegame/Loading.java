@@ -93,7 +93,7 @@ public class Loading extends Activity {
     int random;
     void DateTest () {
         timeGap = (int)(newTime-oldTime)/1000;
-        getRarityData("1","0");
+        getData("1","0");
         Log.d("LOGDATE_timeGap", timeGap + "");
         Log.d("LOGDATE_NextTime", nextTime+"");
         for(int i=0;i<6;i++) {
@@ -121,7 +121,7 @@ public class Loading extends Activity {
     }
 
 
-    public void getRarityData(String scene1, String scene2){
+    public void getData(String scene1, String scene2){
         GameDBHelper helper = GameDBHelper.getInstance(this);
         String[] column = { "_id", "rareWeight","scene_1", "scene_2"};
         Cursor c = helper.getReadableDatabase().query("mobsdata", column, "scene_1=? AND scene_2=?", new String[]{scene1,scene2}, null, null, null);
