@@ -14,15 +14,72 @@
         android:scaleType="centerCrop"
         app:srcCompat="@drawable/bg001"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="-16dp" />
+        tools:layout_editor_absoluteY="-16dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <ImageView
         android:id="@+id/mobView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:layout_marginLeft="50dp"
-        app:srcCompat="@mipmap/ic_launcher" />
+        android:layout_marginLeft="49dp"
+        app:srcCompat="@mipmap/ic_launcher"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="49dp" />
+
+    <ImageView
+        android:id="@+id/mobView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@mipmap/ic_launcher"
+        android:layout_marginBottom="21dp"
+        android:layout_above="@+id/mobView4"
+        android:layout_toRightOf="@+id/mobView1"
+        android:layout_toEndOf="@+id/mobView1" />
+
+    <ImageView
+        android:id="@+id/mobView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@mipmap/ic_launcher"
+        android:layout_above="@+id/mobView2"
+        android:layout_toRightOf="@+id/mobView4"
+        android:layout_toEndOf="@+id/mobView4" />
+
+    <ImageView
+        android:id="@+id/mobView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@mipmap/ic_launcher"
+        android:layout_marginBottom="76dp"
+        android:layout_above="@+id/mobView5"
+        android:layout_alignRight="@+id/mobView6"
+        android:layout_alignEnd="@+id/mobView6"
+        android:layout_marginRight="35dp"
+        android:layout_marginEnd="35dp" />
+
+    <ImageView
+        android:id="@+id/mobView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@mipmap/ic_launcher"
+        android:layout_alignTop="@+id/mobView6"
+        android:layout_toRightOf="@+id/mobView1"
+        android:layout_toEndOf="@+id/mobView1" />
+
+    <ImageView
+        android:id="@+id/mobView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@mipmap/ic_launcher"
+        android:layout_marginBottom="59dp"
+        android:layout_above="@+id/button2"
+        android:layout_alignLeft="@+id/button2"
+        android:layout_alignStart="@+id/button2" />
 
     <LinearLayout
         android:layout_width="match_parent"

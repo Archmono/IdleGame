@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         DBInfo.DB_FILE = getDatabasePath("idlegame.db")+"";    //database的絕對路徑
         copyDBFile();
 
-        loadData();
+//        loadData();
 
 //        getData();
         getRarityData("1","0");
@@ -74,8 +75,6 @@ public class MainActivity extends AppCompatActivity {
                 mobsId[i] = mobs[i].getString("_id");
                 mobsRareWeight[i] = mobs[i].getInt("rareWeight");
             }
-            RandomTest randomTest = new RandomTest(mobsRareWeight);
-            randomTest.randomTest();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -119,6 +118,10 @@ public class MainActivity extends AppCompatActivity {
             c.moveToNext();
         }
         c.close();
+        Object[] objectList = rarityList.toArray();
+        int[] raritygArray =  Arrays.copyOf(objectList,objectList.length,int[].class);
+        RandomTest randomTest = new RandomTest(raritygArray);
+        randomTest.randomTest();
     }
 
     public void copyDBFile()

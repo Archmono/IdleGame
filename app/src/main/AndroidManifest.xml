@@ -12,20 +12,22 @@
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".pre_battle_scene" />
+        <activity android:name=".battle_scene">
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
+        </activity>
+        <activity android:name=".Loading">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity android:name=".pre_battle_scene" />
-        <activity android:name=".battle_scene">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
-
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
-
         </activity>
     </application>
 

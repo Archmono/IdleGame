@@ -11,7 +11,7 @@ public class RandomTest {
     String TAG = "RandomTest";
     int rand,sum = 0;
     int[] mobsRarity = new int[4];
-    public static int cId;
+    public static String cId;
 
     public RandomTest (int[] mobsRarity) {
         this.mobsRarity = new int[mobsRarity.length];
@@ -33,7 +33,7 @@ public class RandomTest {
             rand -= mobsRarity[i];
             Log.d(TAG, "-= mobsRarity[" + i + "] :" + rand);
             if (rand <= 0) {
-                cId = i;
+                cId = Loading.idList.get(i).toString();
                 break;
             }
         }
