@@ -118,10 +118,6 @@ public class MainActivity extends AppCompatActivity {
             c.moveToNext();
         }
         c.close();
-        Object[] objectList = rarityList.toArray();
-        int[] raritygArray =  Arrays.copyOf(objectList,objectList.length,int[].class);
-        RandomTest randomTest = new RandomTest(raritygArray);
-        randomTest.randomTest();
     }
 
     public void copyDBFile()

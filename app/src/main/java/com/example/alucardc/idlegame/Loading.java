@@ -71,8 +71,8 @@ public class Loading extends Activity {
         setContentView(R.layout.activity_loading);
         newTime = rightNow.getTimeInMillis();
         restorePrefs();
-        getRarityData("1","0");
         DateTest();
+        Log.d("LOGDATE", tempHasMod[0] + tempHasMod[1] + tempHasMod[2] + tempHasMod[3] + tempHasMod[4] + tempHasMod[5]);
         onSave();
     }
 
@@ -81,9 +81,11 @@ public class Loading extends Activity {
         onSave();
         super.onDestroy();
     }
+
     int random;
     void DateTest () {
         timeGap = (int)(newTime-oldTime)/1000;
+        getRarityData("1","0");
         Log.d("LOGDATE_timeGap", timeGap + "");
         Log.d("LOGDATE_NextTime", nextTime+"");
         for(int i=0;i<6;i++) {
@@ -99,7 +101,7 @@ public class Loading extends Activity {
                     nextTime = (-timeGap);
                     break;
                 } else {
-                    tempHasMod[i] = "1";
+                    tempHasMod[i] = RandomTest.cId;
                 }
             }
         }
@@ -127,8 +129,10 @@ public class Loading extends Activity {
             c.moveToNext();
         }
         c.close();
-        Object[] objectList = rarityList.toArray();
-        int[] raritygArray =  Arrays.copyOf(objectList,objectList.length,int[].class);
+        int[] raritygArray =  new int[rarityList.size()];
+        for(int i=0; i< rarityList.size(); i++) {
+            raritygArray[i] = Integer.parseInt((String) rarityList.get(i));
+        }
         RandomTest randomTest = new RandomTest(raritygArray);
         randomTest.randomTest();
     }

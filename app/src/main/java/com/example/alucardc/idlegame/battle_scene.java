@@ -80,7 +80,7 @@ public class battle_scene extends AppCompatActivity {
         mobsSetOnClickListener();
 
         blockView.setOnClickListener(blockListener);
-        loadData();
+        //loadData();
 
     }
 
@@ -324,7 +324,7 @@ public class battle_scene extends AppCompatActivity {
 
     void loadData()
     {
-        int mobsId = RandomTest.cId;
+        int mobsId = Integer.parseInt(RandomTest.cId);
         try {
             InputStream is = this.getResources().openRawResource(R.raw.mobsdata);
             byte[] buffer = new byte[is.available()];
