@@ -10,6 +10,12 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -69,10 +75,12 @@ public class Loading extends Activity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
+        DBInfo.DB_FILE = getDatabasePath("idlegame.db")+"";    //database的絕對路徑
+        copyDBFile();
         newTime = rightNow.getTimeInMillis();
         restorePrefs();
         DateTest();
-        Log.d("LOGDATE", tempHasMod[0] + tempHasMod[1] + tempHasMod[2] + tempHasMod[3] + tempHasMod[4] + tempHasMod[5]);
+        Log.d("LOGDATE_Mobs", tempHasMod[0] +" "+ tempHasMod[1] +" "+ tempHasMod[2] +" "+ tempHasMod[3] +" "+ tempHasMod[4] +" "+ tempHasMod[5]+" ");
         onSave();
     }
 
@@ -89,7 +97,7 @@ public class Loading extends Activity {
         Log.d("LOGDATE_timeGap", timeGap + "");
         Log.d("LOGDATE_NextTime", nextTime+"");
         for(int i=0;i<6;i++) {
-            if (tempHasMod[i].equals("0")) {
+            if (tempHasMod[i].equals("")) {
                 random = (int) (Math.random() * 25) + 5; //隨機 5-30
                 if(nextTime > 0) {
                     random = nextTime;
@@ -107,7 +115,7 @@ public class Loading extends Activity {
         }
     }
 
-    public void onClick (View v) {
+    public void onClick (View v) { //切換到主畫面
         Intent i = new Intent(Loading.this, MainActivity.class);
         startActivity(i);
     }
@@ -131,9 +139,31 @@ public class Loading extends Activity {
         c.close();
         int[] raritygArray =  new int[rarityList.size()];
         for(int i=0; i< rarityList.size(); i++) {
-            raritygArray[i] = Integer.parseInt((String) rarityList.get(i));
+            raritygArray[i] = Integer.parseInt(rarityList.get(i).toString());
         }
         RandomTest randomTest = new RandomTest(raritygArray);
         randomTest.randomTest();
+    }
+
+
+    public void copyDBFile() {
+        try {
+            File f = new File(DBInfo.DB_FILE);
+            Log.d("GameDBHelper", "" + DBInfo.DB_FILE);
+            if (!f.exists()) {
+                InputStream is = getResources().openRawResource(R.raw.idlegame);
+                OutputStream os = new FileOutputStream(DBInfo.DB_FILE);
+                int read;
+                while ((read = is.read()) != -1) {
+                    os.write(read);
+                }
+                os.close();
+                is.close();
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
