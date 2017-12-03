@@ -102,6 +102,7 @@ public class Loading extends Activity {
                 if(nextTime > 0) {
                     random = nextTime;
                     nextTime = 0;
+                    break;
                 }
                 Log.d("LOGDATE_Random"+i+":", random + "");
                 timeGap -= random;
