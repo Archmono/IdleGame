@@ -93,10 +93,10 @@ public class Loading extends Activity {
     int random;
     void DateTest () {
         timeGap = (int)(newTime-oldTime)/1000;
-        getRarityData("1","0");
         Log.d("LOGDATE_timeGap", timeGap + "");
         Log.d("LOGDATE_NextTime", nextTime+"");
         for(int i=0;i<6;i++) {
+            getRarityData("1");
             if (tempHasMod[i].equals("")) {
                 random = (int) (Math.random() * 25) + 5; //隨機 5-30
                 if(nextTime > 0) {
@@ -120,6 +120,27 @@ public class Loading extends Activity {
         startActivity(i);
     }
 
+    public void getRarityData(String scene){
+        GameDBHelper helper = GameDBHelper.getInstance(this);
+        String[] column = { "_id", "rareWeight","scene_1", "scene_2"};
+        Cursor c = helper.getReadableDatabase().query("mobsdata", column, "scene_" + scene + "=?", new String[]{"1"}, null, null, null);
+
+        c.moveToFirst();
+        for (int i = 0; i < c.getCount(); i++) {
+            String id = c.getString(c.getColumnIndex("_id"));
+            int rarity = c.getInt(c.getColumnIndex("rareWeight"));
+            idList.add(id);
+            rarityList.add(rarity);
+            c.moveToNext();
+        }
+        c.close();
+        int[] raritygArray =  new int[rarityList.size()];
+        for(int i=0; i< rarityList.size(); i++) {
+            raritygArray[i] = Integer.parseInt(rarityList.get(i).toString());
+        }
+        RandomTest randomTest = new RandomTest(raritygArray);
+        randomTest.randomTest();
+    }
 
     public void getRarityData(String scene1, String scene2){
         GameDBHelper helper = GameDBHelper.getInstance(this);
