@@ -26,7 +26,7 @@ public class GameDBHelper extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-
+        Log.d("GameDBHelper","onCreate DB");
     }
 
     @Override

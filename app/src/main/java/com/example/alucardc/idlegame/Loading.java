@@ -32,8 +32,6 @@ public class Loading extends Activity {
     public static final String DATE_NEXT_DATE = "DATE_NextTime";
 
     public static ArrayList idList = new ArrayList();
-    ArrayList nameList = new ArrayList();
-    ArrayList healthPointList = new ArrayList();
     public static ArrayList rarityList = new ArrayList();
 
     int timeGap,nextTime;

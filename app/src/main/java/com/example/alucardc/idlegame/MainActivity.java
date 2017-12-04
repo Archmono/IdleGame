@@ -2,6 +2,7 @@ package com.example.alucardc.idlegame;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,30 +13,34 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     String TAG = "MainDataTest";
-    ArrayList idList = new ArrayList();
-    ArrayList nameList = new ArrayList();
-    ArrayList healthPointList = new ArrayList();
-    ArrayList rarityList = new ArrayList();
-    ArrayList speedList = new ArrayList();
-    ArrayList qCountsList = new ArrayList();
-    ArrayList qTypesList = new ArrayList();
-    ArrayList qRangeList = new ArrayList();
-    ArrayList stunTimeList = new ArrayList();
-    ArrayList atkList = new ArrayList();
-    ArrayList imageList = new ArrayList();
-    ArrayList lootsList = new ArrayList();
-    ArrayList lootsDropRateList = new ArrayList();
+
+    public static ArrayList idList = new ArrayList();
+    public static ArrayList nameList = new ArrayList();
+    public static ArrayList healthPointList = new ArrayList();
+    public static ArrayList rarityList = new ArrayList();
+    public static ArrayList speedList = new ArrayList();
+    public static ArrayList qCountsList = new ArrayList();
+    public static ArrayList qTypesList = new ArrayList();
+    public static ArrayList qRangeList = new ArrayList();
+    public static ArrayList stunTimeList = new ArrayList();
+    public static ArrayList atkList = new ArrayList();
+    public static ArrayList imageList = new ArrayList();
+    public static ArrayList lootsList = new ArrayList();
+    public static ArrayList lootsDropRateList = new ArrayList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,12 +49,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        DBInfo.DB_FILE = getDatabasePath("idlegame.db")+"";    //database的絕對路徑
+        DBInfo.DB_FILE = getDatabasePath("idlegame")+".db";    //database的絕對路徑
 
         copyDBFile();
 
 //        loadData();
-//
 //        getData();
 //        getRarityData("1","0");
         getData("2");
@@ -65,8 +69,10 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, stunTimeList.toString());
         Log.d(TAG, atkList.toString());
         Log.d(TAG, imageList.toString());
-        Log.d(TAG, lootsList.get(0).toString());
+        int[] arr = (int[]) lootsList.get(1);
+        Log.d(TAG, arr[0]+" ,"+arr[1]+" ,"+arr[2]);
         Log.d(TAG, lootsDropRateList.toString());
+        System.out.println();
 
     }
     public void enter_scene_1(View view){
@@ -75,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(it);
     }
     public void loadTest(View view){
-//        copyDBFile();
+        copyDBFile();
     }
 
 
@@ -166,7 +172,10 @@ public class MainActivity extends AppCompatActivity {
             int loots_2_dp = c.getInt(c.getColumnIndex("loots_2_dp"));
             int loots_3_dp = c.getInt(c.getColumnIndex("loots_3_dp"));
             int lootsInside[] = {loots_1,loots_2,loots_3};
-
+//            ArrayList lootsInside = new ArrayList();
+//            lootsInside.add(loots_1);
+//            lootsInside.add(loots_2);
+//            lootsInside.add(loots_3);
             idList.add(id);
             nameList.add(name);
             healthPointList.add(hp);
@@ -190,9 +199,12 @@ public class MainActivity extends AppCompatActivity {
     {
         try {
             File f = new File(DBInfo.DB_FILE);
-            Log.d("GameDBHelper", "copyFiles"+DBInfo.DB_FILE);
+            File dbDir = new File(DBInfo.DB_FILE.substring(0,DBInfo.DB_FILE.length()-12));
+            Log.d("GameDBHelper", "copyFiles : "+DBInfo.DB_FILE);
+            dbDir.mkdirs();
             if (! f.exists())
             {
+
                 InputStream is = getResources().openRawResource(R.raw.idlegame);
                 OutputStream os = new FileOutputStream(DBInfo.DB_FILE);
                 int read;
@@ -211,4 +223,5 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
 }
