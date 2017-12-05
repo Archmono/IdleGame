@@ -8,6 +8,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+
+import com.google.gson.Gson;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,7 +30,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     String TAG = "MainDataTest";
-
+    String TAG2 = "MainPlayerTest";
     public static ArrayList idList = new ArrayList();
     public static ArrayList nameList = new ArrayList();
     public static ArrayList healthPointList = new ArrayList();
@@ -54,9 +57,8 @@ public class MainActivity extends AppCompatActivity {
         copyDBFile();
 
 //        loadData();
-//        getData();
-//        getRarityData("1","0");
         getData("2");
+        getPlayerStatus();
 
         Log.d(TAG, idList.toString());
         Log.d(TAG, nameList.toString());
@@ -80,10 +82,27 @@ public class MainActivity extends AppCompatActivity {
         it.setClass(MainActivity.this,pre_battle_scene.class);
         startActivity(it);
     }
-    public void loadTest(View view){
-        copyDBFile();
-    }
 
+    public void getPlayerStatus(){
+        try {
+            InputStream is = this.getResources().openRawResource(R.raw.playerdata);
+            byte[] buffer = new byte[is.available()];
+            is.read(buffer);
+            String json = new String(buffer, "UTF-8");
+            Gson gson = new Gson();
+            Player playerStatus = gson.fromJson(json, Player.class);
+            Log.d(TAG2,"玩家名稱 : " + String.valueOf(playerStatus.playerStatus[0].playerID));
+            Log.d(TAG2,"玩家攻擊力 : " + String.valueOf(playerStatus.playerStatus[0].playerATK));
+            Log.d(TAG2,"玩家目前HP : " + String.valueOf(playerStatus.playerStatus[0].playerCurrentHP));
+            Log.d(TAG2,"玩家最大HP : " + String.valueOf(playerStatus.playerStatus[0].playerMaxHP));
+
+            Log.d(TAG2,"玩家100101號道具存量 : " + String.valueOf(playerStatus.playerInventory[0].i100101));
+            Log.d(TAG2,"怪物圖鑑1001號生態介紹解鎖狀態 : " + String.valueOf(playerStatus.playerMobsCollection[0].m1001.mobsBio));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     void loadData()
     {
