@@ -1,0 +1,65 @@
+{
+  "playerStatus":
+  [
+    {
+      "playerID": "Player",
+      "playerMaxHP": 50,
+      "playerCurrentHP": 50,
+      "playerATK": 1
+    }
+  ],
+  "playerInventory":
+  [
+    {
+      "i100101": 0,      "i100102": 0,      "i100103": 0,
+      "i100201": 0,      "i100202": 0,      "i100203": 0,
+      "i100301": 0,      "i100302": 0,      "i100303": 0,
+      "i110101": 0,      "i110102": 0,      "i200101": 0,
+      "i200102": 0,      "i200103": 0,      "i200201": 0,
+      "i200202": 0,      "i200203": 0,      "i200301": 0,
+      "i200302": 0,      "i200303": 0,      "i210101": 0,
+      "i210102": 0,      "i910101": 0,      "i910102": 0
+    }
+  ],
+  "playerMobsCollection":
+  [
+    {
+      "1001":{
+        "image":0,"name":0,"atk":0,"mobsBio":0,
+        "loot1":0,"loot2":0,"loot3":0
+      },
+      "1002":{
+        "image":0,"name":0,"atk":0,"mobsBio":0,
+        "loot1":0,"loot2":0,"loot3":0
+      },
+      "1003":{
+        "image":0,"name":0,"atk":0,"mobsBio":0,
+        "loot1":0,"loot2":0,"loot3":0
+      },
+      "1101":{
+        "image":0,"name":0,"atk":0,"mobsBio":0,
+        "loot1":0,"loot2":0,"loot3":0
+      },
+      "2001":{
+        "image":0,"name":0,"atk":0,"mobsBio":0,
+        "loot1":0,"loot2":0,"loot3":0
+      },
+      "2002":{
+        "image":0,"name":0,"atk":0,"mobsBio":0,
+        "loot1":0,"loot2":0,"loot3":0
+      },
+      "2003":{
+        "image":0,"name":0,"atk":0,"mobsBio":0,
+        "loot1":0,"loot2":0,"loot3":0
+      },
+      "2101":{
+        "image":0,"name":0,"atk":0,"mobsBio":0,
+        "loot1":0,"loot2":0,"loot3":0
+      },
+      "9101":{
+        "image":0,"name":0,"atk":0,"mobsBio":0,
+        "loot1":0,"loot2":0,"loot3":0
+      }
+    }
+  ]
+}
