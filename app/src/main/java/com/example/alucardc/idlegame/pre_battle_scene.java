@@ -59,31 +59,4 @@ public class pre_battle_scene extends AppCompatActivity {
 //                mob[i].setVisibility(View.VISIBLE);
 //        }
 //    }
-    void loadData()
-    {
-        int mobsId = Integer.parseInt(RandomTest.cId);
-
-        try {
-            InputStream is = this.getResources().openRawResource(R.raw.mobsdata);
-            byte[] buffer = new byte[is.available()];
-            is.read(buffer);
-            String json = new String(buffer, "UTF-8");
-            JSONObject jsonObject = new JSONObject(json);
-            JSONArray array = jsonObject.getJSONArray("mobsdata");
-            JSONObject mobs_1 = array.getJSONObject(mobsId);
-
-            JSONObject mobs_pics = mobs_1.getJSONObject("pics");
-            String mobs_1_img1 = mobs_pics.getString("pic1");
-            int mobs_1_img_resID = getResources().getIdentifier(mobs_1_img1,"drawable", getPackageName());
-
-//            modView1.setImageResource(mobs_1_img_resID);
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-    }
 }

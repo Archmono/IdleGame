@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         copyDBFile();
 
 //        loadData();
-        getData("2");
+        getData("1");
         getPlayerStatus();
 
         Log.d(TAG, idList.toString());
@@ -90,46 +90,20 @@ public class MainActivity extends AppCompatActivity {
             is.read(buffer);
             String json = new String(buffer, "UTF-8");
             Gson gson = new Gson();
-            Player playerStatus = gson.fromJson(json, Player.class);
-            Log.d(TAG2,"玩家名稱 : " + String.valueOf(playerStatus.playerStatus[0].playerID));
-            Log.d(TAG2,"玩家攻擊力 : " + String.valueOf(playerStatus.playerStatus[0].playerATK));
-            Log.d(TAG2,"玩家目前HP : " + String.valueOf(playerStatus.playerStatus[0].playerCurrentHP));
-            Log.d(TAG2,"玩家最大HP : " + String.valueOf(playerStatus.playerStatus[0].playerMaxHP));
+            Player playInfo = gson.fromJson(json, Player.class);
+            Log.d(TAG2,"玩家名稱 : " + String.valueOf(playInfo.playerStatus[0].playerID));
+            Log.d(TAG2,"玩家攻擊力 : " + String.valueOf(playInfo.playerStatus[0].playerATK));
+            Log.d(TAG2,"玩家目前HP : " + String.valueOf(playInfo.playerStatus[0].playerCurrentHP));
+            Log.d(TAG2,"玩家最大HP : " + String.valueOf(playInfo.playerStatus[0].playerMaxHP));
 
-            Log.d(TAG2,"玩家100101號道具存量 : " + String.valueOf(playerStatus.playerInventory[0].i100101));
-            Log.d(TAG2,"怪物圖鑑1001號生態介紹解鎖狀態 : " + String.valueOf(playerStatus.playerMobsCollection[0].m1001.mobsBio));
+            Log.d(TAG2,"玩家100101號道具存量 : " + String.valueOf(playInfo.playerInventory[0].i100101));
+            Log.d(TAG2,"怪物圖鑑1001號生態介紹解鎖狀態 : " + String.valueOf(playInfo.playerMobsCollection[0].m1001.mobsBio));
+
+
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    void loadData()
-    {
-        String[] mobsId;
-        int[] mobsRareWeight;
-        try {
-            InputStream is = this.getResources().openRawResource(R.raw.mobsdata);
-            byte[] buffer = new byte[is.available()];
-            is.read(buffer);
-            String json = new String(buffer, "UTF-8");
-            JSONObject jsonObject = new JSONObject(json);
-            JSONArray array = jsonObject.getJSONArray("mobsdata");
-            JSONObject mobs[] = new JSONObject[array.length()];
-            mobsId = new String[array.length()];
-            mobsRareWeight = new int[array.length()];
-            for(int i=0; i < array.length(); i++){
-                mobs[i] = array.getJSONObject(i);
-                mobsId[i] = mobs[i].getString("_id");
-                mobsRareWeight[i] = mobs[i].getInt("rareWeight");
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
     }
 
     public void getData(){

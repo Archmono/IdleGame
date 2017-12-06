@@ -26,8 +26,8 @@
   [
     {
       "m1001": {
-        "image": 0,"name": 0,"atk": 0,"mobsBio": 0,
-        "loot1": 0,"loot2": 0,"loot3": 0
+        "image":0,"name":0,"atk":0,"mobsBio":0,
+        "loot1":0,"loot2":0,"loot3":0
       },
       "m1002":{
         "image":0,"name":0,"atk":0,"mobsBio":0,
