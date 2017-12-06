@@ -25,20 +25,23 @@ import java.util.Calendar;
  */
 
 public class Loading extends Activity {
-
+    /*↓SharedPreferences裡儲存的資料名稱↓*/
     public static final String DATE_PREF = "DATE_PREF";
     public static final String PREF_OLD_TIME = "DATE_OldTime";
     public static final String[] PREF_HASMOB = {"HasMob1","HasMob2","HasMob3","HasMob4","HasMob5","HasMob6"};
     public static final String DATE_NEXT_DATE = "DATE_NextTime";
+    /*↑SharedPreferences裡儲存的資料名稱↑*/
 
+    /*↓SQLite取出的資料↓*/
     public static ArrayList idList = new ArrayList();
     public static ArrayList rarityList = new ArrayList();
+    /*↑SQLite取出的資料↑*/
 
-    int timeGap,nextTime;
-    long newTime,oldTime;
-    String tempOldTime,tempNextTime="0";
-    String[] tempHasMod = new String[6];
-    Calendar rightNow = Calendar.getInstance();
+    int timeGap,nextTime; //運算用變數
+    long newTime,oldTime; //運算用變數
+    String tempOldTime,tempNextTime="0"; //暫存用變數
+    String[] tempHasMod = new String[6]; //暫存用變數
+    Calendar rightNow = Calendar.getInstance(); //提取時間用的方法
 
     private void restorePrefs() { //讀取的位置
         tempHasMod = new String[]{"0", "0", "0", "0", "0", "0"}; //暫存重置不知為何new在class外部會有問題所以先寫在這裡
@@ -48,9 +51,10 @@ public class Loading extends Activity {
         }
         tempNextTime = settings.getString(DATE_NEXT_DATE, "");
         tempOldTime = settings.getString(PREF_OLD_TIME, "");
-        if(tempOldTime.equals("")) //玩家第一次開啟沒有舊時間，就將oldTime設置為now
-            oldTime = rightNow.getTimeInMillis();
-        else {
+        if(tempOldTime.equals("")) { //玩家第一次開啟沒有舊時間，就
+            tempHasMod = new String[]{"0", "0", "0", "0", "0", "0"}; //初始化怪物生成
+            oldTime = rightNow.getTimeInMillis(); //將oldTime設置為now
+        } else {
             nextTime = Integer.parseInt(tempNextTime);
             oldTime = Long.parseLong(tempOldTime);
         }
@@ -90,24 +94,24 @@ public class Loading extends Activity {
 
     int random;
     void DateTest () {
-        timeGap = (int)(newTime-oldTime)/1000;
-        getData("1","0");
+        timeGap = (int)(newTime-oldTime)/1000; //計算上次開啟遊戲與本次開啟遊戲時間差
         Log.d("LOGDATE_timeGap", timeGap + "");
         Log.d("LOGDATE_NextTime", nextTime+"");
-        for(int i=0;i<6;i++) {
-            if (tempHasMod[i].equals("")) {
-                random = (int) (Math.random() * 25) + 5; //隨機 5-30
-                if(nextTime > 0) {
-                    random = nextTime;
-                    nextTime = 0;
+        for(int i=0;i<6;i++) { //迴圈檢查，如怪物陣列滿了將不會進入
+            if (tempHasMod[i].equals("0")) { //如果怪物陣列裡的ID為0
+                getRarityData("1"); //取得場景1一隨機怪物ID (變數存在RandomTest.cId)
+                random = (int) (Math.random() * 25) + 5; //隨機 5-30秒
+                if(nextTime > 0) { //如果有紀錄上次未生成怪物時間
+                    random = nextTime; //覆蓋掉隨機時間
+                    nextTime = 0; //重置下次生怪時間
                 }
                 Log.d("LOGDATE_Random"+i+":", random + "");
-                timeGap -= random;
-                if (timeGap < 0) {
-                    nextTime = (-timeGap);
-                    break;
+                timeGap -= random; //利用時間差運算是否繼續生怪
+                if (timeGap < 0) { //無時間繼續生怪
+                    nextTime = (-timeGap); //將剩餘時間存入下次生怪時間
+                    break; //跳出迴圈
                 } else {
-                    tempHasMod[i] = RandomTest.cId;
+                    tempHasMod[i] = RandomTest.cId; //放入生怪ID至怪物陣列
                 }
             }
         }
@@ -118,31 +122,27 @@ public class Loading extends Activity {
         startActivity(i);
     }
 
-
-    public void getData(String scene1, String scene2){
+    public void getRarityData(String scene){
         GameDBHelper helper = GameDBHelper.getInstance(this);
         String[] column = { "_id", "rareWeight","scene_1", "scene_2"};
-        Cursor c = helper.getReadableDatabase().query("mobsdata", column, "scene_1=? AND scene_2=?", new String[]{scene1,scene2}, null, null, null);
+        Cursor c = helper.getReadableDatabase().query("mobsdata", column, "scene_" + scene + "=?", new String[]{"1"}, null, null, null);
 
         c.moveToFirst();
         for (int i = 0; i < c.getCount(); i++) {
             String id = c.getString(c.getColumnIndex("_id"));
-//            Log.d(TAG, "id"+id);
             int rarity = c.getInt(c.getColumnIndex("rareWeight"));
-//            Log.d(TAG, "rarity"+rarity);
             idList.add(id);
             rarityList.add(rarity);
             c.moveToNext();
         }
         c.close();
-        int[] raritygArray =  new int[rarityList.size()];
+        int[] raritygArray =  new int[rarityList.size()]; //ArrayList轉int[]
         for(int i=0; i< rarityList.size(); i++) {
             raritygArray[i] = Integer.parseInt(rarityList.get(i).toString());
         }
-        RandomTest randomTest = new RandomTest(raritygArray);
-        randomTest.randomTest();
+        RandomTest randomTest = new RandomTest(raritygArray); //將資料庫稀有度帶入隨機生怪
+        randomTest.randomTest(); //執行運算方法
     }
-
 
     public void copyDBFile() {
         try {
