@@ -53,10 +53,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         DBInfo.DB_FILE = getDatabasePath("idlegame")+".db";    //database的絕對路徑
+//        DBInfo.JSON_FILE = getFilesDir("playerdata.json");
 
         copyDBFile();
 
-//        loadData();
         getData("1");
         getPlayerStatus();
 
@@ -71,10 +71,10 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, stunTimeList.toString());
         Log.d(TAG, atkList.toString());
         Log.d(TAG, imageList.toString());
-        int[] arr = (int[]) lootsList.get(1);
-        Log.d(TAG, arr[0]+" ,"+arr[1]+" ,"+arr[2]);
-        Log.d(TAG, lootsDropRateList.toString());
-        System.out.println();
+        int[] loots = (int[]) lootsList.get(0);
+        Log.d(TAG, loots[0]+", "+loots[1]+", "+loots[2]);
+        int[] lootsDP = (int[]) lootsDropRateList.get(0);
+        Log.d(TAG, lootsDP[0]+", "+lootsDP[1]+", "+lootsDP[2]);
 
     }
     public void enter_scene_1(View view){
@@ -165,10 +165,7 @@ public class MainActivity extends AppCompatActivity {
             int loots_2_dp = c.getInt(c.getColumnIndex("loots_2_dp"));
             int loots_3_dp = c.getInt(c.getColumnIndex("loots_3_dp"));
             int lootsInside[] = {loots_1,loots_2,loots_3};
-//            ArrayList lootsInside = new ArrayList();
-//            lootsInside.add(loots_1);
-//            lootsInside.add(loots_2);
-//            lootsInside.add(loots_3);
+            int lootsdpInside[] = {loots_1_dp,loots_2_dp,loots_3_dp};
             idList.add(id);
             nameList.add(name);
             healthPointList.add(hp);
@@ -181,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
             atkList.add(atk);
             imageList.add(imageR);
             lootsList.add(lootsInside);
-            lootsDropRateList.add(loots_1_dp + loots_2_dp + loots_3_dp);
+            lootsDropRateList.add(lootsdpInside);
 
             c.moveToNext();
         }
@@ -189,6 +186,35 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void copyDBFile()
+    {
+        try {
+            File f = new File(DBInfo.DB_FILE);
+            File dbDir = new File(DBInfo.DB_FILE.substring(0,DBInfo.DB_FILE.length()-12));
+            Log.d("GameDBHelper", "copyFiles : "+DBInfo.DB_FILE);
+            dbDir.mkdirs();
+            if (! f.exists())
+            {
+
+                InputStream is = getResources().openRawResource(R.raw.idlegame);
+                OutputStream os = new FileOutputStream(DBInfo.DB_FILE);
+                int read;
+                Log.d("GameDBHelper", "Start Copy");
+                while ((read = is.read()) != -1)
+                {
+                    os.write(read);
+                }
+                Log.d("GameDBHelper", "FilesCopied");
+                os.close();
+                is.close();
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void copyJSONFile()
     {
         try {
             File f = new File(DBInfo.DB_FILE);

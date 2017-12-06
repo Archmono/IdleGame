@@ -6,4 +6,5 @@ package com.example.alucardc.idlegame;
 
 public class DBInfo {
     public static String DB_FILE;
+    public static String JSON_FILE;
 }

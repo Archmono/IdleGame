@@ -35,7 +35,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:scaleType="fitXY"
-            android:onClick="loadTest"
             app:srcCompat="@drawable/book" />
 
         <ImageView
