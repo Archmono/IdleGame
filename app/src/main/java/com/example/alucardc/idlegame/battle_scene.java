@@ -1,7 +1,7 @@
 package com.example.alucardc.idlegame;
 
 import android.content.DialogInterface;
-import android.database.Cursor;
+import android.graphics.Typeface;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.ActionBar;
@@ -15,18 +15,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.w3c.dom.Text;
-
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.logging.LogRecord;
 
 public class battle_scene extends AppCompatActivity {
 
@@ -53,6 +44,7 @@ public class battle_scene extends AppCompatActivity {
     int mobsCurrentHP1,mobsCurrentHP2,mobsCurrentHP3,mobsCurrentHP4,mobsCurrentHP5,mobsCurrentHP6;
     int mobsATK1,mobsATK2,mobsATK3,mobsATK4,mobsATK5,mobsATK6;
     int mobsSpeed1,mobsSpeed2,mobsSpeed3,mobsSpeed4,mobsSpeed5,mobsSpeed6;
+
 
     Handler mHandler = new Handler(){
         @Override
@@ -81,6 +73,10 @@ public class battle_scene extends AppCompatActivity {
 
         blockView.setOnClickListener(blockListener);
         //loadData();
+
+        Typeface font = Typeface.createFromAsset(this.getAssets(), "fonts/witches_magic.ttf");
+        playerHP.setTypeface(font);
+
 
     }
 

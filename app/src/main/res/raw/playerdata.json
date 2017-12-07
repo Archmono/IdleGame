@@ -5,7 +5,8 @@
       "playerID": "Player",
       "playerMaxHP": 50,
       "playerCurrentHP": 50,
-      "playerATK": 1
+      "playerATK": 1,
+      "playerExtraRoll": 50
     }
   ],
   "playerInventory":
