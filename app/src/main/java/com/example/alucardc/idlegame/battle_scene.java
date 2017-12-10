@@ -48,6 +48,14 @@ public class battle_scene extends AppCompatActivity {
     int[] playerCtrB = {R.id.playerCtrB1,R.id.playerCtrB2,R.id.playerCtrB3,R.id.playerCtrB4,R.id.playerCtrB5,R.id.playerCtrB6};
     int[] mobsInclude = {R.id.mobsInclude1,R.id.mobsInclude2,R.id.mobsInclude3,R.id.mobsInclude4,R.id.mobsInclude5,R.id.mobsInclude6};
     GameTest gameTest;
+    int cId;
+
+    int[] elementTypes = new int[6];               //題目屬性種類
+    int[] elementQRange = new int[6];        //題目難度,屬性球數量3-6
+    int[] mobsMaxHP = new int[6];
+    int[] mobsCurrentHP = new int[6];
+    int[] mobsATK = new int[6];
+    int[] mobsSpeed = new int[6];
 
     int mobsMaxHP1,mobsMaxHP2,mobsMaxHP3,mobsMaxHP4,mobsMaxHP5,mobsMaxHP6;
     int mobsCurrentHP1,mobsCurrentHP2,mobsCurrentHP3,mobsCurrentHP4,mobsCurrentHP5,mobsCurrentHP6;
@@ -77,11 +85,31 @@ public class battle_scene extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_battle_scene);
         findViews();
+        setMobs();
         mobsSetOnClickListener();
 
-        blockView.setOnClickListener(blockListener);
+//        blockView.setOnClickListener(blockListener);
         //loadData();
 
+    }
+
+    void setMobs() {
+        for(int i=0; i<Loading.tempHasMod.length; i++) {
+            if(Loading.tempHasMod[i].equals("0"))
+                mobs[i].setVisibility(View.GONE);
+            else {
+                int inx = Loading.idList.indexOf(Loading.tempHasMod[i]);
+                int mobs_img_resID = getResources().getIdentifier((String)Loading.imageList.get(inx), "drawable", getPackageName());
+                mobsImage[i].setImageResource(mobs_img_resID);
+                elementTypes[i] = (int)Loading.qTypesList.get(inx);
+                elementQRange[i] = (int)Loading.qCountsList.get(inx);
+                mobsName[i].setText((String)Loading.nameList.get(inx));
+                mobsMaxHP[i] = (int)Loading.qCountsList.get(inx);
+                mobsCurrentHP[i] = (int)Loading.healthPointList.get(inx);
+                mobsATK[i] = (int)Loading.atkList.get(inx);
+                mobsSpeed[i] = (int)Loading.speedList.get(inx);
+            }
+        }
     }
 
 //    public void getData(String searchMobsID){
@@ -104,8 +132,8 @@ public class battle_scene extends AppCompatActivity {
 
     void findViews(){
         PB = (ProgressBar)findViewById(R.id.pbtest);
-        blockView = (LinearLayout)findViewById(R.id.fightBlockView);
-        tvPrepareFight = (TextView)findViewById(R.id.tvPrepareFight);
+//        blockView = (LinearLayout)findViewById(R.id.fightBlockView);
+//        tvPrepareFight = (TextView)findViewById(R.id.tvPrepareFight);
         questionLayout = (LinearLayout)findViewById(R.id.questionLayout);
         playerHP = (TextView)findViewById(R.id.healthPointCounts);
 
@@ -137,11 +165,11 @@ public class battle_scene extends AppCompatActivity {
         mobs[0].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                gameTest = new GameTest(elementTypes[0],elementQRange[0]);
                 if (attackable) {
-                    mobsCurrentHP1--;   //-玩家攻擊力
-                    if (mobsCurrentHP1 > 0) {
-                        mobsHPbar[0].setScaleX((float) mobsCurrentHP1 / (float) mobsMaxHP1);
+                    mobsCurrentHP[0]--;   //-玩家攻擊力
+                    if (mobsCurrentHP[0] > 0) {
+                        mobsHPbar[0].setScaleX((float) mobsCurrentHP[0] / (float) mobsMaxHP[0]);
                         float mobs1HPbarLocateX = mobsHPbar[0].getX();
                         mobsHPbar[0].setPivotX(mobs1HPbarLocateX);
                     } else {
@@ -156,35 +184,104 @@ public class battle_scene extends AppCompatActivity {
         mobs[1].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                gameTest = new GameTest(elementTypes[1],elementQRange[1]);
+                gameTest.count();
+                if (attackable) {
+                    mobsCurrentHP[1]--;   //-玩家攻擊力
+                    if (mobsCurrentHP[1] > 0) {
+                        mobsHPbar[1].setScaleX((float) mobsCurrentHP[1] / (float) mobsMaxHP[1]);
+                        float mobs1HPbarLocateX = mobsHPbar[1].getX();
+                        mobsHPbar[1].setPivotX(mobs1HPbarLocateX);
+                    } else {
+                        mobs[1].setVisibility(View.GONE);
+                        mob1ActionTimer.cancel();
+                    }
+                } else if (now == 0) {
+                    gameTest.count();
+                }
             }
         });
         mobs[2].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                gameTest = new GameTest(elementTypes[2],elementQRange[2]);
+                gameTest.count();
+                if (attackable) {
+                    mobsCurrentHP[0]--;   //-玩家攻擊力
+                    if (mobsCurrentHP[2] > 0) {
+                        mobsHPbar[2].setScaleX((float) mobsCurrentHP[2] / (float) mobsMaxHP[2]);
+                        float mobs1HPbarLocateX = mobsHPbar[1].getX();
+                        mobsHPbar[2].setPivotX(mobs1HPbarLocateX);
+                    } else {
+                        mobs[2].setVisibility(View.GONE);
+                        mob1ActionTimer.cancel();
+                    }
+                } else if (now == 0) {
+                    gameTest.count();
+                }
             }
         });
         mobs[3].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                gameTest = new GameTest(elementTypes[3],elementQRange[3]);
+                gameTest.count();
+                if (attackable) {
+                    mobsCurrentHP[3]--;   //-玩家攻擊力
+                    if (mobsCurrentHP[3] > 0) {
+                        mobsHPbar[3].setScaleX((float) mobsCurrentHP[3] / (float) mobsMaxHP[3]);
+                        float mobs1HPbarLocateX = mobsHPbar[3].getX();
+                        mobsHPbar[3].setPivotX(mobs1HPbarLocateX);
+                    } else {
+                        mobs[3].setVisibility(View.GONE);
+                        mob1ActionTimer.cancel();
+                    }
+                } else if (now == 0) {
+                    gameTest.count();
+                }
             }
         });
         mobs[4].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                gameTest = new GameTest(elementTypes[4],elementQRange[4]);
+                gameTest.count();
+                if (attackable) {
+                    mobsCurrentHP[4]--;   //-玩家攻擊力
+                    if (mobsCurrentHP[4] > 0) {
+                        mobsHPbar[4].setScaleX((float) mobsCurrentHP[4] / (float) mobsMaxHP[4]);
+                        float mobs1HPbarLocateX = mobsHPbar[1].getX();
+                        mobsHPbar[4].setPivotX(mobs1HPbarLocateX);
+                    } else {
+                        mobs[4].setVisibility(View.GONE);
+                        mob1ActionTimer.cancel();
+                    }
+                } else if (now == 0) {
+                    gameTest.count();
+                }
             }
         });
         mobs[5].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                gameTest = new GameTest(elementTypes[5],elementQRange[5]);
+                gameTest.count();
+                if (attackable) {
+                    mobsCurrentHP[5]--;   //-玩家攻擊力
+                    if (mobsCurrentHP[5] > 0) {
+                        mobsHPbar[5].setScaleX((float) mobsCurrentHP[5] / (float) mobsMaxHP[5]);
+                        float mobs1HPbarLocateX = mobsHPbar[1].getX();
+                        mobsHPbar[5].setPivotX(mobs1HPbarLocateX);
+                    } else {
+                        mobs[5].setVisibility(View.GONE);
+                        mob1ActionTimer.cancel();
+                    }
+                } else if (now == 0) {
+                    gameTest.count();
+                }
             }
         });
     }
-
 
     public class GameTest{
 
@@ -272,47 +369,47 @@ public class battle_scene extends AppCompatActivity {
     };
 
 
-    public View.OnClickListener blockListener = new View.OnClickListener(){
-        @Override
-        public void onClick(View view) {
-            if(introFight == true){
-                tvPrepareFight.setText("");
-                timer01.schedule(battlePrepare, 500, 1000);
-                introFight = false;
-                Log.d("Click test", "view block is clicked");
-            }
-        }
-    };
-    private TimerTask battlePrepare = new TimerTask(){
-        @Override
-        public void run() {
-            if(prepareTime > 0) {
-                Message msg = mHandler.obtainMessage();
-                msg.what = 1;
-                msg.sendToTarget();
-                PB.setProgress(prepareTime);
-                prepareTime--;
-                Log.d("timer","" + prepareTime);
-            }else{
-                Message msg = mHandler.obtainMessage();
-                msg.what = 2;
-                msg.sendToTarget();
-                timer01.cancel();
-                mobsTimer01.schedule(mob1ActionTimer,500,1000);
-            }
-        }
-    };
+//    public View.OnClickListener blockListener = new View.OnClickListener(){
+//        @Override
+//        public void onClick(View view) {
+//            if(introFight == true){
+//                tvPrepareFight.setText("");
+//                timer01.schedule(battlePrepare, 500, 1000);
+//                introFight = false;
+//                Log.d("Click test", "view block is clicked");
+//            }
+//        }
+//    };
+//    private TimerTask battlePrepare = new TimerTask(){
+//        @Override
+//        public void run() {
+//            if(prepareTime > 0) {
+//                Message msg = mHandler.obtainMessage();
+//                msg.what = 1;
+//                msg.sendToTarget();
+//                PB.setProgress(prepareTime);
+//                prepareTime--;
+//                Log.d("timer","" + prepareTime);
+//            }else{
+//                Message msg = mHandler.obtainMessage();
+//                msg.what = 2;
+//                msg.sendToTarget();
+//                timer01.cancel();
+//                mobsTimer01.schedule(mob1ActionTimer,500,1000);
+//            }
+//        }
+//    };
 
     private TimerTask mob1ActionTimer = new TimerTask() {
         @Override
         public void run() {
             if(currentActionTime > 0) {
-                actionbar[0].setProgress(currentActionTime*100/mobsSpeed1);
+                actionbar[0].setProgress(currentActionTime*100/mobsSpeed[0]);
                 currentActionTime -= 1000;
                 Log.d("MobsTime", ""+ currentActionTime);
             }else{
-                actionbar[0].setProgress(currentActionTime*100/mobsSpeed1);
-                currentActionTime = mobsSpeed1;
+                actionbar[0].setProgress(currentActionTime*100/mobsSpeed[0]);
+                currentActionTime = mobsSpeed[0];
                 playerCurrentHP --;
                 Message msg = mHandler.obtainMessage();
                 msg.what = 3;

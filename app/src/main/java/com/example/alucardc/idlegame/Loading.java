@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -25,22 +26,36 @@ import java.util.Calendar;
  */
 
 public class Loading extends Activity {
-
+    /*↓SharedPreferences裡儲存的資料名稱↓*/
     public static final String DATE_PREF = "DATE_PREF";
     public static final String PREF_OLD_TIME = "DATE_OldTime";
     public static final String[] PREF_HASMOB = {"HasMob1","HasMob2","HasMob3","HasMob4","HasMob5","HasMob6"};
     public static final String DATE_NEXT_DATE = "DATE_NextTime";
+    /*↑SharedPreferences裡儲存的資料名稱↑*/
 
+    /*↓SQLite取出的資料↓*/
     public static ArrayList idList = new ArrayList();
-    ArrayList nameList = new ArrayList();
-    ArrayList healthPointList = new ArrayList();
+    public static ArrayList nameList = new ArrayList();
+    public static ArrayList healthPointList = new ArrayList();
     public static ArrayList rarityList = new ArrayList();
+    public static ArrayList speedList = new ArrayList();
+    public static ArrayList qCountsList = new ArrayList();
+    public static ArrayList qTypesList = new ArrayList();
+    public static ArrayList qRangeList = new ArrayList();
+    public static ArrayList stunTimeList = new ArrayList();
+    public static ArrayList atkList = new ArrayList();
+    public static ArrayList imageList = new ArrayList();
+    public static ArrayList lootsList = new ArrayList();
+    public static ArrayList lootsDropRateList = new ArrayList();
+    /*↑SQLite取出的資料↑*/
 
-    int timeGap,nextTime;
-    long newTime,oldTime;
-    String tempOldTime,tempNextTime="0";
-    String[] tempHasMod = new String[6];
-    Calendar rightNow = Calendar.getInstance();
+
+
+    int timeGap,nextTime; //運算用變數
+    long newTime,oldTime; //運算用變數
+    String tempOldTime,tempNextTime="0"; //暫存用變數
+    public static String[] tempHasMod = new String[6];
+    Calendar rightNow = Calendar.getInstance(); //提取時間用的方法
 
     private void restorePrefs() { //讀取的位置
         tempHasMod = new String[]{"0", "0", "0", "0", "0", "0"}; //暫存重置不知為何new在class外部會有問題所以先寫在這裡
@@ -50,9 +65,10 @@ public class Loading extends Activity {
         }
         tempNextTime = settings.getString(DATE_NEXT_DATE, "");
         tempOldTime = settings.getString(PREF_OLD_TIME, "");
-        if(tempOldTime.equals("")) //玩家第一次開啟沒有舊時間，就將oldTime設置為now
-            oldTime = rightNow.getTimeInMillis();
-        else {
+        if(tempOldTime.equals("")) { //玩家第一次開啟沒有舊時間，就
+            tempHasMod = new String[]{"0", "0", "0", "0", "0", "0"}; //初始化怪物生成
+            oldTime = rightNow.getTimeInMillis(); //將oldTime設置為now
+        } else {
             nextTime = Integer.parseInt(tempNextTime);
             oldTime = Long.parseLong(tempOldTime);
         }
@@ -81,36 +97,37 @@ public class Loading extends Activity {
         restorePrefs();
         DateTest();
         Log.d("LOGDATE_Mobs", tempHasMod[0] +" "+ tempHasMod[1] +" "+ tempHasMod[2] +" "+ tempHasMod[3] +" "+ tempHasMod[4] +" "+ tempHasMod[5]+" ");
+        Log.d("pre_battle_scene", rarityList+"");
         onSave();
-    }
-
-    @Override
-    protected void onDestroy() {
-        onSave();
-        super.onDestroy();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                startActivity(new Intent().setClass(Loading.this, MainActivity.class));
+            }
+        }, 2000);
     }
 
     int random;
     void DateTest () {
-        timeGap = (int)(newTime-oldTime)/1000;
+        timeGap = (int)(newTime-oldTime)/1000; //計算上次開啟遊戲與本次開啟遊戲時間差
         Log.d("LOGDATE_timeGap", timeGap + "");
         Log.d("LOGDATE_NextTime", nextTime+"");
-        for(int i=0;i<6;i++) {
-            getRarityData("1");
-            if (tempHasMod[i].equals("")) {
-                random = (int) (Math.random() * 25) + 5; //隨機 5-30
-                if(nextTime > 0) {
-                    random = nextTime;
-                    nextTime = 0;
-                    break;
+        for(int i=0;i<6;i++) { //迴圈檢查，如怪物陣列滿了將不會進入
+            if (tempHasMod[i].equals("0")) { //如果怪物陣列裡的ID為0
+                getData("1"); //取得場景1一隨機怪物ID (變數存在RandomTest.cId)
+                getRarity();
+                random = (int) (Math.random() * 25) + 5; //隨機 5-30秒
+                if(nextTime > 0) { //如果有紀錄上次未生成怪物時間
+                    random = nextTime; //覆蓋掉隨機時間
+                    nextTime = 0; //重置下次生怪時間
                 }
                 Log.d("LOGDATE_Random"+i+":", random + "");
-                timeGap -= random;
-                if (timeGap < 0) {
-                    nextTime = (-timeGap);
-                    break;
+                timeGap -= random; //利用時間差運算是否繼續生怪
+                if (timeGap < 0) { //無時間繼續生怪
+                    nextTime = (-timeGap); //將剩餘時間存入下次生怪時間
+                    break; //跳出迴圈
                 } else {
-                    tempHasMod[i] = RandomTest.cId;
+                    tempHasMod[i] = RandomTest.cId; //放入生怪ID至怪物陣列
                 }
             }
         }
@@ -120,65 +137,79 @@ public class Loading extends Activity {
         Intent i = new Intent(Loading.this, MainActivity.class);
         startActivity(i);
     }
-
-    public void getRarityData(String scene){
+    public void getData(String scene){
         GameDBHelper helper = GameDBHelper.getInstance(this);
-        String[] column = { "_id", "rareWeight","scene_1", "scene_2"};
-        Cursor c = helper.getReadableDatabase().query("mobsdata", column, "scene_" + scene + "=?", new String[]{"1"}, null, null, null);
+//        String[] column = { "_id", "rareWeight","scene_1", "scene_2"};
+        Cursor c = helper.getReadableDatabase().query("mobsdata", null, "scene_" + scene + "=?", new String[]{"1"}, null, null, null);
 
         c.moveToFirst();
         for (int i = 0; i < c.getCount(); i++) {
             String id = c.getString(c.getColumnIndex("_id"));
+            String name = c.getString(c.getColumnIndex("name"));
+            int hp = c.getInt(c.getColumnIndex("healthPoint"));
             int rarity = c.getInt(c.getColumnIndex("rareWeight"));
+            int speed = c.getInt(c.getColumnIndex("speed"));
+            int qCounts = c.getInt(c.getColumnIndex("qCounts"));
+            int qTypes = c.getInt(c.getColumnIndex("qTypes"));
+            int qRange = c.getInt(c.getColumnIndex("qRange"));
+            int stunTime = c.getInt(c.getColumnIndex("stunTime"));
+            int atk = c.getInt(c.getColumnIndex("atk"));
+            String imageR = c.getString(c.getColumnIndex("image_R"));
+            int loots_1 = c.getInt(c.getColumnIndex("loots_1"));
+            int loots_2 = c.getInt(c.getColumnIndex("loots_2"));
+            int loots_3 = c.getInt(c.getColumnIndex("loots_3"));
+            int loots_1_dp = c.getInt(c.getColumnIndex("loots_1_dp"));
+            int loots_2_dp = c.getInt(c.getColumnIndex("loots_2_dp"));
+            int loots_3_dp = c.getInt(c.getColumnIndex("loots_3_dp"));
+            int lootsInside[] = {loots_1,loots_2,loots_3};
+            int lootsdpInside[] = {loots_1_dp,loots_2_dp,loots_3_dp};
             idList.add(id);
+            nameList.add(name);
+            healthPointList.add(hp);
             rarityList.add(rarity);
+            speedList.add(speed);
+            qCountsList.add(qCounts);
+            qTypesList.add(qTypes);
+            qRangeList.add(qRange);
+            stunTimeList.add(stunTime);
+            atkList.add(atk);
+            imageList.add(imageR);
+            lootsList.add(lootsInside);
+            lootsDropRateList.add(lootsdpInside);
+
             c.moveToNext();
         }
         c.close();
-        int[] raritygArray =  new int[rarityList.size()];
+    }
+    void getRarity() {
+
+        int[] raritygArray =  new int[rarityList.size()]; //ArrayList轉int[]
         for(int i=0; i< rarityList.size(); i++) {
             raritygArray[i] = Integer.parseInt(rarityList.get(i).toString());
         }
-        RandomTest randomTest = new RandomTest(raritygArray);
-        randomTest.randomTest();
+        RandomTest randomTest = new RandomTest(raritygArray); //將資料庫稀有度帶入隨機生怪
+        randomTest.randomTest(); //執行運算方法
     }
 
-    public void getRarityData(String scene1, String scene2){
-        GameDBHelper helper = GameDBHelper.getInstance(this);
-        String[] column = { "_id", "rareWeight","scene_1", "scene_2"};
-        Cursor c = helper.getReadableDatabase().query("mobsdata", column, "scene_1=? AND scene_2=?", new String[]{scene1,scene2}, null, null, null);
-
-        c.moveToFirst();
-        for (int i = 0; i < c.getCount(); i++) {
-            String id = c.getString(c.getColumnIndex("_id"));
-//            Log.d(TAG, "id"+id);
-            int rarity = c.getInt(c.getColumnIndex("rareWeight"));
-//            Log.d(TAG, "rarity"+rarity);
-            idList.add(id);
-            rarityList.add(rarity);
-            c.moveToNext();
-        }
-        c.close();
-        int[] raritygArray =  new int[rarityList.size()];
-        for(int i=0; i< rarityList.size(); i++) {
-            raritygArray[i] = Integer.parseInt(rarityList.get(i).toString());
-        }
-        RandomTest randomTest = new RandomTest(raritygArray);
-        randomTest.randomTest();
-    }
-
-
-    public void copyDBFile() {
+    public void copyDBFile()
+    {
         try {
             File f = new File(DBInfo.DB_FILE);
-            Log.d("GameDBHelper", "" + DBInfo.DB_FILE);
-            if (!f.exists()) {
+            File dbDir = new File(DBInfo.DB_FILE.substring(0,DBInfo.DB_FILE.length()-12));
+            Log.d("GameDBHelper", "copyFiles : "+DBInfo.DB_FILE);
+            dbDir.mkdirs();
+            if (! f.exists())
+            {
+
                 InputStream is = getResources().openRawResource(R.raw.idlegame);
                 OutputStream os = new FileOutputStream(DBInfo.DB_FILE);
                 int read;
-                while ((read = is.read()) != -1) {
+                Log.d("GameDBHelper", "Start Copy");
+                while ((read = is.read()) != -1)
+                {
                     os.write(read);
                 }
+                Log.d("GameDBHelper", "FilesCopied");
                 os.close();
                 is.close();
             }
@@ -188,4 +219,5 @@ public class Loading extends Activity {
             e.printStackTrace();
         }
     }
+
 }

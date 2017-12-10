@@ -3,6 +3,7 @@ package com.example.alucardc.idlegame;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -16,6 +17,7 @@ import java.io.InputStream;
 
 public class pre_battle_scene extends AppCompatActivity {
 
+    String TAG = "pre_battle_scene";
     ImageView modView[] = new ImageView[6];
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +26,7 @@ public class pre_battle_scene extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pre_battle_scene);
         findsViews();
-//        loadData();
+        setVisible();
     }
 
     void findsViews() {
@@ -50,40 +52,16 @@ public class pre_battle_scene extends AppCompatActivity {
 //        onSave();
 //    }
 
-//    void setVisible () {
-//        Log.d("LOGDATE",tempHasMod[0]+tempHasMod[1]+tempHasMod[2]+tempHasMod[3]+tempHasMod[4]+tempHasMod[5]);
-//        for(int i=0; i<tempHasMod.length; i++) {
-//            if(tempHasMod[i].equals("0"))
-//                mob[i].setVisibility(View.INVISIBLE);
-//            else
-//                mob[i].setVisibility(View.VISIBLE);
-//        }
-//    }
-    void loadData()
-    {
-        int mobsId = Integer.parseInt(RandomTest.cId);
-
-        try {
-            InputStream is = this.getResources().openRawResource(R.raw.mobsdata);
-            byte[] buffer = new byte[is.available()];
-            is.read(buffer);
-            String json = new String(buffer, "UTF-8");
-            JSONObject jsonObject = new JSONObject(json);
-            JSONArray array = jsonObject.getJSONArray("mobsdata");
-            JSONObject mobs_1 = array.getJSONObject(mobsId);
-
-            JSONObject mobs_pics = mobs_1.getJSONObject("pics");
-            String mobs_1_img1 = mobs_pics.getString("pic1");
-            int mobs_1_img_resID = getResources().getIdentifier(mobs_1_img1,"drawable", getPackageName());
-
-//            modView1.setImageResource(mobs_1_img_resID);
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
+    void setVisible () {
+        Log.d("LOGDATE",Loading.tempHasMod[0]+Loading.tempHasMod[1]+Loading.tempHasMod[2]+Loading.tempHasMod[3]+Loading.tempHasMod[4]+Loading.tempHasMod[5]);
+        for(int i=0; i<Loading.tempHasMod.length; i++) {
+            if(Loading.tempHasMod[i].equals("0"))
+                modView[i].setVisibility(View.INVISIBLE);
+            else {
+                int inx = Loading.idList.indexOf(Loading.tempHasMod[i]);
+                int mobs_img_resID = getResources().getIdentifier((String)Loading.imageList.get(inx), "drawable", getPackageName());
+                modView[i].setImageResource(mobs_img_resID);
+            }
         }
-
     }
 }
