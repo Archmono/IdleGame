@@ -25,12 +25,12 @@ public class GameDBHelper extends SQLiteOpenHelper{
     }
 
     @Override
-    public void onCreate(SQLiteDatabase db) {
-        Log.d("GameDBHelper","onCreate");
+    public void onCreate(SQLiteDatabase sqLiteDatabase) {
+        Log.d("GameDBHelper","onCreate DB");
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
 
     }
 }

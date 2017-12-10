@@ -1,7 +1,7 @@
 package com.example.alucardc.idlegame;
 
 import android.content.DialogInterface;
-import android.database.Cursor;
+import android.graphics.Typeface;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.ActionBar;
@@ -15,18 +15,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.w3c.dom.Text;
-
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.logging.LogRecord;
 
 public class battle_scene extends AppCompatActivity {
 
@@ -62,6 +53,7 @@ public class battle_scene extends AppCompatActivity {
     int mobsATK1,mobsATK2,mobsATK3,mobsATK4,mobsATK5,mobsATK6;
     int mobsSpeed1,mobsSpeed2,mobsSpeed3,mobsSpeed4,mobsSpeed5,mobsSpeed6;
 
+
     Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -90,6 +82,10 @@ public class battle_scene extends AppCompatActivity {
 
 //        blockView.setOnClickListener(blockListener);
         //loadData();
+
+        Typeface font = Typeface.createFromAsset(this.getAssets(), "fonts/witches_magic.ttf");
+        playerHP.setTypeface(font);
+
 
     }
 
@@ -419,54 +415,54 @@ public class battle_scene extends AppCompatActivity {
         }
     };
 
-    void loadData()
-    {
-        int mobsId = Integer.parseInt(RandomTest.cId);
-        try {
-            InputStream is = this.getResources().openRawResource(R.raw.mobsdata);
-            byte[] buffer = new byte[is.available()];
-            is.read(buffer);
-            //讀取json到buffer中
-            String json = new String(buffer, "UTF-8");
-            //轉換編碼
-            JSONObject jsonObject = new JSONObject(json);
-            //把json丟到jsonObject中
-            JSONArray array = jsonObject.getJSONArray("mobsdata");
-            //取出"mobsdata"中的資料,放入JSONArray array
-
-            JSONObject mobs_1 = array.getJSONObject(mobsId);
-            //設置mobs_1變數放入JSON中對應位置的資料;
-            String mobs_1_id = mobs_1.getString("_id");
-            String mobs_1_name = mobs_1.getString("name");
-
-            JSONObject mobs_pics = mobs_1.getJSONObject("pics");
-            String mobs_1_img1 = mobs_pics.getString("pic1");
-
-            int mobs_1_HP = mobs_1.getInt("HP");
-            int mobs_1_elementTypes = mobs_1.getInt("elementTypes");
-            int mobs_1_elementQRange = mobs_1.getInt("elementQRange");
-            int mobs_1_actionbarDuration = mobs_1.getInt("actionbarDuration");
-            int mobs_1_img_resID = getResources().getIdentifier(mobs_1_img1,"drawable", getPackageName());
-            //設置變數存取mobs_1中對應標籤""的資料
-
-            mobsName[0].setText(mobs_1_name);
-            mobsImage[0].setImageResource(mobs_1_img_resID);
-            mobsMaxHP1 = mobs_1_HP;
-            mobsCurrentHP1 = mobs_1_HP;
-            mobsSpeed1 = mobs_1_actionbarDuration;
-            currentActionTime = mobsSpeed1;
-
-            Log.d("Mobs HP Load",mobsMaxHP1 + " " +mobsCurrentHP1);
-
-            gameTest = new GameTest(mobs_1_elementTypes,mobs_1_elementQRange);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-    }
+//    void loadData()
+//    {
+//        int mobsId = Integer.parseInt(RandomTest.cId);
+//        try {
+//            InputStream is = this.getResources().openRawResource(R.raw.mobsdata);
+//            byte[] buffer = new byte[is.available()];
+//            is.read(buffer);
+//            //讀取json到buffer中
+//            String json = new String(buffer, "UTF-8");
+//            //轉換編碼
+//            JSONObject jsonObject = new JSONObject(json);
+//            //把json丟到jsonObject中
+//            JSONArray array = jsonObject.getJSONArray("mobsdata");
+//            //取出"mobsdata"中的資料,放入JSONArray array
+//
+//            JSONObject mobs_1 = array.getJSONObject(mobsId);
+//            //設置mobs_1變數放入JSON中對應位置的資料;
+//            String mobs_1_id = mobs_1.getString("_id");
+//            String mobs_1_name = mobs_1.getString("name");
+//
+//            JSONObject mobs_pics = mobs_1.getJSONObject("pics");
+//            String mobs_1_img1 = mobs_pics.getString("pic1");
+//
+//            int mobs_1_HP = mobs_1.getInt("HP");
+//            int mobs_1_elementTypes = mobs_1.getInt("elementTypes");
+//            int mobs_1_elementQRange = mobs_1.getInt("elementQRange");
+//            int mobs_1_actionbarDuration = mobs_1.getInt("actionbarDuration");
+//            int mobs_1_img_resID = getResources().getIdentifier(mobs_1_img1,"drawable", getPackageName());
+//            //設置變數存取mobs_1中對應標籤""的資料
+//
+//            mobsName[0].setText(mobs_1_name);
+//            mobsImage[0].setImageResource(mobs_1_img_resID);
+//            mobsMaxHP1 = mobs_1_HP;
+//            mobsCurrentHP1 = mobs_1_HP;
+//            mobsSpeed1 = mobs_1_actionbarDuration;
+//            currentActionTime = mobsSpeed1;
+//
+//            Log.d("Mobs HP Load",mobsMaxHP1 + " " +mobsCurrentHP1);
+//
+//            gameTest = new GameTest(mobs_1_elementTypes,mobs_1_elementQRange);
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//
+//    }
     @Override
     public void onBackPressed() {  //返回鍵事件
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

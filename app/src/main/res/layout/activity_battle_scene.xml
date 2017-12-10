@@ -26,6 +26,7 @@
         android:layout_marginBottom="65dp"
         android:layout_marginLeft="10dp"
         android:text="HP:XXXX"
+        android:fontFamily=""
         android:textSize="30sp"
         android:textColor="#000"
         />
@@ -180,9 +181,9 @@
             android:id="@+id/tvPrepareFight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="點擊開始戰鬥倒數"
             android:textColor="#fff"
-            android:textSize="80px"
-            android:text="點擊開始戰鬥倒數" />
+            android:textSize="80px" />
 
 
     </LinearLayout>
