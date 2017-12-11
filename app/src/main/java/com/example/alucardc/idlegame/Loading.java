@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -26,6 +28,10 @@ import java.util.Calendar;
  */
 
 public class Loading extends Activity {
+
+    String TAG = "MainDataTest";
+    String TAG2 = "MainPlayerTest";
+
     /*↓SharedPreferences裡儲存的資料名稱↓*/
     public static final String DATE_PREF = "DATE_PREF";
     public static final String PREF_OLD_TIME = "DATE_OldTime";
@@ -49,13 +55,57 @@ public class Loading extends Activity {
     public static ArrayList lootsDropRateList = new ArrayList();
     /*↑SQLite取出的資料↑*/
 
-
-
     int timeGap,nextTime; //運算用變數
     long newTime,oldTime; //運算用變數
     String tempOldTime,tempNextTime="0"; //暫存用變數
-    public static String[] tempHasMod = new String[6];
+    public static String[] tempHasMod = new String[6]; //暫存用變數
     Calendar rightNow = Calendar.getInstance(); //提取時間用的方法
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,  //隱藏狀態列
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_loading);
+        DBInfo.DB_FILE = getDatabasePath("idlegame.db")+"";    //database的絕對路徑
+        copyDBFile();
+        newTime = rightNow.getTimeInMillis();
+        restorePrefs();
+        DateTest();
+        Log.d("LOGDATE_Mobs", tempHasMod[0] +" "+ tempHasMod[1] +" "+ tempHasMod[2] +" "+ tempHasMod[3] +" "+ tempHasMod[4] +" "+ tempHasMod[5]+" ");
+        onSave();
+
+        getPlayerStatus();
+
+//        Log.d(TAG, idList.toString());
+//        Log.d(TAG, nameList.toString());
+//        Log.d(TAG, healthPointList.toString());
+//        Log.d(TAG, rarityList.toString());
+//        Log.d(TAG, speedList.toString());
+//        Log.d(TAG, qCountsList.toString());
+//        Log.d(TAG, qTypesList.toString());
+//        Log.d(TAG, qRangeList.toString());
+//        Log.d(TAG, stunTimeList.toString());
+//        Log.d(TAG, atkList.toString());
+//        Log.d(TAG, imageList.toString());
+//        int[] loots = (int[]) lootsList.get(0);
+//        Log.d(TAG, loots[0]+", "+loots[1]+", "+loots[2]);
+//        int[] lootsDP = (int[]) lootsDropRateList.get(0);
+//        Log.d(TAG, lootsDP[0]+", "+lootsDP[1]+", "+lootsDP[2]);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                startActivity(new Intent().setClass(Loading.this, MainActivity.class));
+            }
+        }, 2000);
+    }
+
+    @Override
+    protected void onDestroy() {
+        onSave();
+        super.onDestroy();
+    }
 
     private void restorePrefs() { //讀取的位置
         tempHasMod = new String[]{"0", "0", "0", "0", "0", "0"}; //暫存重置不知為何new在class外部會有問題所以先寫在這裡
@@ -85,36 +135,15 @@ public class Loading extends Activity {
         settings.edit().putString(DATE_NEXT_DATE, String.valueOf(nextTime)).commit();
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,  //隱藏狀態列
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_loading);
-        DBInfo.DB_FILE = getDatabasePath("idlegame.db")+"";    //database的絕對路徑
-        copyDBFile();
-        newTime = rightNow.getTimeInMillis();
-        restorePrefs();
-        DateTest();
-        Log.d("LOGDATE_Mobs", tempHasMod[0] +" "+ tempHasMod[1] +" "+ tempHasMod[2] +" "+ tempHasMod[3] +" "+ tempHasMod[4] +" "+ tempHasMod[5]+" ");
-        Log.d("pre_battle_scene", rarityList+"");
-        onSave();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                startActivity(new Intent().setClass(Loading.this, MainActivity.class));
-            }
-        }, 2000);
-    }
 
     int random;
     void DateTest () {
         timeGap = (int)(newTime-oldTime)/1000; //計算上次開啟遊戲與本次開啟遊戲時間差
         Log.d("LOGDATE_timeGap", timeGap + "");
         Log.d("LOGDATE_NextTime", nextTime+"");
+        getData("1"); //取得場景1一隨機怪物ID (變數存在RandomTest.cId)
         for(int i=0;i<6;i++) { //迴圈檢查，如怪物陣列滿了將不會進入
             if (tempHasMod[i].equals("0")) { //如果怪物陣列裡的ID為0
-                getData("1"); //取得場景1一隨機怪物ID (變數存在RandomTest.cId)
                 getRarity();
                 random = (int) (Math.random() * 25) + 5; //隨機 5-30秒
                 if(nextTime > 0) { //如果有紀錄上次未生成怪物時間
@@ -137,6 +166,7 @@ public class Loading extends Activity {
         Intent i = new Intent(Loading.this, MainActivity.class);
         startActivity(i);
     }
+
     public void getData(String scene){
         GameDBHelper helper = GameDBHelper.getInstance(this);
 //        String[] column = { "_id", "rareWeight","scene_1", "scene_2"};
@@ -179,7 +209,6 @@ public class Loading extends Activity {
 
             c.moveToNext();
         }
-        c.close();
     }
     void getRarity() {
 
@@ -189,6 +218,27 @@ public class Loading extends Activity {
         }
         RandomTest randomTest = new RandomTest(raritygArray); //將資料庫稀有度帶入隨機生怪
         randomTest.randomTest(); //執行運算方法
+    }
+
+    public void getPlayerStatus(){
+        try {
+            InputStream is = this.getResources().openRawResource(R.raw.playerdata);
+            byte[] buffer = new byte[is.available()];
+            is.read(buffer);
+            String json = new String(buffer, "UTF-8");
+            Gson gson = new Gson();
+            Player playInfo = gson.fromJson(json, Player.class);
+            Log.d(TAG2,"玩家名稱 : " + String.valueOf(playInfo.playerStatus[0].playerID));
+            Log.d(TAG2,"玩家攻擊力 : " + String.valueOf(playInfo.playerStatus[0].playerATK));
+            Log.d(TAG2,"玩家目前HP : " + String.valueOf(playInfo.playerStatus[0].playerCurrentHP));
+            Log.d(TAG2,"玩家最大HP : " + String.valueOf(playInfo.playerStatus[0].playerMaxHP));
+
+            Log.d(TAG2,"玩家100101號道具存量 : " + String.valueOf(playInfo.playerInventory[0].i100101));
+            Log.d(TAG2,"怪物圖鑑1001號生態介紹解鎖狀態 : " + String.valueOf(playInfo.playerMobsCollection[0].m1001.mobsBio));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void copyDBFile()
@@ -219,5 +269,4 @@ public class Loading extends Activity {
             e.printStackTrace();
         }
     }
-
 }

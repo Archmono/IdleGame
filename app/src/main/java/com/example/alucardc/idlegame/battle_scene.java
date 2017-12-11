@@ -39,7 +39,6 @@ public class battle_scene extends AppCompatActivity {
     int[] playerCtrB = {R.id.playerCtrB1,R.id.playerCtrB2,R.id.playerCtrB3,R.id.playerCtrB4,R.id.playerCtrB5,R.id.playerCtrB6};
     int[] mobsInclude = {R.id.mobsInclude1,R.id.mobsInclude2,R.id.mobsInclude3,R.id.mobsInclude4,R.id.mobsInclude5,R.id.mobsInclude6};
     GameTest gameTest;
-    int cId;
 
     int[] elementTypes = new int[6];               //題目屬性種類
     int[] elementQRange = new int[6];        //題目難度,屬性球數量3-6
@@ -80,8 +79,8 @@ public class battle_scene extends AppCompatActivity {
         setMobs();
         mobsSetOnClickListener();
 
-//        blockView.setOnClickListener(blockListener);
-        //loadData();
+        blockView.setOnClickListener(blockListener);
+//        loadData();
 
         Typeface font = Typeface.createFromAsset(this.getAssets(), "fonts/witches_magic.ttf");
         playerHP.setTypeface(font);
@@ -98,9 +97,9 @@ public class battle_scene extends AppCompatActivity {
                 int mobs_img_resID = getResources().getIdentifier((String)Loading.imageList.get(inx), "drawable", getPackageName());
                 mobsImage[i].setImageResource(mobs_img_resID);
                 elementTypes[i] = (int)Loading.qTypesList.get(inx);
-                elementQRange[i] = (int)Loading.qCountsList.get(inx);
+                elementQRange[i] = (int)Loading.qRangeList.get(inx);
                 mobsName[i].setText((String)Loading.nameList.get(inx));
-                mobsMaxHP[i] = (int)Loading.qCountsList.get(inx);
+                mobsMaxHP[i] = (int)Loading.healthPointList.get(inx);
                 mobsCurrentHP[i] = (int)Loading.healthPointList.get(inx);
                 mobsATK[i] = (int)Loading.atkList.get(inx);
                 mobsSpeed[i] = (int)Loading.speedList.get(inx);
@@ -128,8 +127,8 @@ public class battle_scene extends AppCompatActivity {
 
     void findViews(){
         PB = (ProgressBar)findViewById(R.id.pbtest);
-//        blockView = (LinearLayout)findViewById(R.id.fightBlockView);
-//        tvPrepareFight = (TextView)findViewById(R.id.tvPrepareFight);
+        blockView = (LinearLayout)findViewById(R.id.fightBlockView);
+        tvPrepareFight = (TextView)findViewById(R.id.tvPrepareFight);
         questionLayout = (LinearLayout)findViewById(R.id.questionLayout);
         playerHP = (TextView)findViewById(R.id.healthPointCounts);
 
@@ -161,122 +160,57 @@ public class battle_scene extends AppCompatActivity {
         mobs[0].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                gameTest = new GameTest(elementTypes[0],elementQRange[0]);
-                if (attackable) {
-                    mobsCurrentHP[0]--;   //-玩家攻擊力
-                    if (mobsCurrentHP[0] > 0) {
-                        mobsHPbar[0].setScaleX((float) mobsCurrentHP[0] / (float) mobsMaxHP[0]);
-                        float mobs1HPbarLocateX = mobsHPbar[0].getX();
-                        mobsHPbar[0].setPivotX(mobs1HPbarLocateX);
-                    } else {
-                        mobs[0].setVisibility(View.GONE);
-                        mob1ActionTimer.cancel();
-                    }
-                } else if (now == 0) {
-                    gameTest.count();
-                }
+                modClickEvent(0);
             }
         });
         mobs[1].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                gameTest = new GameTest(elementTypes[1],elementQRange[1]);
-                gameTest.count();
-                if (attackable) {
-                    mobsCurrentHP[1]--;   //-玩家攻擊力
-                    if (mobsCurrentHP[1] > 0) {
-                        mobsHPbar[1].setScaleX((float) mobsCurrentHP[1] / (float) mobsMaxHP[1]);
-                        float mobs1HPbarLocateX = mobsHPbar[1].getX();
-                        mobsHPbar[1].setPivotX(mobs1HPbarLocateX);
-                    } else {
-                        mobs[1].setVisibility(View.GONE);
-                        mob1ActionTimer.cancel();
-                    }
-                } else if (now == 0) {
-                    gameTest.count();
-                }
+                modClickEvent(1);
             }
         });
         mobs[2].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                gameTest = new GameTest(elementTypes[2],elementQRange[2]);
-                gameTest.count();
-                if (attackable) {
-                    mobsCurrentHP[0]--;   //-玩家攻擊力
-                    if (mobsCurrentHP[2] > 0) {
-                        mobsHPbar[2].setScaleX((float) mobsCurrentHP[2] / (float) mobsMaxHP[2]);
-                        float mobs1HPbarLocateX = mobsHPbar[1].getX();
-                        mobsHPbar[2].setPivotX(mobs1HPbarLocateX);
-                    } else {
-                        mobs[2].setVisibility(View.GONE);
-                        mob1ActionTimer.cancel();
-                    }
-                } else if (now == 0) {
-                    gameTest.count();
-                }
+                modClickEvent(2);
             }
         });
         mobs[3].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                gameTest = new GameTest(elementTypes[3],elementQRange[3]);
-                gameTest.count();
-                if (attackable) {
-                    mobsCurrentHP[3]--;   //-玩家攻擊力
-                    if (mobsCurrentHP[3] > 0) {
-                        mobsHPbar[3].setScaleX((float) mobsCurrentHP[3] / (float) mobsMaxHP[3]);
-                        float mobs1HPbarLocateX = mobsHPbar[3].getX();
-                        mobsHPbar[3].setPivotX(mobs1HPbarLocateX);
-                    } else {
-                        mobs[3].setVisibility(View.GONE);
-                        mob1ActionTimer.cancel();
-                    }
-                } else if (now == 0) {
-                    gameTest.count();
-                }
+                modClickEvent(3);
             }
         });
         mobs[4].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                gameTest = new GameTest(elementTypes[4],elementQRange[4]);
-                gameTest.count();
-                if (attackable) {
-                    mobsCurrentHP[4]--;   //-玩家攻擊力
-                    if (mobsCurrentHP[4] > 0) {
-                        mobsHPbar[4].setScaleX((float) mobsCurrentHP[4] / (float) mobsMaxHP[4]);
-                        float mobs1HPbarLocateX = mobsHPbar[1].getX();
-                        mobsHPbar[4].setPivotX(mobs1HPbarLocateX);
-                    } else {
-                        mobs[4].setVisibility(View.GONE);
-                        mob1ActionTimer.cancel();
-                    }
-                } else if (now == 0) {
-                    gameTest.count();
-                }
+                modClickEvent(4);
             }
         });
         mobs[5].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                gameTest = new GameTest(elementTypes[5],elementQRange[5]);
-                gameTest.count();
-                if (attackable) {
-                    mobsCurrentHP[5]--;   //-玩家攻擊力
-                    if (mobsCurrentHP[5] > 0) {
-                        mobsHPbar[5].setScaleX((float) mobsCurrentHP[5] / (float) mobsMaxHP[5]);
-                        float mobs1HPbarLocateX = mobsHPbar[1].getX();
-                        mobsHPbar[5].setPivotX(mobs1HPbarLocateX);
-                    } else {
-                        mobs[5].setVisibility(View.GONE);
-                        mob1ActionTimer.cancel();
-                    }
-                } else if (now == 0) {
-                    gameTest.count();
-                }
+                modClickEvent(5);
             }
         });
+    }
+
+    void modClickEvent(int mobIndex) {
+        gameTest = new GameTest(elementTypes[mobIndex],elementQRange[mobIndex]);
+        gameTest.count();
+        if (attackable) {
+            mobsCurrentHP[mobIndex]--;   //-玩家攻擊力
+            if (mobsCurrentHP[mobIndex] > 0) {
+                mobsHPbar[mobIndex].setScaleX((float) mobsCurrentHP[mobIndex] / (float) mobsMaxHP[mobIndex]);
+                float mobs1HPbarLocateX = mobsHPbar[mobIndex].getX();
+                mobsHPbar[mobIndex].setPivotX(mobs1HPbarLocateX);
+            } else {
+                mobs[mobIndex].setVisibility(View.GONE);
+                mob1ActionTimer.cancel();
+            }
+        } else if (now == 0) {
+            gameTest.count();
+        }
     }
 
     public class GameTest{
@@ -365,36 +299,36 @@ public class battle_scene extends AppCompatActivity {
     };
 
 
-//    public View.OnClickListener blockListener = new View.OnClickListener(){
-//        @Override
-//        public void onClick(View view) {
-//            if(introFight == true){
-//                tvPrepareFight.setText("");
-//                timer01.schedule(battlePrepare, 500, 1000);
-//                introFight = false;
-//                Log.d("Click test", "view block is clicked");
-//            }
-//        }
-//    };
-//    private TimerTask battlePrepare = new TimerTask(){
-//        @Override
-//        public void run() {
-//            if(prepareTime > 0) {
-//                Message msg = mHandler.obtainMessage();
-//                msg.what = 1;
-//                msg.sendToTarget();
-//                PB.setProgress(prepareTime);
-//                prepareTime--;
-//                Log.d("timer","" + prepareTime);
-//            }else{
-//                Message msg = mHandler.obtainMessage();
-//                msg.what = 2;
-//                msg.sendToTarget();
-//                timer01.cancel();
-//                mobsTimer01.schedule(mob1ActionTimer,500,1000);
-//            }
-//        }
-//    };
+    public View.OnClickListener blockListener = new View.OnClickListener(){
+        @Override
+        public void onClick(View view) {
+            if(introFight == true){
+                tvPrepareFight.setText("");
+                timer01.schedule(battlePrepare, 500, 1000);
+                introFight = false;
+                Log.d("Click test", "view block is clicked");
+            }
+        }
+    };
+    private TimerTask battlePrepare = new TimerTask(){
+        @Override
+        public void run() {
+            if(prepareTime > 0) {
+                Message msg = mHandler.obtainMessage();
+                msg.what = 1;
+                msg.sendToTarget();
+                PB.setProgress(prepareTime);
+                prepareTime--;
+                Log.d("timer","" + prepareTime);
+            }else{
+                Message msg = mHandler.obtainMessage();
+                msg.what = 2;
+                msg.sendToTarget();
+                timer01.cancel();
+                mobsTimer01.schedule(mob1ActionTimer,500,1000);
+            }
+        }
+    };
 
     private TimerTask mob1ActionTimer = new TimerTask() {
         @Override
@@ -465,27 +399,26 @@ public class battle_scene extends AppCompatActivity {
 //    }
     @Override
     public void onBackPressed() {  //返回鍵事件
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("確認視窗");
-        builder.setMessage("確定要結束應用程式嗎?");
-        builder.setIcon(R.mipmap.ic_launcher);
-        builder.setPositiveButton("確定",
-                new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                    }
-                });
-        builder.setNegativeButton("取消",
-                new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // TODO Auto-generated method stub
-
-                    }
-                });
-        builder.show();
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setTitle("確認視窗");
+//        builder.setMessage("確定要結束應用程式嗎?");
+//        builder.setIcon(R.mipmap.ic_launcher);
+//        builder.setPositiveButton("確定",
+//                new DialogInterface.OnClickListener() {
+//
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        finish();
+//                    }
+//                });
+//        builder.setNegativeButton("取消",
+//                new DialogInterface.OnClickListener() {
+//
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//
+//                    }
+//                });
+//        builder.show();
     }
 }

@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,9 +40,13 @@ public class pre_battle_scene extends AppCompatActivity {
     }
 
     public void start_fight(View v){
-        Intent it = new Intent();
-        it.setClass(this,battle_scene.class);
-        startActivity(it);
+        if(!Loading.tempHasMod[0].equals("0")) {
+            Intent it = new Intent();
+            it.setClass(this, battle_scene.class);
+            startActivity(it);
+        } else {
+            Toast.makeText(pre_battle_scene.this, "當前場景沒有怪物", Toast.LENGTH_SHORT).show();
+        }
     }
 
 //    public void onClear (View v) {
@@ -57,7 +62,9 @@ public class pre_battle_scene extends AppCompatActivity {
         for(int i=0; i<Loading.tempHasMod.length; i++) {
             if(Loading.tempHasMod[i].equals("0"))
                 modView[i].setVisibility(View.INVISIBLE);
-            else {
+            else if (Loading.tempHasMod[i]==null) {
+                Toast.makeText(pre_battle_scene.this, "資料未存取", Toast.LENGTH_SHORT).show();
+            } else {
                 int inx = Loading.idList.indexOf(Loading.tempHasMod[i]);
                 int mobs_img_resID = getResources().getIdentifier((String)Loading.imageList.get(inx), "drawable", getPackageName());
                 modView[i].setImageResource(mobs_img_resID);

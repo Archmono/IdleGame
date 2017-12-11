@@ -64,20 +64,20 @@ public class MainActivity extends AppCompatActivity {
 //        getData("1");
         getPlayerStatus();
         countMobs();
-//        Log.d(TAG, idList.toString());
-//        Log.d(TAG, nameList.toString());
-//        Log.d(TAG, healthPointList.toString());
-//        Log.d(TAG, rarityList.toString());
-//        Log.d(TAG, speedList.toString());
-//        Log.d(TAG, qCountsList.toString());
-//        Log.d(TAG, qTypesList.toString());
-//        Log.d(TAG, qRangeList.toString());
-//        Log.d(TAG, stunTimeList.toString());
-//        Log.d(TAG, atkList.toString());
-//        Log.d(TAG, imageList.toString());
-//        int[] loots = (int[]) lootsList.get(0);
+        Log.d(TAG, Loading.idList.toString());
+        Log.d(TAG, Loading.nameList.toString());
+        Log.d(TAG, Loading.healthPointList.toString());
+        Log.d(TAG, Loading.rarityList.toString());
+        Log.d(TAG, Loading.speedList.toString());
+        Log.d(TAG, Loading.qCountsList.toString());
+        Log.d(TAG, Loading.qTypesList.toString());
+        Log.d(TAG, Loading.qRangeList.toString());
+        Log.d(TAG, Loading.stunTimeList.toString());
+        Log.d(TAG, Loading.atkList.toString());
+        Log.d(TAG, Loading.imageList.toString());
+//        int[] loots = (int[]) Loading.lootsList.get(0);
 //        Log.d(TAG, loots[0]+", "+loots[1]+", "+loots[2]);
-//        int[] lootsDP = (int[]) lootsDropRateList.get(0);
+//        int[] lootsDP = (int[]) Loading.lootsDropRateList.get(0);
 //        Log.d(TAG, lootsDP[0]+", "+lootsDP[1]+", "+lootsDP[2]);
 
     }
