@@ -35,7 +35,8 @@ public class Loading extends Activity {
     /*↓SharedPreferences裡儲存的資料名稱↓*/
     public static final String DATE_PREF = "DATE_PREF";
     public static final String PREF_OLD_TIME = "DATE_OldTime";
-    public static final String[] PREF_HASMOB = {"HasMob1","HasMob2","HasMob3","HasMob4","HasMob5","HasMob6"};
+    public static final String[] PREF_MOBS_SLOT_FILLED_S1 = {"S1_P1", "S1_P2", "S1_P3", "S1_P4", "S1_P5", "S1_P6"};
+    public static final String[] PREF_MOBS_SLOT_FILLED_S2 = {"S2_P1", "S2_P2", "S2_P3", "S2_P4", "S2_P5", "S2_P6"};
     public static final String DATE_NEXT_DATE = "DATE_NextTime";
     /*↑SharedPreferences裡儲存的資料名稱↑*/
 
@@ -58,7 +59,8 @@ public class Loading extends Activity {
     int timeGap,nextTime; //運算用變數
     long newTime,oldTime; //運算用變數
     String tempOldTime,tempNextTime="0"; //暫存用變數
-    public static String[] tempHasMod = new String[6]; //暫存用變數
+    public static String[] mobsSlotFilled_S1 = new String[6]; //暫存用變數
+    public static String[] mobsSlotFilled_S2 = new String[6];
     Calendar rightNow = Calendar.getInstance(); //提取時間用的方法
 
     @Override
@@ -72,7 +74,7 @@ public class Loading extends Activity {
         newTime = rightNow.getTimeInMillis();
         restorePrefs();
         DateTest();
-        Log.d("LOGDATE_Mobs", tempHasMod[0] +" "+ tempHasMod[1] +" "+ tempHasMod[2] +" "+ tempHasMod[3] +" "+ tempHasMod[4] +" "+ tempHasMod[5]+" ");
+        Log.d("LOGDATE_Mobs", mobsSlotFilled_S1[0] +" "+ mobsSlotFilled_S1[1] +" "+ mobsSlotFilled_S1[2] +" "+ mobsSlotFilled_S1[3] +" "+ mobsSlotFilled_S1[4] +" "+ mobsSlotFilled_S1[5]+" ");
         onSave();
 
         getPlayerStatus();
@@ -101,22 +103,18 @@ public class Loading extends Activity {
         }, 2000);
     }
 
-    @Override
-    protected void onDestroy() {
-        onSave();
-        super.onDestroy();
-    }
-
-    private void restorePrefs() { //讀取的位置
-        tempHasMod = new String[]{"0", "0", "0", "0", "0", "0"}; //暫存重置不知為何new在class外部會有問題所以先寫在這裡
+    public void restorePrefs() { //讀取的位置
+//        tempHasMod = new String[]{"0", "0", "0", "0", "0", "0"}; //暫存重置不知為何new在class外部會有問題所以先寫在這裡
         SharedPreferences settings = getSharedPreferences(DATE_PREF, 0);
         for(int i=0; i<6; i++){
-            tempHasMod[i] = settings.getString(PREF_HASMOB[i], "");
+            mobsSlotFilled_S1[i] = settings.getString(PREF_MOBS_SLOT_FILLED_S1[i], "");
+            mobsSlotFilled_S2[i] = settings.getString(PREF_MOBS_SLOT_FILLED_S2[i], "");
         }
         tempNextTime = settings.getString(DATE_NEXT_DATE, "");
         tempOldTime = settings.getString(PREF_OLD_TIME, "");
         if(tempOldTime.equals("")) { //玩家第一次開啟沒有舊時間，就
-            tempHasMod = new String[]{"0", "0", "0", "0", "0", "0"}; //初始化怪物生成
+            mobsSlotFilled_S1 = new String[]{"0", "0", "0", "0", "0", "0"}; //初始化怪物生成
+            mobsSlotFilled_S2 = new String[]{"0", "0", "0", "0", "0", "0"};
             oldTime = rightNow.getTimeInMillis(); //將oldTime設置為now
         } else {
             nextTime = Integer.parseInt(tempNextTime);
@@ -130,7 +128,7 @@ public class Loading extends Activity {
         SharedPreferences settings = getSharedPreferences(DATE_PREF, 0);
         settings.edit().putString(PREF_OLD_TIME, String.valueOf(rightNow.getTimeInMillis())).commit();
         for(int i=0; i<6; i++){
-            settings.edit().putString(PREF_HASMOB[i], tempHasMod[i]).commit();
+            settings.edit().putString(PREF_MOBS_SLOT_FILLED_S1[i], mobsSlotFilled_S1[i]).commit();
         }
         settings.edit().putString(DATE_NEXT_DATE, String.valueOf(nextTime)).commit();
     }
@@ -143,29 +141,29 @@ public class Loading extends Activity {
         Log.d("LOGDATE_NextTime", nextTime+"");
         getData("1"); //取得場景1一隨機怪物ID (變數存在RandomTest.cId)
         for(int i=0;i<6;i++) { //迴圈檢查，如怪物陣列滿了將不會進入
-            if (tempHasMod[i].equals("0")) { //如果怪物陣列裡的ID為0
+            if (mobsSlotFilled_S1[i].equals("0")) { //如果怪物陣列裡的ID為0
                 getRarity();
                 random = (int) (Math.random() * 25) + 5; //隨機 5-30秒
                 if(nextTime > 0) { //如果有紀錄上次未生成怪物時間
                     random = nextTime; //覆蓋掉隨機時間
                     nextTime = 0; //重置下次生怪時間
                 }
-                Log.d("LOGDATE_Random"+i+":", random + "");
+                Log.d("LOGDATE_Random", random + "");
                 timeGap -= random; //利用時間差運算是否繼續生怪
                 if (timeGap < 0) { //無時間繼續生怪
                     nextTime = (-timeGap); //將剩餘時間存入下次生怪時間
                     break; //跳出迴圈
                 } else {
-                    tempHasMod[i] = RandomTest.cId; //放入生怪ID至怪物陣列
+                    mobsSlotFilled_S1[i] = RandomTest.cId; //放入生怪ID至怪物陣列
                 }
             }
         }
     }
 
-    public void onClick (View v) { //切換到主畫面
-        Intent i = new Intent(Loading.this, MainActivity.class);
-        startActivity(i);
-    }
+//    public void onClick (View v) { //切換到主畫面
+//        Intent i = new Intent(Loading.this, MainActivity.class);
+//        startActivity(i);
+//    }
 
     public void getData(String scene){
         GameDBHelper helper = GameDBHelper.getInstance(this);
@@ -235,6 +233,8 @@ public class Loading extends Activity {
 
             Log.d(TAG2,"玩家100101號道具存量 : " + String.valueOf(playInfo.playerInventory[0].i100101));
             Log.d(TAG2,"怪物圖鑑1001號生態介紹解鎖狀態 : " + String.valueOf(playInfo.playerMobsCollection[0].m1001.mobsBio));
+
+            Log.d(TAG2,"關卡解鎖進度 : " + String.valueOf(playInfo.playerSceneProgress[0].Scene_1));
 
         } catch (IOException e) {
             e.printStackTrace();

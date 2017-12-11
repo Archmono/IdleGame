@@ -63,5 +63,11 @@
         "loot1":0,"loot2":0,"loot3":0
       }
     }
+  ],
+  "playerSceneProgress":
+  [
+    {
+      "Scene_1":true,"Scene_2":true
+    }
   ]
 }

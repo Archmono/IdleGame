@@ -40,7 +40,7 @@ public class pre_battle_scene extends AppCompatActivity {
     }
 
     public void start_fight(View v){
-        if(!Loading.tempHasMod[0].equals("0")) {
+        if(!Loading.mobsSlotFilled_S1[0].equals("0")) {
             Intent it = new Intent();
             it.setClass(this, battle_scene.class);
             startActivity(it);
@@ -58,14 +58,13 @@ public class pre_battle_scene extends AppCompatActivity {
 //    }
 
     void setVisible () {
-        Log.d("LOGDATE",Loading.tempHasMod[0]+Loading.tempHasMod[1]+Loading.tempHasMod[2]+Loading.tempHasMod[3]+Loading.tempHasMod[4]+Loading.tempHasMod[5]);
-        for(int i=0; i<Loading.tempHasMod.length; i++) {
-            if(Loading.tempHasMod[i].equals("0"))
+        for(int i=0; i<Loading.mobsSlotFilled_S1.length; i++) {
+            if(Loading.mobsSlotFilled_S1[i].equals("0"))
                 modView[i].setVisibility(View.INVISIBLE);
-            else if (Loading.tempHasMod[i]==null) {
+            else if (Loading.mobsSlotFilled_S1[i]==null) {
                 Toast.makeText(pre_battle_scene.this, "資料未存取", Toast.LENGTH_SHORT).show();
             } else {
-                int inx = Loading.idList.indexOf(Loading.tempHasMod[i]);
+                int inx = Loading.idList.indexOf(Loading.mobsSlotFilled_S1[i]);
                 int mobs_img_resID = getResources().getIdentifier((String)Loading.imageList.get(inx), "drawable", getPackageName());
                 modView[i].setImageResource(mobs_img_resID);
             }

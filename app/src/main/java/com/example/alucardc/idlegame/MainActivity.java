@@ -85,8 +85,8 @@ public class MainActivity extends AppCompatActivity {
     void countMobs(){
         textView2 = (TextView) findViewById(R.id.textView2);
         for(int i=0; i<6; i++){
-            System.out.println(Loading.tempHasMod[i]);
-            if( !Loading.tempHasMod[i].equals("0") ) {
+            System.out.println(Loading.mobsSlotFilled_S1[i]);
+            if( !Loading.mobsSlotFilled_S1[i].equals("0") ) {
                 sum++;
             }
         }
@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG2,"玩家100101號道具存量 : " + String.valueOf(playInfo.playerInventory[0].i100101));
             Log.d(TAG2,"怪物圖鑑1001號生態介紹解鎖狀態 : " + String.valueOf(playInfo.playerMobsCollection[0].m1001.mobsBio));
 
-
+            Log.d(TAG2,"關卡二解鎖進度 : " + String.valueOf(playInfo.playerSceneProgress[0].Scene_1));
 
         } catch (IOException e) {
             e.printStackTrace();

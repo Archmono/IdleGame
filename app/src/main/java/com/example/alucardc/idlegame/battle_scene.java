@@ -89,11 +89,11 @@ public class battle_scene extends AppCompatActivity {
     }
 
     void setMobs() {
-        for(int i=0; i<Loading.tempHasMod.length; i++) {
-            if(Loading.tempHasMod[i].equals("0"))
+        for(int i=0; i<Loading.mobsSlotFilled_S1.length; i++) {
+            if(Loading.mobsSlotFilled_S1[i].equals("0"))
                 mobs[i].setVisibility(View.GONE);
             else {
-                int inx = Loading.idList.indexOf(Loading.tempHasMod[i]);
+                int inx = Loading.idList.indexOf(Loading.mobsSlotFilled_S1[i]);
                 int mobs_img_resID = getResources().getIdentifier((String)Loading.imageList.get(inx), "drawable", getPackageName());
                 mobsImage[i].setImageResource(mobs_img_resID);
                 elementTypes[i] = (int)Loading.qTypesList.get(inx);
@@ -325,7 +325,7 @@ public class battle_scene extends AppCompatActivity {
                 msg.what = 2;
                 msg.sendToTarget();
                 timer01.cancel();
-                mobsTimer01.schedule(mob1ActionTimer,500,1000);
+                mobsTimer01.schedule(mob1ActionTimer,500,100);
             }
         }
     };
@@ -335,7 +335,7 @@ public class battle_scene extends AppCompatActivity {
         public void run() {
             if(currentActionTime > 0) {
                 actionbar[0].setProgress(currentActionTime*100/mobsSpeed[0]);
-                currentActionTime -= 1000;
+                currentActionTime -= 100;
                 Log.d("MobsTime", ""+ currentActionTime);
             }else{
                 actionbar[0].setProgress(currentActionTime*100/mobsSpeed[0]);
@@ -349,7 +349,7 @@ public class battle_scene extends AppCompatActivity {
         }
     };
 
-//    void loadData()
+    //    void loadData()
 //    {
 //        int mobsId = Integer.parseInt(RandomTest.cId);
 //        try {

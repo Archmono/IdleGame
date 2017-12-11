@@ -8,7 +8,7 @@ public class Player {
     public MyPlayerStatus[] playerStatus;
     public MyPlayerInventory[] playerInventory;
     public MyPlayerMobsCollection[] playerMobsCollection;
-
+    public MyPlayerSceneProgress[] playerSceneProgress;
 }
 
 class MyPlayerStatus
@@ -126,4 +126,8 @@ class mobs9101{
     public int loot1;
     public int loot2;
     public int loot3;
+}
+class MyPlayerSceneProgress{
+    public boolean Scene_1;
+    public boolean Scene_2;
 }
