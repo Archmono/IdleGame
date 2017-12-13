@@ -1,11 +1,8 @@
 package com.example.alucardc.idlegame;
 
-import android.content.DialogInterface;
 import android.graphics.Typeface;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,9 +23,9 @@ public class battle_scene extends AppCompatActivity {
     int prepareTime = 3;
     boolean introFight = true;
     Timer timer01 = new Timer();
-    Timer mobsTimer01 = new Timer();
+    Timer mobsTimer = new Timer();
     int playerCurrentHP = 100;  //暫時設定的玩家HP值,待完成
-    int currentActionTime;
+    int[] currentActionTime = new int[6];
 
     TextView tvPrepareFight,playerHP;
     LinearLayout questionLayout,blockView;
@@ -104,7 +101,10 @@ public class battle_scene extends AppCompatActivity {
                 mobsCurrentHP[i] = (int)Loading.healthPointList.get(inx);
                 mobsATK[i] = (int)Loading.atkList.get(inx);
                 mobsSpeed[i] = (int)Loading.speedList.get(inx);
+
+                currentActionTime[i] = mobsSpeed[i];
             }
+
         }
     }
 
@@ -153,6 +153,7 @@ public class battle_scene extends AppCompatActivity {
             mobsImage[i] = mobs[i].findViewById(R.id.mobsImage);
             actionbar[i] = mobs[i].findViewById(R.id.progressBarAction);
             mobsHPbar[i] = mobs[i].findViewById(R.id.imageViewBarHP);
+
         }
 
     }
@@ -211,7 +212,7 @@ public class battle_scene extends AppCompatActivity {
                 mobsHPbar[mobIndex].setPivotX(mobs1HPbarLocateX);
             } else {
                 mobs[mobIndex].setVisibility(View.GONE);
-                mob1ActionTimer.cancel();
+//                mob1ActionTimer.cancel();
             }
         } else if (now == 0) {
             gameTest.count();
@@ -326,7 +327,7 @@ public class battle_scene extends AppCompatActivity {
                 msg.what = 2;
                 msg.sendToTarget();
                 timer01.cancel();
-                mobsTimer01.schedule(mob1ActionTimer,500,100);
+                mobsTimer.schedule(mob1ActionTimer,500,100);
             }
         }
     };
@@ -334,18 +335,35 @@ public class battle_scene extends AppCompatActivity {
     private TimerTask mob1ActionTimer = new TimerTask() {
         @Override
         public void run() {
-            if(currentActionTime > 0) {
-                actionbar[0].setProgress(currentActionTime*100/mobsSpeed[0]);
-                currentActionTime -= 100;
-                Log.d("MobsTime", ""+ currentActionTime);
-            }else{
-                actionbar[0].setProgress(currentActionTime*100/mobsSpeed[0]);
-                currentActionTime = mobsSpeed[0];
-                playerCurrentHP --;
-                Message msg = mHandler.obtainMessage();
-                msg.what = 3;
-                msg.sendToTarget();
+            for(int i = 0; i<6 ;i++){
+                actionbar[i].setProgress(currentActionTime[i]*100/mobsSpeed[i]);
+//            Log.d("Speed",currentActionTime[0] +"  "+ mobsSpeed[0]);
+                if(mobsCurrentHP[i] > 0){
+                    currentActionTime[i] -= 100;
+                }
+
+                if(currentActionTime[i] <= 0){
+                    playerCurrentHP -= mobsATK[0];
+                    currentActionTime[i] = mobsSpeed[i];
+                    Message msg = mHandler.obtainMessage();
+                    msg.what = 3;
+                    msg.sendToTarget();
+                }
             }
+
+
+//            if(currentActionTime > 0) {
+//                actionbar[0].setProgress(currentActionTime*100/mobsSpeed[0]);
+//                currentActionTime -= 100;
+//                Log.d("MobsTime", ""+ currentActionTime);
+//            }else{
+//                actionbar[0].setProgress(currentActionTime*100/mobsSpeed[0]);
+//                currentActionTime = mobsSpeed[0];
+//                playerCurrentHP --;
+//                Message msg = mHandler.obtainMessage();
+//                msg.what = 3;
+//                msg.sendToTarget();
+//            }
 
         }
     };

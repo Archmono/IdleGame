@@ -17,6 +17,7 @@ public class RandomTest { //在Loading中，隨機時間生怪時創建一此類
         this.mobsRarity = new int[mobsRarity.length];
         this.mobsRarity = mobsRarity;
     }
+
     void randomTest() { //計算方法
 
         for (int i = 0; i < mobsRarity.length; i++) {
