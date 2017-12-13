@@ -21,9 +21,11 @@ public class battle_scene extends AppCompatActivity {
 
     ProgressBar PB;
     int prepareTime = 3;
+    public static boolean condition = true;
+    Timer timerPrepare = new Timer();
+    Timer timerMobsProgress = new Timer();
+    MobsProgressTimerTask mobsProgressTimerTask = new MobsProgressTimerTask();
     boolean introFight = true;
-    Timer timer01 = new Timer();
-    Timer mobsTimer = new Timer();
     int playerCurrentHP = 100;  //暫時設定的玩家HP值,待完成
     int[] currentActionTime = new int[6];
 
@@ -56,12 +58,21 @@ public class battle_scene extends AppCompatActivity {
         public void handleMessage(Message msg) {
             if(msg.what == 1){
                 PB.setVisibility(View.VISIBLE);
+
             }else if(msg.what == 2){
                 tvPrepareFight.setVisibility(View.GONE);
                 PB.setVisibility(View.GONE);
                 blockView.setVisibility(View.GONE);
+                timerPrepare.cancel();
+
             }else if(msg.what == 3){
+                tvPrepareFight.setVisibility(View.VISIBLE);
+                blockView.setVisibility(View.VISIBLE);
+                tvPrepareFight.setText("暫停遊戲");
+
+            }else if(msg.what == 9){
                 playerHP.setText("HP : " + playerCurrentHP);
+
             }
             super.handleMessage(msg);
         }
@@ -86,6 +97,16 @@ public class battle_scene extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onPause() {
+        Message msg = mHandler.obtainMessage();
+        msg.what = 3;                           //msg3訊息內容為遮擋view的顯示 & 中央提示暫停文字顯示
+        msg.sendToTarget();
+        condition = false;             //onPause時把怪物計時條timer取消
+
+        super.onPause();
+    }
+
     void setMobs() {
         for(int i=0; i<Loading.mobsSlotFilled_S1.length; i++) {
             if(Loading.mobsSlotFilled_S1[i].equals("0"))
@@ -107,24 +128,6 @@ public class battle_scene extends AppCompatActivity {
 
         }
     }
-
-//    public void getData(String searchMobsID){
-//        helper = new GameDBHelper(this, "idlegame.db", null, 1);
-//        String[] column = { "_id", "name", "healthPoint"};
-//        Cursor c = helper.getReadableDatabase().query("mobsdata", column, "_id=?", new String[]{searchMobsID}, null, null, null);
-//
-//        c.moveToFirst();
-//        for (int i = 0; i < c.getCount(); i++) {
-//            String id = c.getString(c.getColumnIndex("_id"));
-//            String name = c.getString(c.getColumnIndex("name"));
-//            int hp = c.getInt(c.getColumnIndex("healthPoint"));
-//            c.moveToNext();
-//            Log.d("datatest", id + ", " + name + ", " + hp);
-//            String[] ad = {id , name};
-//            showHP = hp;
-//        }
-//        c.close();
-//    }
 
     void findViews(){
         PB = (ProgressBar)findViewById(R.id.pbtest);
@@ -301,19 +304,25 @@ public class battle_scene extends AppCompatActivity {
     };
 
 
-    public View.OnClickListener blockListener = new View.OnClickListener(){
+    public View.OnClickListener blockListener = new View.OnClickListener(){ //為畫面遮罩設置點擊監聽器
         @Override
         public void onClick(View view) {
-            if(introFight == true){
-                tvPrepareFight.setText("");
-                timer01.schedule(battlePrepare, 500, 1000);
-                introFight = false;
+            if(introFight){
+                tvPrepareFight.setText("");                                         //點擊時將中央文字欄位清空
+                BattlePrepareTimerTask bpTimerTask = new BattlePrepareTimerTask();  //new新的準備畫面timerTask
+                timerPrepare.schedule(bpTimerTask, 500, 1000);                      //為timer timerPrepare設置timerTask
+                introFight = false;                                                 //點擊後進入場景,將檢查值設置為false
                 Log.d("Click test", "view block is clicked");
+            } else {
+                Message msg = mHandler.obtainMessage();
+                msg.what = 2;                               //發送msg2,將暫停用遮擋畫面設定為GONE的可見度
+                msg.sendToTarget();
+                condition = true;
             }
         }
     };
-    private TimerTask battlePrepare = new TimerTask(){
-        @Override
+
+    public class BattlePrepareTimerTask extends TimerTask{
         public void run() {
             if(prepareTime > 0) {
                 Message msg = mHandler.obtainMessage();
@@ -321,52 +330,46 @@ public class battle_scene extends AppCompatActivity {
                 msg.sendToTarget();
                 PB.setProgress(prepareTime);
                 prepareTime--;
-                Log.d("timer","" + prepareTime);
+                Log.d("戰前準備時間", prepareTime+"");
             }else{
+                timerPrepare.cancel();                      //準備倒數小於0,戰鬥開始後把準備時間用timer取消 (msg2中也有取消,測試效果中暫時保留)
+                timerMobsProgress.schedule(mobsProgressTimerTask,500,100);
                 Message msg = mHandler.obtainMessage();
-                msg.what = 2;
+                msg.what = 2;                               //發送msg2,將暫停用遮擋畫面設定為GONE的可見度
                 msg.sendToTarget();
-                timer01.cancel();
-                mobsTimer.schedule(mob1ActionTimer,500,100);
+
             }
         }
     };
 
-    private TimerTask mob1ActionTimer = new TimerTask() {
-        @Override
+    public class MobsProgressTimerTask extends TimerTask {
         public void run() {
-            for(int i = 0; i<6 ;i++){
-                actionbar[i].setProgress(currentActionTime[i]*100/mobsSpeed[i]);
+            if (condition){
+                for (int i = 0; i < 6; i++) {
+                    actionbar[i].setProgress(currentActionTime[i] * 100 / mobsSpeed[i]);
 //            Log.d("Speed",currentActionTime[0] +"  "+ mobsSpeed[0]);
-                if(mobsCurrentHP[i] > 0){
-                    currentActionTime[i] -= 100;
-                }
+                    if (mobsCurrentHP[i] > 0) {
+                        currentActionTime[i] -= 100;
+                    }
 
-                if(currentActionTime[i] <= 0){
-                    playerCurrentHP -= mobsATK[0];
-                    currentActionTime[i] = mobsSpeed[i];
-                    Message msg = mHandler.obtainMessage();
-                    msg.what = 3;
-                    msg.sendToTarget();
+                    if (currentActionTime[i] <= 0) {
+                        playerCurrentHP -= mobsATK[0];
+                        currentActionTime[i] = mobsSpeed[i];
+                        Message msg = mHandler.obtainMessage();
+                        msg.what = 9;
+                        msg.sendToTarget();
+                    }
                 }
             }
-
-
-//            if(currentActionTime > 0) {
-//                actionbar[0].setProgress(currentActionTime*100/mobsSpeed[0]);
-//                currentActionTime -= 100;
-//                Log.d("MobsTime", ""+ currentActionTime);
-//            }else{
-//                actionbar[0].setProgress(currentActionTime*100/mobsSpeed[0]);
-//                currentActionTime = mobsSpeed[0];
-//                playerCurrentHP --;
-//                Message msg = mHandler.obtainMessage();
-//                msg.what = 3;
-//                msg.sendToTarget();
-//            }
-
         }
-    };
+    }
+
+    public void btnBattlePause(View v){
+        condition = false;
+        Message msg = mHandler.obtainMessage();
+        msg.what = 3;                           //msg3訊息內容為遮擋view的顯示 & 中央提示暫停文字顯示
+        msg.sendToTarget();
+    }
 
     //    void loadData()
 //    {
@@ -416,8 +419,8 @@ public class battle_scene extends AppCompatActivity {
 //        }
 //
 //    }
-    @Override
-    public void onBackPressed() {  //返回鍵事件
+//    @Override
+//    public void onBackPressed() {  //返回鍵事件
 //        AlertDialog.Builder builder = new AlertDialog.Builder(this);
 //        builder.setTitle("確認視窗");
 //        builder.setMessage("確定要結束應用程式嗎?");
@@ -439,7 +442,7 @@ public class battle_scene extends AppCompatActivity {
 //                    }
 //                });
 //        builder.show();
-    }
+//    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
