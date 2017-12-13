@@ -54,15 +54,16 @@ public class battle_scene extends AppCompatActivity {
     Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
-            if(msg.what == 1){
+            if(msg.what == 1){  //顯示準備進度條
                 PB.setVisibility(View.VISIBLE);
-            }else if(msg.what == 2){
+            }else if(msg.what == 2){ //戰鬥開始
                 tvPrepareFight.setVisibility(View.GONE);
                 PB.setVisibility(View.GONE);
                 blockView.setVisibility(View.GONE);
-            }else if(msg.what == 3){
+            }else if(msg.what == 3){ //重設玩家血量
                 playerHP.setText("HP : " + playerCurrentHP);
             }
+
             super.handleMessage(msg);
         }
     };
@@ -202,8 +203,6 @@ public class battle_scene extends AppCompatActivity {
     public boolean[] attackable = {false,false,false,false,false,false};
     void modClickEvent(int mobIndex) {
         this.mobIndex = mobIndex;
-        gameTest = new GameTest(elementTypes[mobIndex],elementQRange[mobIndex]);
-        gameTest.count();
         if (attackable[mobIndex]) { //可被攻擊
             mobsCurrentHP[mobIndex]--;   //-玩家攻擊力
             if (mobsCurrentHP[mobIndex] > 0) {
@@ -215,6 +214,7 @@ public class battle_scene extends AppCompatActivity {
 //                mob1ActionTimer.cancel();
             }
         } else if (now == 0) {
+            gameTest = new GameTest(elementTypes[mobIndex],elementQRange[mobIndex]);
             gameTest.count();
         }
     }
@@ -441,11 +441,11 @@ public class battle_scene extends AppCompatActivity {
 //        builder.show();
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (KeyEvent.KEYCODE_HOME == keyCode) {
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
+//    @Override
+//    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//        if (KeyEvent.KEYCODE_HOME == keyCode) {
+//            return true;
+//        }
+//        return super.onKeyDown(keyCode, event);
+//    }
 }
