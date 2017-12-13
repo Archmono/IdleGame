@@ -25,7 +25,7 @@
         android:layout_gravity="bottom"
         android:layout_marginBottom="65dp"
         android:layout_marginLeft="10dp"
-        android:text="HP:XXXX"
+        android:text="HP:100"
         android:fontFamily=""
         android:textSize="30sp"
         android:textColor="#000"
@@ -107,20 +107,22 @@
             layout="@layout/mobs"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
+            android:layout_marginLeft="-29dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="28dp" />
+            android:layout_marginTop="34dp" />
 
         <include
             android:id="@+id/mobsInclude2"
             layout="@layout/mobs"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="78dp"
-            android:layout_marginLeft="162dp"
-            app:layout_constraintLeft_toLeftOf="parent" />
+            android:layout_marginTop="71dp" />
 
         <include
             android:id="@+id/mobsInclude3"
@@ -128,8 +130,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="78dp"
-            android:layout_marginRight="34dp"
+            android:layout_marginTop="58dp"
+            android:layout_marginRight="5dp"
             app:layout_constraintRight_toRightOf="parent" />
 
         <include
@@ -137,11 +139,10 @@
             layout="@layout/mobs"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="39dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="208dp"
-            android:layout_marginStart="64dp" />
+            android:layout_marginTop="297dp"
+            android:layout_marginLeft="-6dp" />
 
         <include
             android:id="@+id/mobsInclude5"
@@ -149,10 +150,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="299dp"
-            android:layout_marginLeft="178dp"
+            android:layout_marginTop="257dp"
+            android:layout_marginLeft="150dp"
             app:layout_constraintLeft_toLeftOf="parent"
-            android:layout_marginStart="178dp" />
+            android:layout_marginRight="8dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintHorizontal_bias="0.0" />
 
         <include
             android:id="@+id/mobsInclude6"
@@ -160,10 +163,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="238dp"
-            android:layout_marginRight="43dp"
-            app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginEnd="47dp" />
+            android:layout_marginTop="282dp"
+            android:layout_marginRight="5dp"
+            app:layout_constraintRight_toRightOf="parent" />
 
     </android.support.constraint.ConstraintLayout>
 
@@ -190,11 +192,11 @@
 
     <ProgressBar
         android:id="@+id/pbtest"
-        android:layout_gravity="center"
-        android:visibility="invisible"
         style="?android:attr/progressBarStyleHorizontal"
-        android:max="3"
         android:layout_width="match_parent"
-        android:layout_height="65dp" />
+        android:layout_height="65dp"
+        android:layout_gravity="center"
+        android:max="3"
+        android:visibility="invisible" />
 
 </FrameLayout>
