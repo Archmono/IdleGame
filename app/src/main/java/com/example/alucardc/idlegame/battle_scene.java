@@ -56,20 +56,11 @@ public class battle_scene extends AppCompatActivity {
         public void handleMessage(Message msg) {
             if(msg.what == 1){
                 PB.setVisibility(View.VISIBLE);
-                blockView.setVisibility(View.VISIBLE);
             }else if(msg.what == 2){
                 tvPrepareFight.setVisibility(View.GONE);
                 PB.setVisibility(View.GONE);
                 blockView.setVisibility(View.GONE);
             }else if(msg.what == 3){
-                blockView.setVisibility(View.VISIBLE);
-                blockView.setOnClickListener(blockListener);
-                tvPrepareFight.setVisibility(View.VISIBLE);
-                tvPrepareFight.setText("暫停中");
-            }else if(msg.what == 4){
-
-            }
-            else if(msg.what == 9){
                 playerHP.setText("HP : " + playerCurrentHP);
             }
             super.handleMessage(msg);
@@ -94,16 +85,6 @@ public class battle_scene extends AppCompatActivity {
 
 
     }
-
-    @Override
-    protected void onPause() {
-        mobsTimer.cancel();
-        Message msg = mHandler.obtainMessage();
-        msg.what = 3;
-        msg.sendToTarget();
-        super.onPause();
-    }
-
 
     void setMobs() {
         for(int i=0; i<Loading.mobsSlotFilled_S1.length; i++) {
@@ -221,6 +202,8 @@ public class battle_scene extends AppCompatActivity {
     public boolean[] attackable = {false,false,false,false,false,false};
     void modClickEvent(int mobIndex) {
         this.mobIndex = mobIndex;
+        gameTest = new GameTest(elementTypes[mobIndex],elementQRange[mobIndex]);
+        gameTest.count();
         if (attackable[mobIndex]) { //可被攻擊
             mobsCurrentHP[mobIndex]--;   //-玩家攻擊力
             if (mobsCurrentHP[mobIndex] > 0) {
@@ -232,8 +215,6 @@ public class battle_scene extends AppCompatActivity {
 //                mob1ActionTimer.cancel();
             }
         } else if (now == 0) {
-
-            gameTest = new GameTest(elementTypes[mobIndex],elementQRange[mobIndex]);
             gameTest.count();
         }
     }
@@ -323,20 +304,11 @@ public class battle_scene extends AppCompatActivity {
     public View.OnClickListener blockListener = new View.OnClickListener(){
         @Override
         public void onClick(View view) {
-            if(introFight){
+            if(introFight == true){
                 tvPrepareFight.setText("");
                 timer01.schedule(battlePrepare, 500, 1000);
                 introFight = false;
                 Log.d("Click test", "view block is clicked");
-            }else{
-                tvPrepareFight.setText("");
-                blockView.setVisibility(View.GONE);
-                Message msg = mHandler.obtainMessage();
-                msg.what = 4;
-                msg.sendToTarget();
-
-                Log.d("battlePrepare", mobsTimer+"");
-                mobsTimer = new Timer();
             }
         }
     };
@@ -351,12 +323,10 @@ public class battle_scene extends AppCompatActivity {
                 prepareTime--;
                 Log.d("timer","" + prepareTime);
             }else{
-                Log.d("battlePrepare", "else submit");
                 Message msg = mHandler.obtainMessage();
                 msg.what = 2;
                 msg.sendToTarget();
                 timer01.cancel();
-                mobsTimer = new Timer();
                 mobsTimer.schedule(mob1ActionTimer,500,100);
             }
         }
@@ -376,10 +346,25 @@ public class battle_scene extends AppCompatActivity {
                     playerCurrentHP -= mobsATK[0];
                     currentActionTime[i] = mobsSpeed[i];
                     Message msg = mHandler.obtainMessage();
-                    msg.what = 9;
+                    msg.what = 3;
                     msg.sendToTarget();
                 }
             }
+
+
+//            if(currentActionTime > 0) {
+//                actionbar[0].setProgress(currentActionTime*100/mobsSpeed[0]);
+//                currentActionTime -= 100;
+//                Log.d("MobsTime", ""+ currentActionTime);
+//            }else{
+//                actionbar[0].setProgress(currentActionTime*100/mobsSpeed[0]);
+//                currentActionTime = mobsSpeed[0];
+//                playerCurrentHP --;
+//                Message msg = mHandler.obtainMessage();
+//                msg.what = 3;
+//                msg.sendToTarget();
+//            }
+
         }
     };
 
@@ -454,5 +439,13 @@ public class battle_scene extends AppCompatActivity {
 //                    }
 //                });
 //        builder.show();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (KeyEvent.KEYCODE_HOME == keyCode) {
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }
