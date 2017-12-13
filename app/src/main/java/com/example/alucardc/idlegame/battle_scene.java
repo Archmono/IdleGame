@@ -9,6 +9,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -156,6 +157,7 @@ public class battle_scene extends AppCompatActivity {
 
     }
 
+    public int mobIndex;
     void mobsSetOnClickListener(){
         mobs[0].setOnClickListener(new View.OnClickListener() {
             @Override
@@ -195,10 +197,13 @@ public class battle_scene extends AppCompatActivity {
         });
     }
 
+
+    public boolean[] attackable = {false,false,false,false,false,false};
     void modClickEvent(int mobIndex) {
+        this.mobIndex = mobIndex;
         gameTest = new GameTest(elementTypes[mobIndex],elementQRange[mobIndex]);
         gameTest.count();
-        if (attackable) {
+        if (attackable[mobIndex]) { //可被攻擊
             mobsCurrentHP[mobIndex]--;   //-玩家攻擊力
             if (mobsCurrentHP[mobIndex] > 0) {
                 mobsHPbar[mobIndex].setScaleX((float) mobsCurrentHP[mobIndex] / (float) mobsMaxHP[mobIndex]);
@@ -246,11 +251,11 @@ public class battle_scene extends AppCompatActivity {
         }
     }
 
-    public boolean attackable = false;
+
     public boolean right ;
     public ArrayList<Integer> qte = new ArrayList<>();
-    int now = 0;
-    int ans;
+    int now = 0; //玩家qte進度
+    int ans; //判斷玩家按的按鈕
 
     View.OnClickListener playerCtrListener = new View.OnClickListener () {
         @Override
@@ -264,8 +269,8 @@ public class battle_scene extends AppCompatActivity {
                 case R.id.playerCtrB5 : ans = 4; break;
                 case R.id.playerCtrB6 : ans = 5; break;
             }
-            Log.d("now","now = " + now);
-            if(now < gameTest.elementQRange) {
+
+            if(now < gameTest.elementQRange) { //判斷是否正在qte
                 if (ans == qte.get(now)) {
                     right = true;
                     now++;
@@ -276,22 +281,18 @@ public class battle_scene extends AppCompatActivity {
 
                 if (right && questionLayout.getChildCount() > 1) {
                     questionLayout.removeViewAt(0);
-                    Log.d("attackable",questionLayout.getChildCount()+"");
-                } else if (right && questionLayout.getChildCount() == 1) {
+                } else if (right && questionLayout.getChildCount() == 1) { //清除最後一顆屬性時
                     //接入怪物可被攻擊狀態
-                    Log.d("attackable", attackable + "");
                     questionLayout.removeViewAt(0);
-                    attackable = true;
+                    attackable[mobIndex] = true;
                     now = 0;
 
-                } else if(!attackable){ //答錯
-                    Log.d("attackable",questionLayout.getChildCount()+"");
+                } else if(!attackable[mobIndex]){ //答錯
                     now = 0;
                     questionLayout.removeAllViews();
-                    for (int i = 0; i < gameTest.elementQRange; i++) {
+                    for (int i = 0; i < gameTest.elementQRange; i++) { //重置題目
                         questionImg[i].setImageResource(mobsQid[qte.get(i)]);
                         questionLayout.addView(questionImg[i]);
-                        //qte.add(i, qte.get(i));
                     }
                 }
             }
@@ -420,5 +421,13 @@ public class battle_scene extends AppCompatActivity {
 //                    }
 //                });
 //        builder.show();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (KeyEvent.KEYCODE_HOME == keyCode) {
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

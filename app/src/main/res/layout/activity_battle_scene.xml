@@ -107,10 +107,10 @@
             layout="@layout/mobs"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="54dp"
+            android:layout_marginLeft="16dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="78dp" />
+            android:layout_marginTop="28dp" />
 
         <include
             android:id="@+id/mobsInclude2"
@@ -118,8 +118,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="159dp"
-            android:layout_marginLeft="178dp"
+            android:layout_marginTop="78dp"
+            android:layout_marginLeft="162dp"
             app:layout_constraintLeft_toLeftOf="parent" />
 
         <include
@@ -128,8 +128,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="106dp"
-            android:layout_marginRight="37dp"
+            android:layout_marginTop="78dp"
+            android:layout_marginRight="34dp"
             app:layout_constraintRight_toRightOf="parent" />
 
         <include
@@ -137,10 +137,10 @@
             layout="@layout/mobs"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="64dp"
+            android:layout_marginLeft="39dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="348dp"
+            android:layout_marginTop="208dp"
             android:layout_marginStart="64dp" />
 
         <include
@@ -160,8 +160,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="396dp"
-            android:layout_marginRight="47dp"
+            android:layout_marginTop="238dp"
+            android:layout_marginRight="43dp"
             app:layout_constraintRight_toRightOf="parent"
             android:layout_marginEnd="47dp" />
 
