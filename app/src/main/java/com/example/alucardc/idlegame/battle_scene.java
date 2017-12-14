@@ -337,7 +337,7 @@ public class battle_scene extends AppCompatActivity {
                 Log.d("戰前準備時間", prepareTime+"");
             }else{
                 timerPrepare.cancel();                      //準備倒數小於0,戰鬥開始後把準備時間用timer取消 (msg2中也有取消,測試效果中暫時保留)
-                timerMobsProgress.schedule(mobsProgressTimerTask,500,100);
+                timerMobsProgress.schedule(mobsProgressTimerTask,500,200);
                 Message msg = mHandler.obtainMessage();
                 msg.what = 2;                               //發送msg2,將暫停用遮擋畫面設定為GONE的可見度
                 msg.sendToTarget();
@@ -353,7 +353,7 @@ public class battle_scene extends AppCompatActivity {
                     actionbar[i].setProgress(currentActionTime[i] * 100 / mobsSpeed[i]);
 //            Log.d("Speed",currentActionTime[0] +"  "+ mobsSpeed[0]);
                     if (mobsCurrentHP[i] > 0) {
-                        currentActionTime[i] -= 100;
+                        currentActionTime[i] -= 200;
                     }
 
                     if (currentActionTime[i] <= 0) {
