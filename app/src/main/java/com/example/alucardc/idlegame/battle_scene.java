@@ -29,6 +29,7 @@ public class battle_scene extends AppCompatActivity {
     boolean isPaused = false;
     int playerCurrentHP = 100;  //暫時設定的玩家HP值,待完成
     int[] currentActionTime = new int[6];
+    int[] currentStunTime = new int[6];
 
     TextView tvPrepareFight,playerHP;
     LinearLayout questionLayout,blockView;
@@ -47,6 +48,7 @@ public class battle_scene extends AppCompatActivity {
     int[] mobsCurrentHP = new int[6];
     int[] mobsATK = new int[6];
     int[] mobsSpeed = new int[6];
+    int[] mobsStunTime = new int[6];
 
     int mobsMaxHP1,mobsMaxHP2,mobsMaxHP3,mobsMaxHP4,mobsMaxHP5,mobsMaxHP6;
     int mobsCurrentHP1,mobsCurrentHP2,mobsCurrentHP3,mobsCurrentHP4,mobsCurrentHP5,mobsCurrentHP6;
@@ -57,21 +59,21 @@ public class battle_scene extends AppCompatActivity {
     Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
-            if(msg.what == 1){
+            if(msg.what == 1) {
                 PB.setVisibility(View.VISIBLE);
 
-            }else if(msg.what == 2){
+            } else if(msg.what == 2) {
                 tvPrepareFight.setVisibility(View.GONE);
                 PB.setVisibility(View.GONE);
                 blockView.setVisibility(View.GONE);
                 timerPrepare.cancel();
 
-            }else if(msg.what == 3){
+            } else if(msg.what == 3) {
                 tvPrepareFight.setVisibility(View.VISIBLE);
                 blockView.setVisibility(View.VISIBLE);
                 tvPrepareFight.setText("暫停遊戲");
 
-            }else if(msg.what == 9){
+            } else if(msg.what == 9) {
                 playerHP.setText("HP : " + playerCurrentHP);
 
             }
@@ -125,6 +127,8 @@ public class battle_scene extends AppCompatActivity {
                 mobsCurrentHP[i] = (int)Loading.healthPointList.get(inx);
                 mobsATK[i] = (int)Loading.atkList.get(inx);
                 mobsSpeed[i] = (int)Loading.speedList.get(inx);
+                mobsStunTime[i] = (int)Loading.stunTimeList.get(inx);
+                currentStunTime[i] = (int)Loading.stunTimeList.get(inx);
 
                 currentActionTime[i] = mobsSpeed[i];
             }
@@ -205,9 +209,12 @@ public class battle_scene extends AppCompatActivity {
     }
 
 
-    public boolean[] attackable = {false,false,false,false,false,false};
+    boolean[] attackable = {false,false,false,false,false,false};
+    boolean[] isChecked = {false,false,false,false,false,false};
+
     void modClickEvent(int mobIndex) {
         this.mobIndex = mobIndex;
+        Log.d("isChecked", isChecked[mobIndex]+"");
         if (attackable[mobIndex]) { //可被攻擊
             mobsCurrentHP[mobIndex]--;   //-玩家攻擊力
             if (mobsCurrentHP[mobIndex] > 0) {
@@ -218,10 +225,13 @@ public class battle_scene extends AppCompatActivity {
                 mobs[mobIndex].setVisibility(View.GONE);
 //                mob1ActionTimer.cancel();
             }
-        } else if (now == 0) {
+        } else if ( !isChecked[mobIndex] ) { //不可被攻擊&未出題目or非當前目標對象
+            Log.d("isChecked", isChecked[mobIndex]+"");
             gameTest = new GameTest(elementTypes[mobIndex],elementQRange[mobIndex]);
             gameTest.count();
+            isChecked = new boolean[]{false,false,false,false,false,false};
         }
+        isChecked[mobIndex] = true; //設為當前目標對象
     }
 
     public class GameTest{
@@ -245,7 +255,9 @@ public class battle_scene extends AppCompatActivity {
                 setTypes[i] = elementTypesCons[randMob];
                 elementTypesCons[randMob] = temp;
             }
-            if (questionLayout.getChildCount() == 0) {
+            if ( !isChecked[mobIndex] ) {
+                qte = new ArrayList<>();
+                questionLayout.removeAllViews();
                 for (int i = 0; i < elementQRange; i++) {
                     int random = (int) (Math.random() * elementTypes);
                     qte.add(i, (setTypes[random]));
@@ -350,18 +362,26 @@ public class battle_scene extends AppCompatActivity {
         public void run() {
             if (condition){
                 for (int i = 0; i < mobSum; i++) {
-                    actionbar[i].setProgress(currentActionTime[i] * 100 / mobsSpeed[i]);
-//            Log.d("Speed",currentActionTime[0] +"  "+ mobsSpeed[0]);
-                    if (mobsCurrentHP[i] > 0) {
-                        currentActionTime[i] -= 200;
+                    if(!attackable[i]) {
+                        actionbar[i].setProgress(currentActionTime[i] * 100 / mobsSpeed[i]);
+//                       Log.d("Speed",currentActionTime[0] +"  "+ mobsSpeed[0]);
+                        if (mobsCurrentHP[i] > 0) {
+                            currentActionTime[i] -= 200;
+                        }
+                    } else {
+                        currentStunTime[i] -= 200;
                     }
-
                     if (currentActionTime[i] <= 0) {
                         playerCurrentHP -= mobsATK[0];
                         currentActionTime[i] = mobsSpeed[i];
                         Message msg = mHandler.obtainMessage();
                         msg.what = 9;
                         msg.sendToTarget();
+                    }
+                    if (currentStunTime[i] <= 0) {
+                        attackable[i] = false;
+                        isChecked[i] = false;
+                        currentStunTime[i] = mobsStunTime[i];
                     }
                 }
             }
