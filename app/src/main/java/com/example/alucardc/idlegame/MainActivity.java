@@ -1,5 +1,7 @@
 package com.example.alucardc.idlegame;
 
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -62,6 +64,9 @@ public class MainActivity extends AppCompatActivity {
 //        copyDBFile();
 
 //        getData("1");
+        LootFail lootFail = new LootFail();
+        lootFail.count();
+        Log.d(TAG, LootFail.lootSet+"");
         getPlayerStatus();
         countMobs();
         Log.d(TAG, Loading.idList.toString());
@@ -120,6 +125,18 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void onBag(View v) {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+        // Create and show the dialog.
+        android.app.DialogFragment newFragment = new SettlementDialog();
+        newFragment.show(ft, "dialog");
     }
 
 //    public void getData(){

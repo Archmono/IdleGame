@@ -1,5 +1,7 @@
 package com.example.alucardc.idlegame;
 
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.graphics.Typeface;
 import android.os.Handler;
 import android.os.Message;
@@ -73,7 +75,7 @@ public class battle_scene extends AppCompatActivity {
                 blockView.setVisibility(View.VISIBLE);
                 tvPrepareFight.setText("暫停遊戲");
 
-            } else if(msg.what == 9) {
+            }  else if(msg.what == 9) {
                 playerHP.setText("HP : " + playerCurrentHP);
 
             }
@@ -269,7 +271,6 @@ public class battle_scene extends AppCompatActivity {
         }
     }
 
-
     public boolean right ;
     public ArrayList<Integer> qte = new ArrayList<>();
     int now = 0; //玩家qte進度
@@ -367,6 +368,14 @@ public class battle_scene extends AppCompatActivity {
 //                       Log.d("Speed",currentActionTime[0] +"  "+ mobsSpeed[0]);
                         if (mobsCurrentHP[i] > 0) {
                             currentActionTime[i] -= 200;
+                        } else if ( mobsCurrentHP[0]<=0 &&
+                                    mobsCurrentHP[1]<=0 &&
+                                    mobsCurrentHP[2]<=0 &&
+                                    mobsCurrentHP[3]<=0 &&
+                                    mobsCurrentHP[4]<=0 &&
+                                    mobsCurrentHP[5]<=0) {
+                            showSettlement();
+                            timerMobsProgress.cancel();
                         }
                     } else {
                         currentStunTime[i] -= 200;
@@ -381,6 +390,7 @@ public class battle_scene extends AppCompatActivity {
                     if (currentStunTime[i] <= 0) {
                         attackable[i] = false;
                         isChecked[i] = false;
+                        currentActionTime[i] = mobsSpeed[i];
                         currentStunTime[i] = mobsStunTime[i];
                     }
                 }
@@ -394,6 +404,18 @@ public class battle_scene extends AppCompatActivity {
         Message msg = mHandler.obtainMessage();
         msg.what = 3;                           //msg3訊息內容為遮擋view的顯示 & 中央提示暫停文字顯示
         msg.sendToTarget();
+    }
+
+    private void showSettlement() {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+        // Create and show the dialog.
+        android.app.DialogFragment newFragment = new SettlementDialog();
+        newFragment.show(ft, "dialog");
     }
 
     //    void loadData()

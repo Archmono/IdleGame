@@ -53,6 +53,7 @@ public class Loading extends Activity {
     public static ArrayList atkList = new ArrayList();
     public static ArrayList imageList = new ArrayList();
     public static ArrayList lootsList = new ArrayList();
+
     public static ArrayList lootsDropRateList = new ArrayList();
     /*↑SQLite取出的資料↑*/
 
