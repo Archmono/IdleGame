@@ -26,6 +26,7 @@ public class battle_scene extends AppCompatActivity {
     Timer timerMobsProgress = new Timer();
     MobsProgressTimerTask mobsProgressTimerTask = new MobsProgressTimerTask();
     boolean introFight = true;
+    boolean isPaused = false;
     int playerCurrentHP = 100;  //暫時設定的玩家HP值,待完成
     int[] currentActionTime = new int[6];
 
@@ -103,6 +104,7 @@ public class battle_scene extends AppCompatActivity {
         msg.what = 3;                           //msg3訊息內容為遮擋view的顯示 & 中央提示暫停文字顯示
         msg.sendToTarget();
         condition = false;             //onPause時把怪物計時條timer取消
+        isPaused = true;
 
         super.onPause();
     }
@@ -164,37 +166,37 @@ public class battle_scene extends AppCompatActivity {
 
     public int mobIndex;
     void mobsSetOnClickListener(){
-        mobs[0].setOnClickListener(new View.OnClickListener() {
+        mobsImage[0].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 modClickEvent(0);
             }
         });
-        mobs[1].setOnClickListener(new View.OnClickListener() {
+        mobsImage[1].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 modClickEvent(1);
             }
         });
-        mobs[2].setOnClickListener(new View.OnClickListener() {
+        mobsImage[2].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 modClickEvent(2);
             }
         });
-        mobs[3].setOnClickListener(new View.OnClickListener() {
+        mobsImage[3].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 modClickEvent(3);
             }
         });
-        mobs[4].setOnClickListener(new View.OnClickListener() {
+        mobsImage[4].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 modClickEvent(4);
             }
         });
-        mobs[5].setOnClickListener(new View.OnClickListener() {
+        mobsImage[5].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 modClickEvent(5);
@@ -206,8 +208,6 @@ public class battle_scene extends AppCompatActivity {
     public boolean[] attackable = {false,false,false,false,false,false};
     void modClickEvent(int mobIndex) {
         this.mobIndex = mobIndex;
-        gameTest = new GameTest(elementTypes[mobIndex],elementQRange[mobIndex]);
-        gameTest.count();
         if (attackable[mobIndex]) { //可被攻擊
             mobsCurrentHP[mobIndex]--;   //-玩家攻擊力
             if (mobsCurrentHP[mobIndex] > 0) {
@@ -219,6 +219,7 @@ public class battle_scene extends AppCompatActivity {
 //                mob1ActionTimer.cancel();
             }
         } else if (now == 0) {
+            gameTest = new GameTest(elementTypes[mobIndex],elementQRange[mobIndex]);
             gameTest.count();
         }
     }
@@ -315,10 +316,12 @@ public class battle_scene extends AppCompatActivity {
                 introFight = false;                                                 //點擊後進入場景,將檢查值設置為false
                 Log.d("Click test", "view block is clicked");
             } else {
-                Message msg = mHandler.obtainMessage();
-                msg.what = 2;                               //發送msg2,將暫停用遮擋畫面設定為GONE的可見度
-                msg.sendToTarget();
-                condition = true;
+                if(isPaused) {
+                    Message msg = mHandler.obtainMessage();
+                    msg.what = 2;                               //發送msg2,將暫停用遮擋畫面設定為GONE的可見度
+                    msg.sendToTarget();
+                    condition = true;
+                }
             }
         }
     };
@@ -367,6 +370,7 @@ public class battle_scene extends AppCompatActivity {
 
     public void btnBattlePause(View v){
         condition = false;
+        isPaused = true;
         Message msg = mHandler.obtainMessage();
         msg.what = 3;                           //msg3訊息內容為遮擋view的顯示 & 中央提示暫停文字顯示
         msg.sendToTarget();
