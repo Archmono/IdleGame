@@ -108,6 +108,7 @@ public class battle_scene extends AppCompatActivity {
     }
 
     void setMobs() {
+        countMobs();
         for(int i=0; i<Loading.mobsSlotFilled_S1.length; i++) {
             if(Loading.mobsSlotFilled_S1[i].equals("0"))
                 mobs[i].setVisibility(View.GONE);
@@ -345,7 +346,7 @@ public class battle_scene extends AppCompatActivity {
     public class MobsProgressTimerTask extends TimerTask {
         public void run() {
             if (condition){
-                for (int i = 0; i < 6; i++) {
+                for (int i = 0; i < mobSum; i++) {
                     actionbar[i].setProgress(currentActionTime[i] * 100 / mobsSpeed[i]);
 //            Log.d("Speed",currentActionTime[0] +"  "+ mobsSpeed[0]);
                     if (mobsCurrentHP[i] > 0) {
@@ -419,8 +420,17 @@ public class battle_scene extends AppCompatActivity {
 //        }
 //
 //    }
-//    @Override
-//    public void onBackPressed() {  //返回鍵事件
+    int mobSum=0;
+    void countMobs() {
+        for (int i = 0; i < 6; i++) {
+            System.out.println(Loading.mobsSlotFilled_S1[i]);
+            if (!Loading.mobsSlotFilled_S1[i].equals("0")) {
+                mobSum++;
+            }
+        }
+    }
+    @Override
+    public void onBackPressed() {  //返回鍵事件
 //        AlertDialog.Builder builder = new AlertDialog.Builder(this);
 //        builder.setTitle("確認視窗");
 //        builder.setMessage("確定要結束應用程式嗎?");
@@ -442,13 +452,5 @@ public class battle_scene extends AppCompatActivity {
 //                    }
 //                });
 //        builder.show();
-//    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (KeyEvent.KEYCODE_HOME == keyCode) {
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
     }
 }
