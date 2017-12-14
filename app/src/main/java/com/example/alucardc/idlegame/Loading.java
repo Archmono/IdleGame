@@ -70,7 +70,10 @@ public class Loading extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
         DBInfo.DB_FILE = getDatabasePath("idlegame.db")+"";    //database的絕對路徑
-        copyDBFile();
+        copyDBFile();                                           //如果沒有db檔案存在目錄databases下,從RAW複製一份
+        DBInfo.JSON_FILE = getFilesDir()+"/playerdata.json";    //json的檔案路徑
+        copyJSONFile();                                         //如果沒有json檔案存在目錄files下,從RAW複製一份
+
         newTime = rightNow.getTimeInMillis();
         restorePrefs();
         DateTest();
@@ -220,7 +223,7 @@ public class Loading extends Activity {
 
     public void getPlayerStatus(){
         try {
-            InputStream is = this.getResources().openRawResource(R.raw.playerdata);
+            InputStream is = this.openFileInput("playerdata.json");
             byte[] buffer = new byte[is.available()];
             is.read(buffer);
             String json = new String(buffer, "UTF-8");
@@ -260,6 +263,31 @@ public class Loading extends Activity {
                     os.write(read);
                 }
                 Log.d("GameDBHelper", "FilesCopied");
+                os.close();
+                is.close();
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public void copyJSONFile()
+    {
+        try {
+            File f = new File(DBInfo.JSON_FILE);
+            Log.d("JSON files", "copyFiles : "+DBInfo.JSON_FILE);
+            if (! f.exists())
+            {
+                InputStream is = getResources().openRawResource(R.raw.playerdata);
+                OutputStream os = new FileOutputStream(DBInfo.JSON_FILE);
+                int read;
+                Log.d("JSON files", "Start Copy");
+                while ((read = is.read()) != -1)
+                {
+                    os.write(read);
+                }
+                Log.d("JSON files", "FilesCopied");
                 os.close();
                 is.close();
             }
