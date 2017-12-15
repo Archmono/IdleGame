@@ -1,5 +1,6 @@
 package com.example.alucardc.idlegame;
 
+import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.graphics.Color;
@@ -22,12 +23,21 @@ import android.widget.TextView;
 
 public class SettlementDialog extends DialogFragment {
 
+    Context context;
     TextView tvGetItem;
     ListView listView;
     Button lootViewBtn;
     ArrayAdapter listAdapter;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
+
+    @Override
+    public void onAttach(Activity activity) {
+        // TODO Auto-generated method stub
+        super.onAttach(activity);
+        context=activity;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.settlement_dialog, container, false);
@@ -36,13 +46,14 @@ public class SettlementDialog extends DialogFragment {
         listView = (ListView)v.findViewById(R.id.lootViwe);
         lootViewBtn = (Button)v.findViewById(R.id.lootViewBtn);
         lootViewBtn.setOnClickListener(listener);
-        Typeface font = Typeface.createFromAsset(getContext().getAssets(), "fonts/witches_magic.ttf");
+        Typeface font = Typeface.createFromAsset(context.getAssets(), "fonts/witches_magic.ttf");
         tvGetItem.setTypeface(font);
-        listAdapter = new ArrayAdapter(getContext(), R.layout.simple_list_item_1, LootFail.lootSet);
+        listAdapter = new ArrayAdapter(context, R.layout.simple_list_item_1, LootFail.lootSet);
         listView.setAdapter(listAdapter);
 
         return v;
     }
+
     Button.OnClickListener listener = new Button.OnClickListener(){
         @Override
         public void onClick(View view) {

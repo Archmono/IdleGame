@@ -72,6 +72,7 @@ public class Loading extends Activity {
         setContentView(R.layout.activity_loading);
         DBInfo.DB_FILE = getDatabasePath("idlegame.db")+"";    //database的絕對路徑
         copyDBFile();
+//        copyJSONFile();
         newTime = rightNow.getTimeInMillis();
         restorePrefs();
         DateTest();
@@ -270,4 +271,29 @@ public class Loading extends Activity {
             e.printStackTrace();
         }
     }
+//    public void copyJSONFile()
+//    {
+//        try {
+//            File f = new File(DBInfo.JSON_FILE);
+//            Log.d("JSON files", "copyFiles : "+DBInfo.JSON_FILE);
+//            if (! f.exists())
+//            {
+//                InputStream is = getResources().openRawResource(R.raw.playerdata);
+//                OutputStream os = new FileOutputStream(DBInfo.JSON_FILE);
+//                int read;
+//                Log.d("JSON files", "Start Copy");
+//                while ((read = is.read()) != -1)
+//                {
+//                    os.write(read);
+//                }
+//                Log.d("JSON files", "FilesCopied");
+//                os.close();
+//                is.close();
+//            }
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 }
