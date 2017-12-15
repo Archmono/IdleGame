@@ -37,19 +37,6 @@ public class MainActivity extends AppCompatActivity {
     String TAG = "MainDataTest";
     String TAG2 = "MainPlayerTest";
     TextView textView2;
-//    public static ArrayList idList = new ArrayList();
-//    public static ArrayList nameList = new ArrayList();
-//    public static ArrayList healthPointList = new ArrayList();
-//    public static ArrayList rarityList = new ArrayList();
-//    public static ArrayList speedList = new ArrayList();
-//    public static ArrayList qCountsList = new ArrayList();
-//    public static ArrayList qTypesList = new ArrayList();
-//    public static ArrayList qRangeList = new ArrayList();
-//    public static ArrayList stunTimeList = new ArrayList();
-//    public static ArrayList atkList = new ArrayList();
-//    public static ArrayList imageList = new ArrayList();
-//    public static ArrayList lootsList = new ArrayList();
-//    public static ArrayList lootsDropRateList = new ArrayList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,15 +45,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        DBInfo.DB_FILE = getDatabasePath("idlegame")+".db";    //database的絕對路徑
-//        DBInfo.JSON_FILE = getFilesDir("playerdata.json");
-
-//        copyDBFile();
-
 //        getData("1");
-        LootFail lootFail = new LootFail();
-        lootFail.count();
-        Log.d(TAG, LootFail.lootSet+"");
         getPlayerStatus();
         countMobs();
         Log.d(TAG, Loading.idList.toString());
@@ -127,17 +106,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void onBag(View v) {
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
-        if (prev != null) {
-            ft.remove(prev);
-        }
-        ft.addToBackStack(null);
-        // Create and show the dialog.
-        android.app.DialogFragment newFragment = new SettlementDialog();
-        newFragment.show(ft, "dialog");
-    }
 
 //    public void getData(){
 //        GameDBHelper helper = GameDBHelper.getInstance(this);
@@ -218,63 +186,6 @@ public class MainActivity extends AppCompatActivity {
 //        c.close();
 //    }
 
-//    public void copyDBFile()
-//    {
-//        try {
-//            File f = new File(DBInfo.DB_FILE);
-//            File dbDir = new File(DBInfo.DB_FILE.substring(0,DBInfo.DB_FILE.length()-12));
-//            Log.d("GameDBHelper", "copyFiles : "+DBInfo.DB_FILE);
-//            dbDir.mkdirs();
-//            if (! f.exists())
-//            {
-//
-//                InputStream is = getResources().openRawResource(R.raw.idlegame);
-//                OutputStream os = new FileOutputStream(DBInfo.DB_FILE);
-//                int read;
-//                Log.d("GameDBHelper", "Start Copy");
-//                while ((read = is.read()) != -1)
-//                {
-//                    os.write(read);
-//                }
-//                Log.d("GameDBHelper", "FilesCopied");
-//                os.close();
-//                is.close();
-//            }
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
-    public void copyJSONFile()
-    {
-        try {
-            File f = new File(DBInfo.DB_FILE);
-            File dbDir = new File(DBInfo.DB_FILE.substring(0,DBInfo.DB_FILE.length()-12));
-            Log.d("GameDBHelper", "copyFiles : "+DBInfo.DB_FILE);
-            dbDir.mkdirs();
-            if (! f.exists())
-            {
-
-                InputStream is = getResources().openRawResource(R.raw.idlegame);
-                OutputStream os = new FileOutputStream(DBInfo.DB_FILE);
-                int read;
-                Log.d("GameDBHelper", "Start Copy");
-                while ((read = is.read()) != -1)
-                {
-                    os.write(read);
-                }
-                Log.d("GameDBHelper", "FilesCopied");
-                os.close();
-                is.close();
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
     @Override
     public void onBackPressed() {  //返回鍵事件
 

@@ -99,7 +99,6 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:scaleType="fitXY"
-            android:onClick="onBag"
             app:srcCompat="@drawable/inventory" />
 
         <ImageView

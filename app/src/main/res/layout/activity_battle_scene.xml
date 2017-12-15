@@ -107,10 +107,10 @@
             layout="@layout/mobs"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="-29dp"
+            android:layout_marginLeft="-30dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="34dp" />
+            android:layout_marginTop="151dp" />
 
         <include
             android:id="@+id/mobsInclude2"
@@ -122,7 +122,7 @@
             android:layout_marginLeft="8dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="71dp" />
+            android:layout_marginTop="151dp" />
 
         <include
             android:id="@+id/mobsInclude3"
@@ -130,8 +130,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="58dp"
-            android:layout_marginRight="5dp"
+            android:layout_marginTop="151dp"
+            android:layout_marginRight="-1dp"
             app:layout_constraintRight_toRightOf="parent" />
 
         <include
@@ -141,8 +141,8 @@
             android:layout_height="wrap_content"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="297dp"
-            android:layout_marginLeft="-6dp" />
+            android:layout_marginTop="340dp"
+            android:layout_marginLeft="0dp" />
 
         <include
             android:id="@+id/mobsInclude5"
@@ -150,12 +150,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="257dp"
-            android:layout_marginLeft="150dp"
+            android:layout_marginTop="304dp"
+            android:layout_marginLeft="8dp"
             app:layout_constraintLeft_toLeftOf="parent"
             android:layout_marginRight="8dp"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintHorizontal_bias="0.0" />
+            app:layout_constraintRight_toRightOf="parent" />
 
         <include
             android:id="@+id/mobsInclude6"
@@ -163,8 +162,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="282dp"
-            android:layout_marginRight="5dp"
+            android:layout_marginTop="355dp"
+            android:layout_marginRight="0dp"
             app:layout_constraintRight_toRightOf="parent" />
 
         <Button
@@ -178,6 +177,16 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginBottom="62dp" />
 
+        <Button
+            android:id="@+id/button"
+            android:layout_width="89dp"
+            android:layout_height="41dp"
+            android:layout_marginRight="102dp"
+            android:onClick="btnDoom"
+            android:text="DIE"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBaseline_toBaselineOf="@+id/button3" />
+
     </android.support.constraint.ConstraintLayout>
 
     <LinearLayout
@@ -186,7 +195,8 @@
         android:layout_height="match_parent"
         android:background="#9c000000"
         android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        >
 
         <TextView
             android:id="@+id/tvPrepareFight"

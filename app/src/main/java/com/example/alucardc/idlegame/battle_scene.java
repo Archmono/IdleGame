@@ -394,6 +394,9 @@ public class battle_scene extends AppCompatActivity {
                     mobsCurrentHP[3] <= 0 &&
                     mobsCurrentHP[4] <= 0 &&
                     mobsCurrentHP[5] <= 0) {
+                LootFail lootFail = new LootFail();
+                lootFail.count();
+                Log.d("TAG", LootFail.lootSet+"");
                 showSettlement();
                 timerMobsProgress.cancel();
             }
@@ -406,6 +409,12 @@ public class battle_scene extends AppCompatActivity {
         Message msg = mHandler.obtainMessage();
         msg.what = 3;                           //msg3訊息內容為遮擋view的顯示 & 中央提示暫停文字顯示
         msg.sendToTarget();
+    }
+
+    public void btnDoom(View v){
+        for(int i = 0; i<mobSum; i++){
+            mobsCurrentHP[i] = 0;
+        }
     }
 
     private void showSettlement() {
