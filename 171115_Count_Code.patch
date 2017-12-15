@@ -1,0 +1,183 @@
+Index: app/src/main/java/com/example/alucardc/idlegame/mobs.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/alucardc/idlegame/mobs.java	(revision 6d9d85d961a988a829fda8251b6bebb2965bddc7)
++++ app/src/main/java/com/example/alucardc/idlegame/mobs.java	(revision )
+@@ -1,11 +1,23 @@
+ package com.example.alucardc.idlegame;
+ 
++import android.os.Bundle;
++import android.support.v7.app.AppCompatActivity;
++
+ /**
+  * Created by auser on 2017/11/14.
+  */
+ 
+-public class mobs {
+-    class mobs001{
++public class mobs extends AppCompatActivity {
++
++    @Override
++    protected void onCreate(Bundle savedInstanceState) {
++        super.onCreate(savedInstanceState);
++        setContentView(R.layout.mobs);
++
++    }
++
++
++    public static class Mobs001{
+         String[] name = {"Poring","波利"};
+         int healthPoint = 10;               //需要點擊次數
+         int actionBarTime = 5000;           //動作條時間,毫秒
+@@ -17,9 +29,10 @@
+         double differenceRange = 0.1;       //個體差異程度,正負 min(基礎值*(1-差異度)) max(基礎*(1+差異度))
+         int weakPointEffect = 2000;         //弱點屬性對於暈眩時間增加幅度,毫秒
+         double damage = 1;                  //對玩家傷害
++        int image = R.drawable.mobs1002;
+     }
+ 
+-    class mobs002{
++    public static class Mobs002{
+         String[] name = {"Orc","獸人"};
+         int healthPoint = 30;               //需要點擊次數
+         int actionBarTime = 5000;           //動作條時間,毫秒
+@@ -31,9 +44,10 @@
+         double differenceRange = 0.2;       //個體差異程度,正負 min(基礎值*(1-差異度)) max(基礎*(1+差異度))
+         int weakPointEffect = 1000;         //弱點屬性對於暈眩時間增加幅度,毫秒
+         double damage = 3;                  //對玩家傷害
++        int image = R.drawable.mobs1241;
+     }
+ 
+-    class mobs003{
++    public static class Mobs003{
+         String[] name = {"Peco","大嘴鳥"};
+         int healthPoint = 15;               //需要點擊次數
+         int actionBarTime = 5000;           //動作條時間,毫秒
+@@ -45,6 +59,6 @@
+         double differenceRange = 0.1;       //個體差異程度,正負 min(基礎值*(1-差異度)) max(基礎*(1+差異度))
+         int weakPointEffect = 1500;         //弱點屬性對於暈眩時間增加幅度,毫秒
+         double damage = 2;                  //對玩家傷害
++        int image = R.drawable.mobs1019;
+     }
+-
+ }
+Index: app/src/main/java/com/example/alucardc/idlegame/MainActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/alucardc/idlegame/MainActivity.java	(revision 6d9d85d961a988a829fda8251b6bebb2965bddc7)
++++ app/src/main/java/com/example/alucardc/idlegame/MainActivity.java	(revision )
+@@ -6,21 +6,89 @@
+ import android.os.CountDownTimer;
+ import android.support.v7.app.AppCompatActivity;
+ import android.os.Bundle;
++import android.util.Log;
++import android.view.WindowManager;
+ import android.view.animation.DecelerateInterpolator;
++import android.widget.ImageView;
+ import android.widget.ProgressBar;
++import android.widget.TextView;
+ 
+ public class MainActivity extends AppCompatActivity {
+ 
+     ProgressBar PB;
++    int i =5;
++    ImageView mobsImage;
++    TextView mobsName;
+ 
+-
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
++        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,  //隱藏狀態列
++                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+         super.onCreate(savedInstanceState);
+         setContentView(R.layout.activity_main);
+-
+         PB = (ProgressBar)findViewById(R.id.pbtest);
+ 
+-        //test
++        GameTest gameTest = new GameTest(30,2,6,R.drawable.mobs1002);
++        gameTest.count();
++        test();
++
++        //IEnumerator & yield 之前C#做時間漸變的關鍵字
++    }
++
++    public class GameTest{
++        int healthPoint;               //需要點擊次數;
++        int elementTypes;               //題目屬性種類
++        int elementQuestionRange;       //題目難度,屬性球數量3-6
++        int imgId;
++
++        public GameTest(int healthPoint, int elementTypes, int elementQuestionRange, int imgId)
++        {
++            this.healthPoint = healthPoint;
++            this.elementTypes = elementTypes;
++            this.elementQuestionRange = elementQuestionRange;
++            this.imgId = imgId;
++        }
++
++        void count()
++        {
++            int[] elementTypesCons = {1,2,3,4,5,6};
++            int[] setTypes = new int[elementTypes];
++            for (int i=0; i < setTypes.length; i++) {
++                int tamp = elementTypesCons[i];
++                int randMob = (int) (Math.random() * 6 + 1);
++                setTypes[i] = elementTypesCons[randMob];
++                elementTypesCons[randMob] = tamp;
++                //Log.d("count",setTypes[i]+"");
++            }
++            for (int i=0; i < elementQuestionRange; i++)
++            {
++                int random = (int) (Math.random() * elementTypes);
++                Log.d("count",setTypes[random]+"");
++            }
++
++        }
++    }
++
++    void test()
++    {
++        int randMob = (int)(Math.random()*3+1);
++
++        switch (randMob) {
++            case 1:
++                mobs.Mobs001 mobs001 = new mobs.Mobs001();
++                mobsImage.setImageResource(mobs001.image);
++                mobsName.setText(mobs001.name[1]);
++                break;
++            case 2:
++                mobs.Mobs002 mobs002 = new mobs.Mobs002();
++                mobsImage.setImageResource(mobs002.image);
++                mobsName.setText(mobs002.name[1]);
++                break;
++            case 3:
++                mobs.Mobs003 mobs003 = new mobs.Mobs003();
++                mobsImage.setImageResource(mobs003.image);
++                mobsName.setText(mobs003.name[1]);
++                break;
++        }
+     }
+ }
+Index: .idea/modules.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/modules.xml	(revision 6d9d85d961a988a829fda8251b6bebb2965bddc7)
++++ .idea/modules.xml	(revision )
+@@ -4,7 +4,9 @@
+     <modules>
+       <module fileurl="file://$PROJECT_DIR$/IdleGame.iml" filepath="$PROJECT_DIR$/IdleGame.iml" />
+       <module fileurl="file://$PROJECT_DIR$/IdleGame.iml" filepath="$PROJECT_DIR$/IdleGame.iml" />
++      <module fileurl="file://$PROJECT_DIR$/IdleGame.iml" filepath="$PROJECT_DIR$/IdleGame.iml" />
+       <module fileurl="file://$PROJECT_DIR$/MyApplication.iml" filepath="$PROJECT_DIR$/MyApplication.iml" />
++      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+     </modules>
+\ No newline at end of file

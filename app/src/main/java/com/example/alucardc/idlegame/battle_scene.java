@@ -361,38 +361,40 @@ public class battle_scene extends AppCompatActivity {
 
     public class MobsProgressTimerTask extends TimerTask {
         public void run() {
-            if (condition){
+            if (condition) {
                 for (int i = 0; i < mobSum; i++) {
-                    if(!attackable[i]) {
+                    if (!attackable[i]) {
                         actionbar[i].setProgress(currentActionTime[i] * 100 / mobsSpeed[i]);
 //                       Log.d("Speed",currentActionTime[0] +"  "+ mobsSpeed[0]);
                         if (mobsCurrentHP[i] > 0) {
                             currentActionTime[i] -= 200;
-                        } else if ( mobsCurrentHP[0]<=0 &&
-                                    mobsCurrentHP[1]<=0 &&
-                                    mobsCurrentHP[2]<=0 &&
-                                    mobsCurrentHP[3]<=0 &&
-                                    mobsCurrentHP[4]<=0 &&
-                                    mobsCurrentHP[5]<=0) {
-                            showSettlement();
-                            timerMobsProgress.cancel();
+
+                        } else {
+                            currentStunTime[i] -= 200;
                         }
-                    } else {
-                        currentStunTime[i] -= 200;
+                        if (currentActionTime[i] <= 0) {
+                            playerCurrentHP -= mobsATK[0];
+                            currentActionTime[i] = mobsSpeed[i];
+                            Message msg = mHandler.obtainMessage();
+                            msg.what = 9;
+                            msg.sendToTarget();
+                        }
+                        if (currentStunTime[i] <= 0) {
+                            attackable[i] = false;
+                            isChecked[i] = false;
+                            currentActionTime[i] = mobsSpeed[i];
+                            currentStunTime[i] = mobsStunTime[i];
+                        }
                     }
-                    if (currentActionTime[i] <= 0) {
-                        playerCurrentHP -= mobsATK[0];
-                        currentActionTime[i] = mobsSpeed[i];
-                        Message msg = mHandler.obtainMessage();
-                        msg.what = 9;
-                        msg.sendToTarget();
-                    }
-                    if (currentStunTime[i] <= 0) {
-                        attackable[i] = false;
-                        isChecked[i] = false;
-                        currentActionTime[i] = mobsSpeed[i];
-                        currentStunTime[i] = mobsStunTime[i];
-                    }
+                }
+                if (mobsCurrentHP[0] <= 0 &&
+                        mobsCurrentHP[1] <= 0 &&
+                        mobsCurrentHP[2] <= 0 &&
+                        mobsCurrentHP[3] <= 0 &&
+                        mobsCurrentHP[4] <= 0 &&
+                        mobsCurrentHP[5] <= 0) {
+                    showSettlement();
+                    timerMobsProgress.cancel();
                 }
             }
         }
@@ -475,6 +477,7 @@ public class battle_scene extends AppCompatActivity {
             }
         }
     }
+
     @Override
     public void onBackPressed() {  //返回鍵事件
 //        AlertDialog.Builder builder = new AlertDialog.Builder(this);
