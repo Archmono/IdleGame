@@ -368,34 +368,34 @@ public class battle_scene extends AppCompatActivity {
 //                       Log.d("Speed",currentActionTime[0] +"  "+ mobsSpeed[0]);
                         if (mobsCurrentHP[i] > 0) {
                             currentActionTime[i] -= 200;
+                        }
 
-                        } else {
-                            currentStunTime[i] -= 200;
-                        }
-                        if (currentActionTime[i] <= 0) {
-                            playerCurrentHP -= mobsATK[0];
-                            currentActionTime[i] = mobsSpeed[i];
-                            Message msg = mHandler.obtainMessage();
-                            msg.what = 9;
-                            msg.sendToTarget();
-                        }
-                        if (currentStunTime[i] <= 0) {
-                            attackable[i] = false;
-                            isChecked[i] = false;
-                            currentActionTime[i] = mobsSpeed[i];
-                            currentStunTime[i] = mobsStunTime[i];
-                        }
+                    } else {
+                        currentStunTime[i] -= 200;
+                    }
+                    if (currentActionTime[i] <= 0) {
+                        playerCurrentHP -= mobsATK[0];
+                        currentActionTime[i] = mobsSpeed[i];
+                        Message msg = mHandler.obtainMessage();
+                        msg.what = 9;
+                        msg.sendToTarget();
+                    }
+                    if (currentStunTime[i] <= 0) {
+                        attackable[i] = false;
+                        isChecked[i] = false;
+                        currentActionTime[i] = mobsSpeed[i];
+                        currentStunTime[i] = mobsStunTime[i];
                     }
                 }
-                if (mobsCurrentHP[0] <= 0 &&
-                        mobsCurrentHP[1] <= 0 &&
-                        mobsCurrentHP[2] <= 0 &&
-                        mobsCurrentHP[3] <= 0 &&
-                        mobsCurrentHP[4] <= 0 &&
-                        mobsCurrentHP[5] <= 0) {
-                    showSettlement();
-                    timerMobsProgress.cancel();
-                }
+            }
+            if (mobsCurrentHP[0] <= 0 &&
+                    mobsCurrentHP[1] <= 0 &&
+                    mobsCurrentHP[2] <= 0 &&
+                    mobsCurrentHP[3] <= 0 &&
+                    mobsCurrentHP[4] <= 0 &&
+                    mobsCurrentHP[5] <= 0) {
+                showSettlement();
+                timerMobsProgress.cancel();
             }
         }
     }
