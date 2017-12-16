@@ -38,7 +38,8 @@ public class SettlementDialog extends DialogFragment {
     ListView listView;
     Button lootViewBtn;
     Object[] lootSet, num;
-    ArrayList<HashMap<String,String>> data = new ArrayList();
+    int[] img;
+    ArrayList<HashMap<String,Object>> data = new ArrayList();
 
     @RequiresApi(api = Build.VERSION_CODES.M)
 
@@ -73,8 +74,11 @@ public class SettlementDialog extends DialogFragment {
         }
         num = new String[numSet.size()];
         num = numSet.toArray();
+        img = new int[numSet.size()];
         for(int i=0; i < lootSet.length; i++){       //添加数据到HashMap集合中
-            HashMap<String,String> item = new HashMap();
+            img[i] = getResources().getIdentifier("i"+lootSet[i], "drawable", "com.example.alucardc.idlegame");
+            HashMap<String,Object> item = new HashMap();
+            item.put ("img", img[i]);
             item.put ("item", lootSet[i].toString());
             item.put ("num", num[i].toString().substring(0,num[i].toString().indexOf(",")));
             data.add(item);  //把HashMap添加到ArrayList中
@@ -82,8 +86,8 @@ public class SettlementDialog extends DialogFragment {
         Log.d("reCount",lootSet.toString());
 
         SimpleAdapter adapter = new SimpleAdapter(context, data, R.layout.simple_list_item_1,
-                new String[]{"item","num"},
-                new int[]{R.id.text1, R.id.text2});
+                new String[]{"img","item","num"},
+                new int[]{R.id.img, R.id.text1, R.id.text2});
         listView.setAdapter(adapter);
         Loading.mobsSlotFilled_S1 = new String[] {"0","0","0","0","0","0"};
 
