@@ -489,7 +489,7 @@ public class battle_scene extends AppCompatActivity {
 //        }
 //
 //    }
-    int mobSum=0;
+    public static int mobSum=0;
     void countMobs() {
         for (int i = 0; i < 6; i++) {
             System.out.println(Loading.mobsSlotFilled_S1[i]);

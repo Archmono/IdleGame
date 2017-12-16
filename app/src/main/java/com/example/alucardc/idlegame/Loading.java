@@ -105,10 +105,10 @@ public class Loading extends Activity {
 //        Log.d(TAG, loots[0]+", "+loots[1]+", "+loots[2]);
 //        int[] lootsDP = (int[]) lootsDropRateList.get(0);
 //        Log.d(TAG, lootsDP[0]+", "+lootsDP[1]+", "+lootsDP[2]);
-        Log.d(TAG, id_lootList.toString());
-        Log.d(TAG, i_nametList.toString());
-        Log.d(TAG, i_image_RList.toString());
-        Log.d(TAG, i_descList.toString());
+//        Log.d(TAG, id_lootList.toString());
+//        Log.d(TAG, i_nametList.toString());
+//        Log.d(TAG, i_image_RList.toString());
+//        Log.d(TAG, i_descList.toString());
 
         new Handler().postDelayed(new Runnable() {
             @Override

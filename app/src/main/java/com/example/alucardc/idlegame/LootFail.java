@@ -22,7 +22,7 @@ public class LootFail {
 
     Boolean again;
     void count () {
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < battle_scene.mobSum; i++) {
             int[] lootsDP = (int[]) Loading.lootsDropRateList.get(cId[i]);
             int[] loots = (int[]) Loading.lootsList.get(cId[i]);
             do {
