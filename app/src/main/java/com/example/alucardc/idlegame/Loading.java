@@ -211,7 +211,7 @@ public class Loading extends Activity {
             c.moveToNext();
         }
     }
-    void getRarity() {
+    static void getRarity() {
 
         int[] raritygArray =  new int[rarityList.size()]; //ArrayList轉int[]
         for(int i=0; i< rarityList.size(); i++) {

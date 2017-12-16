@@ -1,13 +1,17 @@
 package com.example.alucardc.idlegame;
 
+import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -98,8 +102,6 @@ public class battle_scene extends AppCompatActivity {
 
         Typeface font = Typeface.createFromAsset(this.getAssets(), "fonts/witches_magic.ttf");
         playerHP.setTypeface(font);
-
-
     }
 
     @Override
@@ -214,6 +216,7 @@ public class battle_scene extends AppCompatActivity {
     boolean[] attackable = {false,false,false,false,false,false};
     boolean[] isChecked = {false,false,false,false,false,false};
 
+    @TargetApi(Build.VERSION_CODES.M)
     void modClickEvent(int mobIndex) {
         this.mobIndex = mobIndex;
         Log.d("isChecked", isChecked[mobIndex]+"");
@@ -227,10 +230,12 @@ public class battle_scene extends AppCompatActivity {
                 mobs[mobIndex].setVisibility(View.GONE);
 //                mob1ActionTimer.cancel();
             }
-        } else if ( !isChecked[mobIndex] ) { //不可被攻擊&未出題目or非當前目標對象
+        } else if ( !isChecked[mobIndex] ) { //非當前目標對象
             Log.d("isChecked", isChecked[mobIndex]+"");
             gameTest = new GameTest(elementTypes[mobIndex],elementQRange[mobIndex]);
             gameTest.count();
+            questionLayout.setX(mobs[mobIndex].getX());
+            questionLayout.setY(mobs[mobIndex].getY());
             isChecked = new boolean[]{false,false,false,false,false,false};
         }
         isChecked[mobIndex] = true; //設為當前目標對象
@@ -247,6 +252,8 @@ public class battle_scene extends AppCompatActivity {
             this.elementQRange = elementQRange;
         }
 
+        @TargetApi(Build.VERSION_CODES.M)
+        @RequiresApi(api = Build.VERSION_CODES.M)
         void count()
         {
             int[] elementTypesCons = {0,1,2,3,4,5};
@@ -264,9 +271,13 @@ public class battle_scene extends AppCompatActivity {
                     int random = (int) (Math.random() * elementTypes);
                     qte.add(i, (setTypes[random]));
                     questionImg[i].setImageResource(mobsQid[qte.get(i)]);
+                    questionImg[i].setLayoutParams(new LinearLayout.LayoutParams(75 , 75));
+                    questionImg[i].setScaleType(ImageView.ScaleType.CENTER_CROP);
                     questionLayout.addView(questionImg[i]);
                     Log.d("qte", qte.toString());
                 }
+                questionImg[0].setLayoutParams(new LinearLayout.LayoutParams(100 , 100));
+//                questionImg[0].setForegroundGravity(Gravity.TOP);
             }
         }
     }
@@ -300,6 +311,7 @@ public class battle_scene extends AppCompatActivity {
 
                 if (right && questionLayout.getChildCount() > 1) {
                     questionLayout.removeViewAt(0);
+                    questionImg[now].setLayoutParams(new LinearLayout.LayoutParams(100 , 100));
                 } else if (right && questionLayout.getChildCount() == 1) { //清除最後一顆屬性時
                     //接入怪物可被攻擊狀態
                     questionLayout.removeViewAt(0);
@@ -429,7 +441,7 @@ public class battle_scene extends AppCompatActivity {
         newFragment.show(ft, "dialog");
     }
 
-    //    void loadData()
+//    void loadData()
 //    {
 //        int mobsId = Integer.parseInt(RandomTest.cId);
 //        try {

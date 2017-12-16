@@ -13,6 +13,7 @@ public class LootFail {
     int[] cId = new int[6];
     ArrayList lootFail = new ArrayList();
     public static String[] lootSet;
+    public static String[] num;
 
     public LootFail () {
         for (int i =0; i<6; i++)
@@ -47,6 +48,21 @@ public class LootFail {
         lootSet = new String[lootFail.size()];
         for (int i=0; i<lootFail.size(); i++){
             lootSet[i] = (String) lootFail.get(i);
+        }
+        reCount();
+    }
+
+    void reCount() {
+        num = new String[lootFail.size()];
+        for(int i=0; i < lootSet.length; i++) {
+            int count=0;
+            for(int j=0; j < lootSet.length; j++) {
+                if( lootSet[i].equals( lootSet[j]) ) {
+                    count++;  //計算元素出現的次數
+                }
+            }
+            Log.d("reCount",lootSet[i]+" "+count);
+            num[i] = "x" + count + ","+lootSet[i];
         }
     }
 }
