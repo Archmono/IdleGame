@@ -56,6 +56,13 @@ public class Loading extends Activity {
     public static ArrayList lootsDropRateList = new ArrayList();
     /*↑SQLite取出的資料↑*/
 
+    //從mobsloot table取出的物品資料
+    public static ArrayList id_lootList = new ArrayList();
+    public static ArrayList i_nametList = new ArrayList();
+    public static ArrayList i_image_RList = new ArrayList();
+    public static ArrayList i_descList = new ArrayList();
+    //從mobsloot table取出的物品資料
+
     int timeGap,nextTime; //運算用變數
     long newTime,oldTime; //運算用變數
     String tempOldTime,tempNextTime="0"; //暫存用變數
@@ -80,6 +87,7 @@ public class Loading extends Activity {
         Log.d("LOGDATE_Mobs", mobsSlotFilled_S1[0] +" "+ mobsSlotFilled_S1[1] +" "+ mobsSlotFilled_S1[2] +" "+ mobsSlotFilled_S1[3] +" "+ mobsSlotFilled_S1[4] +" "+ mobsSlotFilled_S1[5]+" ");
         onSave();
 
+        getItem();
         getPlayerStatus();
 
 //        Log.d(TAG, idList.toString());
@@ -97,6 +105,10 @@ public class Loading extends Activity {
 //        Log.d(TAG, loots[0]+", "+loots[1]+", "+loots[2]);
 //        int[] lootsDP = (int[]) lootsDropRateList.get(0);
 //        Log.d(TAG, lootsDP[0]+", "+lootsDP[1]+", "+lootsDP[2]);
+        Log.d(TAG, id_lootList.toString());
+        Log.d(TAG, i_nametList.toString());
+        Log.d(TAG, i_image_RList.toString());
+        Log.d(TAG, i_descList.toString());
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -211,6 +223,26 @@ public class Loading extends Activity {
             c.moveToNext();
         }
     }
+
+    public void getItem(){
+        GameDBHelper itemHelper = GameDBHelper.getInstance(this);
+        Cursor citem = itemHelper.getReadableDatabase().query("mobsloot", null, null, null, null, null, null);
+
+        citem.moveToFirst();
+        for (int i = 0; i < citem.getCount(); i++) {
+            String id = citem.getString(citem.getColumnIndex("_id_loot"));
+            String name = citem.getString(citem.getColumnIndex("i_name"));
+            String imageR = citem.getString(citem.getColumnIndex("i_image_R"));
+            String desc = citem.getString(citem.getColumnIndex("i_desc"));
+            id_lootList.add(id);
+            i_nametList.add(name);
+            i_image_RList.add(imageR);
+            i_descList.add(desc);
+
+            citem.moveToNext();
+        }
+    }
+
     static void getRarity() {
 
         int[] raritygArray =  new int[rarityList.size()]; //ArrayList轉int[]
