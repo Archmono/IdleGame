@@ -30,7 +30,6 @@ public class battle_scene extends AppCompatActivity {
     public static boolean condition = true;
     Timer timerPrepare = new Timer();
     Timer timerMobsProgress = new Timer();
-    MobsProgressTimerTask mobsProgressTimerTask = new MobsProgressTimerTask();
     boolean introFight = true;
     boolean isPaused = false;
     int playerCurrentHP = 100;  //暫時設定的玩家HP值,待完成
@@ -340,12 +339,14 @@ public class battle_scene extends AppCompatActivity {
                 timerPrepare.schedule(bpTimerTask, 500, 1000);                      //為timer timerPrepare設置timerTask
                 introFight = false;                                                 //點擊後進入場景,將檢查值設置為false
                 Log.d("Click test", "view block is clicked");
+                Log.d("TAG","condition:" + condition+", !intro fight" + introFight + ", isPaused" + isPaused);
             } else {
                 if(isPaused) {
                     Message msg = mHandler.obtainMessage();
                     msg.what = 2;                               //發送msg2,將暫停用遮擋畫面設定為GONE的可見度
                     msg.sendToTarget();
                     condition = true;
+                    Log.d("TAG","condition:" + condition+", !intro fight" + introFight + ", isPaused" + isPaused + ", msg=2");
                 }
             }
         }
@@ -362,14 +363,18 @@ public class battle_scene extends AppCompatActivity {
                 Log.d("戰前準備時間", prepareTime+"");
             }else{
                 timerPrepare.cancel();                      //準備倒數小於0,戰鬥開始後把準備時間用timer取消 (msg2中也有取消,測試效果中暫時保留)
+                Log.d("isPaused", "倒數時間為0,isPaused即將設定為false : "+isPaused);
+                condition = true;
+                MobsProgressTimerTask mobsProgressTimerTask = new MobsProgressTimerTask();
                 timerMobsProgress.schedule(mobsProgressTimerTask,500,200);
+
                 Message msg = mHandler.obtainMessage();
                 msg.what = 2;                               //發送msg2,將暫停用遮擋畫面設定為GONE的可見度
                 msg.sendToTarget();
 
             }
         }
-    };
+    }
 
     public class MobsProgressTimerTask extends TimerTask {
         public void run() {
@@ -491,6 +496,7 @@ public class battle_scene extends AppCompatActivity {
 //    }
     public static int mobSum=0;
     void countMobs() {
+        mobSum = 0;
         for (int i = 0; i < 6; i++) {
             System.out.println(Loading.mobsSlotFilled_S1[i]);
             if (!Loading.mobsSlotFilled_S1[i].equals("0")) {

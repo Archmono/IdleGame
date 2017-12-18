@@ -100,6 +100,7 @@ public class SettlementDialog extends DialogFragment {
             getDialog().dismiss();
             MainActivity.settle = true;
             Intent i = new Intent(context, MainActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(i);
         }
     };
