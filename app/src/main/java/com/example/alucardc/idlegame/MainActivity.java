@@ -91,6 +91,11 @@ public class MainActivity extends AppCompatActivity {
         startActivity(it);
     }
 
+    public void btnInventory(View v){
+        PlayerInventory PInventory = new PlayerInventory();
+        PInventory.getCurrentInventory(this);
+    }
+
     public void getPlayerStatus(){
         try {
             InputStream is = this.getResources().openRawResource(R.raw.playerdata);
@@ -104,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG2,"玩家目前HP : " + String.valueOf(playInfo.playerStatus[0].playerCurrentHP));
             Log.d(TAG2,"玩家最大HP : " + String.valueOf(playInfo.playerStatus[0].playerMaxHP));
 
-            Log.d(TAG2,"玩家100101號道具存量 : " + String.valueOf(playInfo.playerInventory[0].i100101));
+//            Log.d(TAG2,"玩家100101號道具存量 : " + String.valueOf(playInfo.playerInventory[0].i100101));
             Log.d(TAG2,"怪物圖鑑1001號生態介紹解鎖狀態 : " + String.valueOf(playInfo.playerMobsCollection[0].m1001.mobsBio));
 
             Log.d(TAG2,"關卡二解鎖進度 : " + String.valueOf(playInfo.playerSceneProgress[0].Scene_1));

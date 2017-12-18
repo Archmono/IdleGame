@@ -6,7 +6,7 @@ package com.example.alucardc.idlegame;
 
 public class Player {
     public MyPlayerStatus[] playerStatus;
-    public MyPlayerInventory[] playerInventory;
+    public MyPlayerInventory playerInventory;
     public MyPlayerMobsCollection[] playerMobsCollection;
     public MyPlayerSceneProgress[] playerSceneProgress;
 }
