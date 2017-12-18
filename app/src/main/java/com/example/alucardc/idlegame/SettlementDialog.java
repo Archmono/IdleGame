@@ -62,6 +62,7 @@ public class SettlementDialog extends DialogFragment {
         tvGetItem.setTypeface(font);
 //        listAdapter = new ArrayAdapter(context, R.layout.simple_list_item_1, LootFail.lootSet);
 
+
         Set<String> itemSet = new HashSet<String>();
         for (String element : LootFail.lootSet) {
             itemSet.add(element);
@@ -76,10 +77,10 @@ public class SettlementDialog extends DialogFragment {
         num = numSet.toArray();
         img = new int[numSet.size()];
         for(int i=0; i < lootSet.length; i++){       //添加数据到HashMap集合中
-            img[i] = getResources().getIdentifier("i"+lootSet[i], "drawable", "com.example.alucardc.idlegame");
+            img[i] = getResources().getIdentifier("i"+lootSet[i], "drawable", Loading.APP_NAME);
             HashMap<String,Object> item = new HashMap();
             item.put ("img", img[i]);
-            item.put ("item", lootSet[i].toString());
+            item.put ("item", Loading.i_nametList.get(Loading.id_lootList.indexOf(lootSet[i].toString())));
             item.put ("num", num[i].toString().substring(0,num[i].toString().indexOf(",")));
             data.add(item);  //把HashMap添加到ArrayList中
         }
