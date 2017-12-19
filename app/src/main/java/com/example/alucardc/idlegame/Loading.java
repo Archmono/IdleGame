@@ -1,9 +1,11 @@
 package com.example.alucardc.idlegame;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -58,10 +60,16 @@ public class Loading extends Activity {
 
     //從mobsloot table取出的物品資料
     public static ArrayList id_lootList = new ArrayList();
-    public static ArrayList i_nametList = new ArrayList();
     public static ArrayList i_image_RList = new ArrayList();
+    public static ArrayList i_nametList = new ArrayList();
+    public static ArrayList i_countList = new ArrayList();  //在MainActivity與準備畫面作為暫存資料庫中的物品存量使用
+    public static ArrayList i_priceList = new ArrayList();
+    public static ArrayList i_healList = new ArrayList();
+    public static ArrayList i_poisontList = new ArrayList();
+    public static ArrayList i_cureList = new ArrayList();
     public static ArrayList i_descList = new ArrayList();
     //從mobsloot table取出的物品資料
+
 
     int timeGap,nextTime; //運算用變數
     long newTime,oldTime; //運算用變數
@@ -231,12 +239,20 @@ public class Loading extends Activity {
         citem.moveToFirst();
         for (int i = 0; i < citem.getCount(); i++) {
             String id = citem.getString(citem.getColumnIndex("_id_loot"));
-            String name = citem.getString(citem.getColumnIndex("i_name"));
             String imageR = citem.getString(citem.getColumnIndex("i_image_R"));
+            String name = citem.getString(citem.getColumnIndex("i_name"));
+            int price = citem.getInt(citem.getColumnIndex("i_price"));
+            int heal = citem.getInt(citem.getColumnIndex("i_heal"));
+            int poison = citem.getInt(citem.getColumnIndex("i_poison"));
+            int cure = citem.getInt(citem.getColumnIndex("i_cure"));
             String desc = citem.getString(citem.getColumnIndex("i_desc"));
             id_lootList.add(id);
-            i_nametList.add(name);
             i_image_RList.add(imageR);
+            i_nametList.add(name);
+            i_priceList.add(price);
+            i_healList.add(heal);
+            i_poisontList.add(poison);
+            i_cureList.add(cure);
             i_descList.add(desc);
 
             citem.moveToNext();
@@ -266,7 +282,6 @@ public class Loading extends Activity {
             Log.d(TAG2,"玩家目前HP : " + String.valueOf(playInfo.playerStatus[0].playerCurrentHP));
             Log.d(TAG2,"玩家最大HP : " + String.valueOf(playInfo.playerStatus[0].playerMaxHP));
 
-            Log.d(TAG2,"玩家100101號道具存量 : " + String.valueOf(playInfo.playerInventory[0].i100101));
             Log.d(TAG2,"怪物圖鑑1001號生態介紹解鎖狀態 : " + String.valueOf(playInfo.playerMobsCollection[0].m1001.mobsBio));
 
             Log.d(TAG2,"關卡解鎖進度 : " + String.valueOf(playInfo.playerSceneProgress[0].Scene_1));

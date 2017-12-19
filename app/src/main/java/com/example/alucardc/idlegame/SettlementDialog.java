@@ -75,11 +75,11 @@ public class SettlementDialog extends DialogFragment {
         num = new String[numSet.size()];
         num = numSet.toArray();
         img = new int[numSet.size()];
-        for(int i=0; i < lootSet.length; i++){       //添加数据到HashMap集合中
+        for(int i=0; i < lootSet.length; i++){
             img[i] = getResources().getIdentifier("i"+lootSet[i], "drawable", "com.example.alucardc.idlegame");
             HashMap<String,Object> item = new HashMap();
             item.put ("img", img[i]);
-            item.put ("item", lootSet[i].toString());
+            item.put ("item", Loading.i_nametList.get(Loading.id_lootList.indexOf(lootSet[i].toString())));
             item.put ("num", num[i].toString().substring(0,num[i].toString().indexOf(",")));
             data.add(item);  //把HashMap添加到ArrayList中
         }

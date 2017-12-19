@@ -2,10 +2,13 @@ package com.example.alucardc.idlegame;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -45,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
     String TAG2 = "MainPlayerTest";
     TextView textView2;
 
+    private SQLiteDatabase db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,  //隱藏狀態列
@@ -53,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 //        getData("1");
-        getPlayerStatus();
+//        getPlayerStatus();
         countMobs();
         Log.d(TAG, Loading.idList.toString());
         Log.d(TAG, Loading.nameList.toString());
@@ -94,6 +99,9 @@ public class MainActivity extends AppCompatActivity {
     public void btnInventory(View v){
         PlayerInventory PInventory = new PlayerInventory();
         PInventory.getCurrentInventory(this);
+
+        updateItem(100101,10);
+        getItemCounts(this);
     }
 
     public void getPlayerStatus(){
@@ -116,6 +124,29 @@ public class MainActivity extends AppCompatActivity {
 
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void updateItem(int ItemId, int ItemCount){
+        GameDBHelper itemHelper = GameDBHelper.getInstance(this);
+        db = itemHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("i_count",ItemCount);
+        db.update("mobsloot",values,"_id_loot="+ItemId,null);
+    }
+
+    public static void getItemCounts(Context context){
+        GameDBHelper helper = GameDBHelper.getInstance(context);
+        String[] column = {"i_count"};
+        Cursor c = helper.getReadableDatabase().query("mobsloot", column, null, null, null, null, null);
+//        Cursor c = helper.getReadableDatabase().query("mobsdata", column, "scene_" + scene + "=?", new String[]{"1"}, null, null, null);
+
+        c.moveToFirst();
+        for (int i = 0; i < c.getCount(); i++) {
+            int counts = c.getInt(c.getColumnIndex("i_count"));
+            Loading.i_countList.add(counts);
+
+            c.moveToNext();
         }
     }
 

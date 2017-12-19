@@ -32,6 +32,7 @@ public class battle_scene extends AppCompatActivity {
     Timer timerMobsProgress = new Timer();
     boolean introFight = true;
     boolean isPaused = false;
+    boolean endFight = false;
     int playerCurrentHP = 100;  //暫時設定的玩家HP值,待完成
     int[] currentActionTime = new int[6];
     int[] currentStunTime = new int[6];
@@ -105,12 +106,13 @@ public class battle_scene extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        Message msg = mHandler.obtainMessage();
-        msg.what = 3;                           //msg3訊息內容為遮擋view的顯示 & 中央提示暫停文字顯示
-        msg.sendToTarget();
-        condition = false;             //onPause時把怪物計時條timer取消
-        isPaused = true;
-
+        if(!endFight){
+            Message msg = mHandler.obtainMessage();
+            msg.what = 3;                           //msg3訊息內容為遮擋view的顯示 & 中央提示暫停文字顯示
+            msg.sendToTarget();
+            condition = false;             //onPause時把怪物計時條timer取消
+            isPaused = true;
+        }
         super.onPause();
     }
 
@@ -416,6 +418,7 @@ public class battle_scene extends AppCompatActivity {
                 Log.d("TAG", LootFail.lootSet+"");
                 showSettlement();
                 timerMobsProgress.cancel();
+                endFight = true;
             }
         }
     }
