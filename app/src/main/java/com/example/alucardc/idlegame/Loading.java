@@ -34,6 +34,8 @@ public class Loading extends Activity {
     String TAG = "MainDataTest";
     String TAG2 = "MainPlayerTest";
 
+    public static String APP_NAME;
+
     /*↓SharedPreferences裡儲存的資料名稱↓*/
     public static final String DATE_PREF = "DATE_PREF";
     public static final String PREF_OLD_TIME = "DATE_OldTime";
@@ -84,6 +86,7 @@ public class Loading extends Activity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
+        APP_NAME = getPackageName();
         DBInfo.DB_FILE = getDatabasePath("idlegame.db")+"";    //database的絕對路徑
         copyDBFile();                                           //如果沒有db檔案存在目錄databases下,從RAW複製一份
         DBInfo.JSON_FILE = getFilesDir()+"/playerdata.json";    //json的檔案路徑
