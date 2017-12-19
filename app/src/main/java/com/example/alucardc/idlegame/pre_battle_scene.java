@@ -1,5 +1,6 @@
 package com.example.alucardc.idlegame;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +21,7 @@ import java.util.Calendar;
 
 public class pre_battle_scene extends AppCompatActivity {
 
+    Context context = this;
     int timeGap,nextTime; //運算用變數
     long newTime,oldTime; //運算用變數
     String tempOldTime,tempNextTime="0"; //暫存用變數
@@ -35,6 +37,9 @@ public class pre_battle_scene extends AppCompatActivity {
         setContentView(R.layout.activity_pre_battle_scene);
         findsViews();
         setVisible();
+
+        Context context = this;
+        MainActivity.getItemCounts(context);
     }
 
     void findsViews() {

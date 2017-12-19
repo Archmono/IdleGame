@@ -97,6 +97,7 @@
             android:id="@+id/imageView4"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:onClick="btnInventory"
             android:layout_weight="1"
             android:scaleType="fitXY"
             app:srcCompat="@drawable/inventory" />

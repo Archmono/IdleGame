@@ -2,10 +2,13 @@ package com.example.alucardc.idlegame;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -45,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
     String TAG2 = "MainPlayerTest";
     TextView textView2;
 
+    private SQLiteDatabase db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,  //隱藏狀態列
@@ -53,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 //        getData("1");
-        getPlayerStatus();
+//        getPlayerStatus();
         countMobs();
         Log.d(TAG, Loading.idList.toString());
         Log.d(TAG, Loading.nameList.toString());
@@ -91,6 +96,14 @@ public class MainActivity extends AppCompatActivity {
         startActivity(it);
     }
 
+    public void btnInventory(View v){
+        PlayerInventory PInventory = new PlayerInventory();
+        PInventory.getCurrentInventory(this);
+
+        updateItem(100101,10);
+        getItemCounts(this);
+    }
+
     public void getPlayerStatus(){
         try {
             InputStream is = this.getResources().openRawResource(R.raw.playerdata);
@@ -104,13 +117,36 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG2,"玩家目前HP : " + String.valueOf(playInfo.playerStatus[0].playerCurrentHP));
             Log.d(TAG2,"玩家最大HP : " + String.valueOf(playInfo.playerStatus[0].playerMaxHP));
 
-            Log.d(TAG2,"玩家100101號道具存量 : " + String.valueOf(playInfo.playerInventory[0].i100101));
+//            Log.d(TAG2,"玩家100101號道具存量 : " + String.valueOf(playInfo.playerInventory[0].i100101));
             Log.d(TAG2,"怪物圖鑑1001號生態介紹解鎖狀態 : " + String.valueOf(playInfo.playerMobsCollection[0].m1001.mobsBio));
 
             Log.d(TAG2,"關卡二解鎖進度 : " + String.valueOf(playInfo.playerSceneProgress[0].Scene_1));
 
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void updateItem(int ItemId, int ItemCount){
+        GameDBHelper itemHelper = GameDBHelper.getInstance(this);
+        db = itemHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("i_count",ItemCount);
+        db.update("mobsloot",values,"_id_loot="+ItemId,null);
+    }
+
+    public static void getItemCounts(Context context){
+        GameDBHelper helper = GameDBHelper.getInstance(context);
+        String[] column = {"i_count"};
+        Cursor c = helper.getReadableDatabase().query("mobsloot", column, null, null, null, null, null);
+//        Cursor c = helper.getReadableDatabase().query("mobsdata", column, "scene_" + scene + "=?", new String[]{"1"}, null, null, null);
+
+        c.moveToFirst();
+        for (int i = 0; i < c.getCount(); i++) {
+            int counts = c.getInt(c.getColumnIndex("i_count"));
+            Loading.i_countList.add(counts);
+
+            c.moveToNext();
         }
     }
 
