@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context="com.example.alucardc.idlegame.battle_scene">
 
+
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
@@ -216,5 +217,21 @@
         android:layout_gravity="center"
         android:max="3"
         android:visibility="invisible" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="top"
+        android:background="@drawable/top_menu_ui_visual"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/playerStatusBar"
+            layout="@layout/player_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"></include>
+
+    </LinearLayout>
 
 </FrameLayout>

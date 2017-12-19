@@ -62,12 +62,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 //        getData("1");
-        tvPlayerID = (TextView)findViewById(R.id.tvPlayerID);
-        playerStatusBar = (LinearLayout)findViewById(R.id.playerStatusBar);
-        tvPlayerHP = (TextView) playerStatusBar.findViewById(R.id.tvPlayerHP);
-        tvPlayerMoney = (TextView) playerStatusBar.findViewById(R.id.tvPlayerMoney);
-
-
+        findViews();
         getPlayerStatus();
 
         countMobs();
@@ -101,6 +96,13 @@ public class MainActivity extends AppCompatActivity {
         textView2.setText(sum+"/ "+nextTime+"s");
     }
 
+    public void findViews(){
+        tvPlayerID = (TextView)findViewById(R.id.tvPlayerID);
+        playerStatusBar = (LinearLayout)findViewById(R.id.playerStatusBar);
+        tvPlayerHP = (TextView) playerStatusBar.findViewById(R.id.tvPlayerHP);
+        tvPlayerMoney = (TextView) playerStatusBar.findViewById(R.id.tvPlayerMoney);
+    }
+
     public void enter_scene_1(View view){
         Intent it = new Intent();
         it.setClass(MainActivity.this,pre_battle_scene.class);
@@ -114,7 +116,6 @@ public class MainActivity extends AppCompatActivity {
         updateItem(100101,10);
         getItemCounts(this);
     }
-
 
     public void getPlayerStatus(){
         try {
@@ -131,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG2,"怪物圖鑑1001號生態介紹解鎖狀態 : " + String.valueOf(playInfo.playerMobsCollection.m1001.mobsBio));
             Log.d(TAG2,"關卡二解鎖進度 : " + String.valueOf(playInfo.playerSceneProgress.Scene_1));
 
-            playInfo.playerStatus.playerMaxHP = 50;
+//            playInfo.playerStatus.playerMaxHP = 50;
             String json_2 = gson.toJson(playInfo);
             Log.d("JSON", json_2);
 

@@ -9,7 +9,11 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,6 +31,9 @@ public class pre_battle_scene extends AppCompatActivity {
     String tempOldTime,tempNextTime="0"; //暫存用變數
     Calendar rightNow = Calendar.getInstance(); //提取時間用的方法
 
+    LinearLayout playerStatusBar;
+    TextView tvPlayerID,tvPlayerHP,tvPlayerMoney;
+
     String TAG = "pre_battle_scene";
     ImageView modView[] = new ImageView[6];
     @Override
@@ -37,6 +44,9 @@ public class pre_battle_scene extends AppCompatActivity {
         setContentView(R.layout.activity_pre_battle_scene);
         findsViews();
         setVisible();
+        getPlayerStatus();
+
+        randomViewPosition();
 
         Context context = this;
         MainActivity.getItemCounts(context);
@@ -49,6 +59,11 @@ public class pre_battle_scene extends AppCompatActivity {
         modView[3] = (ImageView)findViewById(R.id.mobView4);
         modView[4] = (ImageView)findViewById(R.id.mobView5);
         modView[5] = (ImageView)findViewById(R.id.mobView6);
+
+        tvPlayerID = (TextView)findViewById(R.id.tvPlayerID);
+        playerStatusBar = (LinearLayout)findViewById(R.id.playerStatusBar);
+        tvPlayerHP = (TextView) playerStatusBar.findViewById(R.id.tvPlayerHP);
+        tvPlayerMoney = (TextView) playerStatusBar.findViewById(R.id.tvPlayerMoney);
     }
 
     public void start_fight(View v){
@@ -58,6 +73,66 @@ public class pre_battle_scene extends AppCompatActivity {
             startActivity(it);
         } else {
             Toast.makeText(pre_battle_scene.this, "當前場景沒有怪物", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void randomViewPosition(){
+        float posX,posY;
+        float afterPosX,afterPosY;
+        float tempX[] = new float[Loading.mobsSlotFilled_S1.length];
+        float tempY[] = new float[Loading.mobsSlotFilled_S1.length];
+
+        for(int i = 0; i<Loading.mobsSlotFilled_S1.length; i++){
+            posX = modView[i].getX();   //取得第1-6個modView位置x值
+            posY = modView[i].getY();   //取得第1-6個modView位置y值
+
+            tempX[i] = (float) (Math.random()*800) -400;
+            tempY[i] = (float) (Math.random()*750) -200;
+
+            if(tempY[i] < 150){
+                modView[i].setScaleX(0.5f);
+                modView[i].setScaleY(0.5f);
+            }else if(tempY[i] < 260){
+                modView[i].setScaleX(0.65f);
+                modView[i].setScaleY(0.65f);
+            }else if(tempY[i] < 400){
+                modView[i].setScaleX(0.8f);
+                modView[i].setScaleY(0.8f);
+            }
+
+            modView[i].setTranslationX(tempX[i]);
+            modView[i].setTranslationY(tempY[i]);
+
+            afterPosX = modView[i].getX();   //取得第1-6個modView位置x值
+            afterPosY = modView[i].getY();   //取得第1-6個modView位置y值
+
+            for(int j = 0; j<Loading.mobsSlotFilled_S1.length; j++){
+                if(modView[j].getY() > afterPosY){
+                    modView[j].bringToFront();
+                }
+            }
+        }
+    }
+
+    public void getPlayerStatus(){
+        try {
+            InputStream is = this.openFileInput("playerdata.json");
+            byte[] buffer = new byte[is.available()];
+            is.read(buffer);
+            String json = new String(buffer, "UTF-8");
+            Gson gson = new Gson();
+            Player playInfo = gson.fromJson(json, Player.class);
+
+            playInfo.playerStatus.playerMaxHP = 50;
+            String json_2 = gson.toJson(playInfo);
+            Log.d("JSON", json_2);
+
+            tvPlayerID.setText("ID :" + playInfo.playerStatus.playerID);
+            tvPlayerMoney.setText("持有金錢 :" + playInfo.playerStatus.playerMoney);
+            tvPlayerHP.setText("HP : " + playInfo.playerStatus.playerCurrentHP + " / " + playInfo.playerStatus.playerMaxHP);
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

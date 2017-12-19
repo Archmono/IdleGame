@@ -19,6 +19,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.google.gson.Gson;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -33,7 +40,8 @@ public class battle_scene extends AppCompatActivity {
     boolean introFight = true;
     boolean isPaused = false;
     boolean endFight = false;
-    int playerCurrentHP = 100;  //暫時設定的玩家HP值,待完成
+    int playerCurrentHP;    //玩家目前血量,從JSON讀取值暫存用
+    int playerMaxHP;        //玩家最大HP
     int[] currentActionTime = new int[6];
     int[] currentStunTime = new int[6];
 
@@ -55,6 +63,11 @@ public class battle_scene extends AppCompatActivity {
     int[] mobsATK = new int[6];
     int[] mobsSpeed = new int[6];
     int[] mobsStunTime = new int[6];
+
+    //玩家狀態區
+    LinearLayout playerStatusBar;
+    TextView tvPlayerID,tvPlayerHP,tvPlayerMoney;
+    //玩家狀態區
 
     int mobsMaxHP1,mobsMaxHP2,mobsMaxHP3,mobsMaxHP4,mobsMaxHP5,mobsMaxHP6;
     int mobsCurrentHP1,mobsCurrentHP2,mobsCurrentHP3,mobsCurrentHP4,mobsCurrentHP5,mobsCurrentHP6;
@@ -80,7 +93,7 @@ public class battle_scene extends AppCompatActivity {
                 tvPrepareFight.setText("暫停遊戲");
 
             }  else if(msg.what == 9) {
-                playerHP.setText("HP : " + playerCurrentHP);
+                tvPlayerHP.setText("HP : " + playerCurrentHP + " / " + playerMaxHP);
 
             }
             super.handleMessage(msg);
@@ -96,6 +109,7 @@ public class battle_scene extends AppCompatActivity {
         findViews();
         setMobs();
         mobsSetOnClickListener();
+        getPlayerStatus();
 
         blockView.setOnClickListener(blockListener);
 //        loadData();
@@ -141,6 +155,53 @@ public class battle_scene extends AppCompatActivity {
         }
     }
 
+    public void getPlayerStatus(){
+        try {
+            InputStream is = this.openFileInput("playerdata.json");
+            byte[] buffer = new byte[is.available()];
+            is.read(buffer);
+            String json = new String(buffer, "UTF-8");
+            Gson gson = new Gson();
+            Player playInfo = gson.fromJson(json, Player.class);
+
+//            playInfo.playerStatus.playerMaxHP = 50;
+            String json_2 = gson.toJson(playInfo);
+            Log.d("JSON", json_2);
+
+            tvPlayerID.setText("ID :" + playInfo.playerStatus.playerID);
+            tvPlayerMoney.setText("持有金錢 :" + playInfo.playerStatus.playerMoney);
+            tvPlayerHP.setText("HP : " + playInfo.playerStatus.playerCurrentHP + " / " + playInfo.playerStatus.playerMaxHP);
+            playerCurrentHP = playInfo.playerStatus.playerCurrentHP;
+            playerMaxHP = playInfo.playerStatus.playerMaxHP;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updatePlayerHP(){
+        try {
+            InputStream is = this.openFileInput("playerdata.json");
+            byte[] buffer = new byte[is.available()];
+            is.read(buffer);
+            String json = new String(buffer, "UTF-8");
+            Gson gson = new Gson();
+            Player playInfo = gson.fromJson(json, Player.class);
+
+            playInfo.playerStatus.playerCurrentHP = playerCurrentHP;
+            String json_2 = gson.toJson(playInfo);
+            Log.d("JSON", json_2);
+
+            OutputStream os = new FileOutputStream(DBInfo.JSON_FILE);
+            os.write(json_2.getBytes());
+            os.close();
+            is.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     void findViews(){
         PB = (ProgressBar)findViewById(R.id.pbtest);
         blockView = (LinearLayout)findViewById(R.id.fightBlockView);
@@ -155,6 +216,11 @@ public class battle_scene extends AppCompatActivity {
         mobsHPbar = new ImageView[6];
         questionImg = new ImageView[6];
         playerCtrBut = new ImageView[6];
+
+        tvPlayerID = (TextView)findViewById(R.id.tvPlayerID);
+        playerStatusBar = (LinearLayout)findViewById(R.id.playerStatusBar);
+        tvPlayerHP = (TextView) playerStatusBar.findViewById(R.id.tvPlayerHP);
+        tvPlayerMoney = (TextView) playerStatusBar.findViewById(R.id.tvPlayerMoney);
 
 
         for (int i = 0; i < 6; i++)
@@ -417,6 +483,7 @@ public class battle_scene extends AppCompatActivity {
                 lootFail.count();
                 Log.d("TAG", LootFail.lootSet+"");
                 showSettlement();
+                updatePlayerHP();   //更新目前血量到JSON
                 timerMobsProgress.cancel();
                 endFight = true;
             }
