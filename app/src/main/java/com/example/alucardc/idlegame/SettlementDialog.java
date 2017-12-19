@@ -76,7 +76,7 @@ public class SettlementDialog extends DialogFragment {
         num = numSet.toArray();
         img = new int[numSet.size()];
         for(int i=0; i < lootSet.length; i++){
-            img[i] = getResources().getIdentifier("i"+lootSet[i], "drawable", Loading.APP_NAME);
+            img[i] = getResources().getIdentifier("i"+lootSet[i], "drawable", "com.example.alucardc.idlegame");
             HashMap<String,Object> item = new HashMap();
             item.put ("img", img[i]);
             item.put ("item", Loading.i_nametList.get(Loading.id_lootList.indexOf(lootSet[i].toString())));

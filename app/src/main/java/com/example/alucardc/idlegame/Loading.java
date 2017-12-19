@@ -72,7 +72,6 @@ public class Loading extends Activity {
     public static ArrayList i_descList = new ArrayList();
     //從mobsloot table取出的物品資料
 
-
     int timeGap,nextTime; //運算用變數
     long newTime,oldTime; //運算用變數
     String tempOldTime,tempNextTime="0"; //暫存用變數
@@ -186,11 +185,6 @@ public class Loading extends Activity {
         }
     }
 
-//    public void onClick (View v) { //切換到主畫面
-//        Intent i = new Intent(Loading.this, MainActivity.class);
-//        startActivity(i);
-//    }
-
     public void getData(String scene){
         GameDBHelper helper = GameDBHelper.getInstance(this);
 //        String[] column = { "_id", "rareWeight","scene_1", "scene_2"};
@@ -280,15 +274,16 @@ public class Loading extends Activity {
             String json = new String(buffer, "UTF-8");
             Gson gson = new Gson();
             Player playInfo = gson.fromJson(json, Player.class);
-            Log.d(TAG2,"玩家名稱 : " + String.valueOf(playInfo.playerStatus[0].playerID));
-            Log.d(TAG2,"玩家攻擊力 : " + String.valueOf(playInfo.playerStatus[0].playerATK));
-            Log.d(TAG2,"玩家目前HP : " + String.valueOf(playInfo.playerStatus[0].playerCurrentHP));
-            Log.d(TAG2,"玩家最大HP : " + String.valueOf(playInfo.playerStatus[0].playerMaxHP));
+            Log.d(TAG2,"玩家名稱 : " + String.valueOf(playInfo.playerStatus.playerID));
+            Log.d(TAG2,"玩家攻擊力 : " + String.valueOf(playInfo.playerStatus.playerATK));
+            Log.d(TAG2,"玩家目前HP : " + String.valueOf(playInfo.playerStatus.playerCurrentHP));
+            Log.d(TAG2,"玩家最大HP : " + String.valueOf(playInfo.playerStatus.playerMaxHP));
 
-            Log.d(TAG2,"怪物圖鑑1001號生態介紹解鎖狀態 : " + String.valueOf(playInfo.playerMobsCollection[0].m1001.mobsBio));
 
-            Log.d(TAG2,"關卡解鎖進度 : " + String.valueOf(playInfo.playerSceneProgress[0].Scene_1));
-            is.close();
+            Log.d(TAG2,"怪物圖鑑1001號生態介紹解鎖狀態 : " + String.valueOf(playInfo.playerMobsCollection.m1001.mobsBio));
+
+            Log.d(TAG2,"關卡解鎖進度 : " + String.valueOf(playInfo.playerSceneProgress.Scene_1));
+
         } catch (IOException e) {
             e.printStackTrace();
         }
