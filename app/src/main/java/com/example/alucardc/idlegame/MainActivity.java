@@ -104,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
     public void enter_scene_1(View view){
         Intent it = new Intent();
         it.setClass(MainActivity.this,pre_battle_scene.class);
+        it.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(it);
     }
 
@@ -247,6 +248,12 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(0, 0);
     }
 }
 

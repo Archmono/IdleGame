@@ -96,23 +96,60 @@
                 android:layout_height="wrap_content"
                 android:padding="8dp"
                 android:text="TextView"
-                android:textSize="14dp"
-                android:textColor="#FFF"/>
+                android:textColor="#FFF"
+                android:textSize="14dp" />
 
         </ScrollView>
 
-        <ScrollView
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="300dp"
-            android:background="@drawable/button_light">
+            android:orientation="horizontal">
+
+            <ScrollView
+                android:layout_width="252dp"
+                android:layout_height="300dp"
+                android:background="@drawable/button_light">
+
+                <LinearLayout
+                    android:id="@+id/inventory_bottomBag"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:layout_gravity="left"
+                    android:orientation="vertical" />
+            </ScrollView>
 
             <LinearLayout
-                android:id="@+id/inventory_bottomBag"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="left"
-                android:orientation="vertical" />
-        </ScrollView>
+                android:layout_width="50dp"
+                android:layout_height="300dp"
+                android:layout_gravity="right"
+                android:orientation="vertical">
+
+
+                <Button
+                    android:id="@+id/inventory_btnAll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/btn_tag_on"
+                    android:text="全部" />
+
+                <Button
+                    android:id="@+id/inventory_btnMaterial"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/btn_tag_off"
+                    android:text="素材" />
+
+                <Button
+                    android:id="@+id/inventory_btnConsumables"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/btn_tag_off"
+                    android:text="消耗品" />
+            </LinearLayout>
+
+
+        </FrameLayout>
 
 
     </LinearLayout>

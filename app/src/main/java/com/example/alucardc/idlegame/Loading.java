@@ -123,7 +123,9 @@ public class Loading extends Activity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent().setClass(Loading.this, MainActivity.class));
+                Intent i = new Intent(Loading.this, MainActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(i);
             }
         }, 2000);
     }

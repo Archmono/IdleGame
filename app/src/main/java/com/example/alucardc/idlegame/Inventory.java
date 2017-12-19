@@ -31,7 +31,7 @@ import java.util.List;
 
 public class Inventory extends DialogFragment {
 
-    final int column = 5;
+    final int column = 3;
     View v,item;
     Context context;
     LinearLayout inventory_bottomBag;
@@ -42,7 +42,7 @@ public class Inventory extends DialogFragment {
     ImageView[] items;
     TextView[] itemFrameCounts;
     ArrayList list = new ArrayList();
-    Button button;
+    Button btnSell,btnAll,btnMaterial,btnConsumables;
     int img;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -59,7 +59,6 @@ public class Inventory extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.inventory, container, false);
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
         findViews();
 
         for (int i = 0; i < Loading.i_countList.size(); i++) {
@@ -76,7 +75,7 @@ public class Inventory extends DialogFragment {
         itemFrame = new FrameLayout[list.size()];
         for (int i = 0; i < list.size(); i++) {
             itemFrame[i] = new FrameLayout(context);
-            itemFrame[i].setBackgroundResource(R.drawable.bottom_light);
+            itemFrame[i].setBackgroundResource(R.drawable.button_light);
             itemFrameCounts[i] = new TextView(context);
             itemFrameCounts[i].setText(String.valueOf(Loading.i_countList.get((int)list.get(i))));
             itemFrameCounts[i].setGravity(Gravity.END|Gravity.BOTTOM);
@@ -92,7 +91,7 @@ public class Inventory extends DialogFragment {
         }
 
         if( list.size()>0) {
-            itemFrame[0].setBackgroundResource(R.drawable.bottom_dark);
+            itemFrame[0].setBackgroundResource(R.drawable.button_dark);
             imgItem.setImageResource(getResources().getIdentifier(String.valueOf(Loading.i_image_RList.get((int)list.get(0))), "drawable", Loading.APP_NAME));
             tvName.setText(String.valueOf(Loading.i_nametList.get((int)list.get(0))));
 //            tvCount.setText("數量：" + String.valueOf(Loading.i_countList.get((int)list.get(0))));
@@ -121,10 +120,10 @@ public class Inventory extends DialogFragment {
             int tag = (int)view.getTag();
 
             for (int i = 0; i < list.size(); i++) {
-                itemFrame[i].setBackgroundResource(R.drawable.bottom_light);
+                itemFrame[i].setBackgroundResource(R.drawable.button_light);
             }
             imgItem.setImageResource(getResources().getIdentifier(String.valueOf(Loading.i_image_RList.get((int)list.get(tag))), "drawable", Loading.APP_NAME));
-            itemFrame[tag].setBackgroundResource(R.drawable.bottom_dark);
+            itemFrame[tag].setBackgroundResource(R.drawable.button_dark);
             tvName.setText(String.valueOf(Loading.i_nametList.get((int)list.get(tag))));
 //            tvCount.setText("數量：" + String.valueOf(Loading.i_countList.get((int)list.get(tag))));
             tvCount.setText("");
@@ -133,6 +132,29 @@ public class Inventory extends DialogFragment {
             tvPison.setText("毒性：" + String.valueOf(Loading.i_poisontList.get((int)list.get(tag))));
             tvCure.setText("中和：" + String.valueOf(Loading.i_cureList.get((int)list.get(tag))));
             tvDesc.setText(String.valueOf(Loading.i_descList.get((int)list.get(tag))));
+        }
+    };
+
+    Button.OnClickListener btnTag = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()) {
+                case R.id.inventory_btnAll:
+                    btnAll.setBackgroundResource(R.drawable.btn_tag_on);
+                    btnMaterial.setBackgroundResource(R.drawable.btn_tag_off);
+                    btnConsumables.setBackgroundResource(R.drawable.btn_tag_off);
+                    break;
+                case R.id.inventory_btnMaterial:
+                    btnMaterial.setBackgroundResource(R.drawable.btn_tag_on);
+                    btnAll.setBackgroundResource(R.drawable.btn_tag_off);
+                    btnConsumables.setBackgroundResource(R.drawable.btn_tag_off);
+                    break;
+                case R.id.inventory_btnConsumables:
+                    btnConsumables.setBackgroundResource(R.drawable.btn_tag_on);
+                    btnMaterial.setBackgroundResource(R.drawable.btn_tag_off);
+                    btnAll.setBackgroundResource(R.drawable.btn_tag_off);
+                    break;
+            }
         }
     };
 
@@ -146,5 +168,11 @@ public class Inventory extends DialogFragment {
         tvPison = (TextView) v.findViewById(R.id.inventory_selectedItem_poison);
         tvCure = (TextView) v.findViewById(R.id.inventory_selectedItem_cure);
         tvDesc = (TextView) v.findViewById(R.id.inventory_itemDesc);
+        btnAll = (Button) v.findViewById(R.id.inventory_btnAll);
+        btnMaterial = (Button) v.findViewById(R.id.inventory_btnMaterial);
+        btnConsumables = (Button) v.findViewById(R.id.inventory_btnConsumables);
+        btnAll.setOnClickListener(btnTag);
+        btnMaterial.setOnClickListener(btnTag);
+        btnConsumables.setOnClickListener(btnTag);
     }
 }

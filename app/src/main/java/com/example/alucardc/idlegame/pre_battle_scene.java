@@ -54,6 +54,7 @@ public class pre_battle_scene extends AppCompatActivity {
         if(!Loading.mobsSlotFilled_S1[0].equals("0")) {
             Intent it = new Intent();
             it.setClass(this, battle_scene.class);
+            it.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
             startActivity(it);
         } else {
             Toast.makeText(pre_battle_scene.this, "當前場景沒有怪物", Toast.LENGTH_SHORT).show();
@@ -140,5 +141,10 @@ public class pre_battle_scene extends AppCompatActivity {
                 }
             }
         }
+    }
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(0, 0);
     }
 }
