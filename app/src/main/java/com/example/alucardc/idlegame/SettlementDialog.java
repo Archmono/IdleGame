@@ -2,9 +2,11 @@ package com.example.alucardc.idlegame;
 
 import android.app.Activity;
 import android.app.DialogFragment;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
@@ -34,11 +36,14 @@ import java.util.Set;
 public class SettlementDialog extends DialogFragment {
 
     Context context;
+    View v;
     TextView tvGetItem;
     ListView listView;
     Button lootViewBtn;
     Object[] lootSet, num;
     int[] img;
+    int itemId,count=0;
+    private SQLiteDatabase db;
     ArrayList<HashMap<String,Object>> data = new ArrayList();
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -52,14 +57,11 @@ public class SettlementDialog extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.settlement_dialog, container, false);
+        v = inflater.inflate(R.layout.settlement_dialog, container, false);
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        tvGetItem = (TextView)v.findViewById(R.id.tvGetItem);
-        listView = (ListView)v.findViewById(R.id.lootViwe);
-        lootViewBtn = (Button)v.findViewById(R.id.lootViewBtn);
-        lootViewBtn.setOnClickListener(listener);
-        Typeface font = Typeface.createFromAsset(context.getAssets(), "fonts/witches_magic.ttf");
-        tvGetItem.setTypeface(font);
+        MainActivity.getItemCounts(context);
+        findViews();
+
 //        listAdapter = new ArrayAdapter(context, R.layout.simple_list_item_1, LootFail.lootSet);
 
         Set<String> itemSet = new HashSet<String>();
@@ -76,11 +78,14 @@ public class SettlementDialog extends DialogFragment {
         num = numSet.toArray();
         img = new int[numSet.size()];
         for(int i=0; i < lootSet.length; i++){
-            img[i] = getResources().getIdentifier("i"+lootSet[i], "drawable", "com.example.alucardc.idlegame");
+            img[i] = getResources().getIdentifier("i"+lootSet[i], "drawable", Loading.APP_NAME);
             HashMap<String,Object> item = new HashMap();
             item.put ("img", img[i]);
+            itemId = Integer.parseInt(lootSet[i].toString());
             item.put ("item", Loading.i_nametList.get(Loading.id_lootList.indexOf(lootSet[i].toString())));
+            count = (Integer.parseInt(num[i].toString().substring(1,num[i].toString().indexOf(","))));
             item.put ("num", num[i].toString().substring(0,num[i].toString().indexOf(",")));
+            updateItem(itemId,(int)Loading.i_countList.get(Loading.id_lootList.indexOf(String.valueOf(itemId)))+count);
             data.add(item);  //把HashMap添加到ArrayList中
         }
         Log.d("reCount",lootSet.toString());
@@ -100,8 +105,26 @@ public class SettlementDialog extends DialogFragment {
             getDialog().dismiss();
             MainActivity.settle = true;
             Intent i = new Intent(context, MainActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(i);
         }
     };
+
+    public void updateItem(int ItemId, int ItemCount){
+        GameDBHelper itemHelper = GameDBHelper.getInstance(context);
+        db = itemHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("i_count",ItemCount);
+        db.update("mobsloot",values,"_id_loot="+ItemId,null);
+    }
+
+    void findViews() {
+        tvGetItem = (TextView)v.findViewById(R.id.tvGetItem);
+        listView = (ListView)v.findViewById(R.id.lootViwe);
+        lootViewBtn = (Button)v.findViewById(R.id.lootViewBtn);
+        lootViewBtn.setOnClickListener(listener);
+        Typeface font = Typeface.createFromAsset(context.getAssets(), "fonts/witches_magic.ttf");
+        tvGetItem.setTypeface(font);
+    }
 }

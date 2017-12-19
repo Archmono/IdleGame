@@ -116,14 +116,16 @@ public class Loading extends Activity {
 //        int[] lootsDP = (int[]) lootsDropRateList.get(0);
 //        Log.d(TAG, lootsDP[0]+", "+lootsDP[1]+", "+lootsDP[2]);
 //        Log.d(TAG, id_lootList.toString());
-//        Log.d(TAG, i_nametList.toString());
+        Log.d(TAG, i_nametList.toString());
 //        Log.d(TAG, i_image_RList.toString());
 //        Log.d(TAG, i_descList.toString());
 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent().setClass(Loading.this, MainActivity.class));
+                Intent i = new Intent(Loading.this, MainActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(i);
             }
         }, 2000);
     }
