@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -35,6 +36,7 @@ import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -47,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
     String TAG = "MainDataTest";
     String TAG2 = "MainPlayerTest";
     TextView textView2;
+    LinearLayout playerStatusBar;
+    TextView tvPlayerID,tvPlayerHP,tvPlayerMoney;
 
     private SQLiteDatabase db;
 
@@ -58,7 +62,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 //        getData("1");
-//        getPlayerStatus();
+        tvPlayerID = (TextView)findViewById(R.id.tvPlayerID);
+        playerStatusBar = (LinearLayout)findViewById(R.id.playerStatusBar);
+        tvPlayerHP = (TextView) playerStatusBar.findViewById(R.id.tvPlayerHP);
+        tvPlayerMoney = (TextView) playerStatusBar.findViewById(R.id.tvPlayerMoney);
+
+
+        getPlayerStatus();
+
         countMobs();
         Log.d(TAG, Loading.idList.toString());
         Log.d(TAG, Loading.nameList.toString());
@@ -104,23 +115,29 @@ public class MainActivity extends AppCompatActivity {
         getItemCounts(this);
     }
 
+
     public void getPlayerStatus(){
         try {
-            InputStream is = this.getResources().openRawResource(R.raw.playerdata);
+            InputStream is = this.openFileInput("playerdata.json");
             byte[] buffer = new byte[is.available()];
             is.read(buffer);
             String json = new String(buffer, "UTF-8");
             Gson gson = new Gson();
             Player playInfo = gson.fromJson(json, Player.class);
-            Log.d(TAG2,"玩家名稱 : " + String.valueOf(playInfo.playerStatus[0].playerID));
-            Log.d(TAG2,"玩家攻擊力 : " + String.valueOf(playInfo.playerStatus[0].playerATK));
-            Log.d(TAG2,"玩家目前HP : " + String.valueOf(playInfo.playerStatus[0].playerCurrentHP));
-            Log.d(TAG2,"玩家最大HP : " + String.valueOf(playInfo.playerStatus[0].playerMaxHP));
+            Log.d(TAG2,"玩家名稱 : " + String.valueOf(playInfo.playerStatus.playerID));
+            Log.d(TAG2,"玩家攻擊力 : " + String.valueOf(playInfo.playerStatus.playerATK));
+            Log.d(TAG2,"玩家目前HP : " + String.valueOf(playInfo.playerStatus.playerCurrentHP));
+            Log.d(TAG2,"玩家最大HP : " + String.valueOf(playInfo.playerStatus.playerMaxHP));
+            Log.d(TAG2,"怪物圖鑑1001號生態介紹解鎖狀態 : " + String.valueOf(playInfo.playerMobsCollection.m1001.mobsBio));
+            Log.d(TAG2,"關卡二解鎖進度 : " + String.valueOf(playInfo.playerSceneProgress.Scene_1));
 
-//            Log.d(TAG2,"玩家100101號道具存量 : " + String.valueOf(playInfo.playerInventory[0].i100101));
-            Log.d(TAG2,"怪物圖鑑1001號生態介紹解鎖狀態 : " + String.valueOf(playInfo.playerMobsCollection[0].m1001.mobsBio));
+            playInfo.playerStatus.playerMaxHP = 50;
+            String json_2 = gson.toJson(playInfo);
+            Log.d("JSON", json_2);
 
-            Log.d(TAG2,"關卡二解鎖進度 : " + String.valueOf(playInfo.playerSceneProgress[0].Scene_1));
+            tvPlayerID.setText("ID :" + playInfo.playerStatus.playerID);
+            tvPlayerMoney.setText("持有金錢 :" + playInfo.playerStatus.playerMoney);
+            tvPlayerHP.setText("HP : " + playInfo.playerStatus.playerCurrentHP + " / " + playInfo.playerStatus.playerMaxHP);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -149,86 +166,6 @@ public class MainActivity extends AppCompatActivity {
             c.moveToNext();
         }
     }
-
-
-//    public void getData(){
-//        GameDBHelper helper = GameDBHelper.getInstance(this);
-//        String[] column = { "_id", "name", "healthPoint"};
-//        Cursor c = helper.getReadableDatabase().query("mobsdata", column, "healthPoint>?", new String[]{"10"}, null, null, null);
-//
-//        c.moveToFirst();
-//        for (int i = 0; i < c.getCount(); i++) {
-//            String id = c.getString(c.getColumnIndex("_id"));
-//            String name = c.getString(c.getColumnIndex("name"));
-//            int hp = c.getInt(c.getColumnIndex("healthPoint"));
-//            c.moveToNext();
-//            idList.add(id);
-//            nameList.add(name);
-//            healthPointList.add(hp);
-//        }
-//        c.close();
-//    }
-//
-//    public void getData(String scene1, String scene2){
-//        GameDBHelper helper = GameDBHelper.getInstance(this);
-//        String[] column = { "_id", "rareWeight","scene_1", "scene_2"};
-//        Cursor c = helper.getReadableDatabase().query("mobsdata", column, "scene_1=? AND scene_2=?", new String[]{scene1,scene2}, null, null, null);
-//
-//        c.moveToFirst();
-//        for (int i = 0; i < c.getCount(); i++) {
-//            String id = c.getString(c.getColumnIndex("_id"));
-//            int rarity = c.getInt(c.getColumnIndex("rareWeight"));
-//            idList.add(id);
-//            rarityList.add(rarity);
-//            c.moveToNext();
-//        }
-//        c.close();
-//    }
-//
-//    public void getData(String scene){
-//        GameDBHelper helper = GameDBHelper.getInstance(this);
-//        String[] column = { "_id", "rareWeight","scene_1", "scene_2"};
-//        Cursor c = helper.getReadableDatabase().query("mobsdata", null, "scene_" + scene + "=?", new String[]{"1"}, null, null, null);
-//
-//        c.moveToFirst();
-//        for (int i = 0; i < c.getCount(); i++) {
-//            String id = c.getString(c.getColumnIndex("_id"));
-//            String name = c.getString(c.getColumnIndex("name"));
-//            int hp = c.getInt(c.getColumnIndex("healthPoint"));
-//            int rarity = c.getInt(c.getColumnIndex("rareWeight"));
-//            int speed = c.getInt(c.getColumnIndex("speed"));
-//            int qCounts = c.getInt(c.getColumnIndex("qCounts"));
-//            int qTypes = c.getInt(c.getColumnIndex("qTypes"));
-//            int qRange = c.getInt(c.getColumnIndex("qRange"));
-//            int stunTime = c.getInt(c.getColumnIndex("stunTime"));
-//            int atk = c.getInt(c.getColumnIndex("atk"));
-//            String imageR = c.getString(c.getColumnIndex("image_R"));
-//            int loots_1 = c.getInt(c.getColumnIndex("loots_1"));
-//            int loots_2 = c.getInt(c.getColumnIndex("loots_2"));
-//            int loots_3 = c.getInt(c.getColumnIndex("loots_3"));
-//            int loots_1_dp = c.getInt(c.getColumnIndex("loots_1_dp"));
-//            int loots_2_dp = c.getInt(c.getColumnIndex("loots_2_dp"));
-//            int loots_3_dp = c.getInt(c.getColumnIndex("loots_3_dp"));
-//            int lootsInside[] = {loots_1,loots_2,loots_3};
-//            int lootsdpInside[] = {loots_1_dp,loots_2_dp,loots_3_dp};
-//            idList.add(id);
-//            nameList.add(name);
-//            healthPointList.add(hp);
-//            rarityList.add(rarity);
-//            speedList.add(speed);
-//            qCountsList.add(qCounts);
-//            qTypesList.add(qTypes);
-//            qRangeList.add(qRange);
-//            stunTimeList.add(stunTime);
-//            atkList.add(atk);
-//            imageList.add(imageR);
-//            lootsList.add(lootsInside);
-//            lootsDropRateList.add(lootsdpInside);
-//
-//            c.moveToNext();
-//        }
-//        c.close();
-//    }
 
     @Override
     public void onBackPressed() {  //返回鍵事件
