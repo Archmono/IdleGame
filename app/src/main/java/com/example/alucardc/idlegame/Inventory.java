@@ -31,7 +31,7 @@ import java.util.List;
 
 public class Inventory extends DialogFragment {
 
-    final int column = 3;
+    final int column = 4;
     View v,item;
     Context context;
     LinearLayout inventory_bottomBag;

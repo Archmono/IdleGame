@@ -107,7 +107,7 @@
             android:orientation="horizontal">
 
             <ScrollView
-                android:layout_width="252dp"
+                android:layout_width="277dp"
                 android:layout_height="300dp"
                 android:background="@drawable/button_light">
 
@@ -120,7 +120,7 @@
             </ScrollView>
 
             <LinearLayout
-                android:layout_width="50dp"
+                android:layout_width="26dp"
                 android:layout_height="300dp"
                 android:layout_gravity="right"
                 android:orientation="vertical">
@@ -131,21 +131,21 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/btn_tag_on"
-                    android:text="全部" />
+                    android:text="全\n部" />
 
                 <Button
                     android:id="@+id/inventory_btnMaterial"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/btn_tag_off"
-                    android:text="素材" />
+                    android:text="素\n材" />
 
                 <Button
                     android:id="@+id/inventory_btnConsumables"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/btn_tag_off"
-                    android:text="消耗品" />
+                    android:text="消\n耗\n品\n" />
             </LinearLayout>
 
 
