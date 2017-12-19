@@ -36,7 +36,6 @@ public class pre_battle_scene extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pre_battle_scene);
         findsViews();
-        setVisible();
 
         Context context = this;
         MainActivity.getItemCounts(context);
@@ -91,6 +90,7 @@ public class pre_battle_scene extends AppCompatActivity {
         newTime = rightNow.getTimeInMillis();
         restorePrefs();
         DateTest();
+        setVisible();
         onSave();
     }
 

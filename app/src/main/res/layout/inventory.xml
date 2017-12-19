@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
@@ -17,8 +17,8 @@
 
             <ImageView
                 android:id="@+id/inventory_selectedItem_image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_gravity="center"
                 android:layout_weight="2"
                 app:srcCompat="@drawable/bottom_light" />
@@ -77,11 +77,13 @@
 
             <Button
                 android:id="@+id/inventory_btnSell"
+                style="@style/Widget.AppCompat.Button.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_weight="1"
-                android:text="Button" />
+                android:background="@drawable/button_dark"
+                android:text="sell"
+                android:textColor="#FFF" />
         </LinearLayout>
 
         <ScrollView
@@ -93,9 +95,9 @@
                 android:id="@+id/inventory_itemDesc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
+                android:padding="8dp"
                 android:text="TextView"
-                android:textSize="20dp" />
+                android:textSize="14dp" />
 
         </ScrollView>
 
