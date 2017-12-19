@@ -31,7 +31,7 @@ import java.util.List;
 
 public class Inventory extends DialogFragment {
 
-    final int column = 4;
+    final int column = 4; //列數
     View v,item;
     Context context;
     LinearLayout inventory_bottomBag;
@@ -65,7 +65,7 @@ public class Inventory extends DialogFragment {
             if ( (int)Loading.i_countList.get(i) > 0)
                 list.add(i);
         }
-        inventory_bottomBag_showLine = new LinearLayout[(list.size()/column)+1];
+        inventory_bottomBag_showLine = new LinearLayout[(list.size()/column)+1]; //動態產生新行
         for(int i=0; i < (list.size()/column)+1; i++) {
             inventory_bottomBag_showLine[i] = new LinearLayout(context);
             inventory_bottomBag.addView(inventory_bottomBag_showLine[i]);
@@ -73,7 +73,7 @@ public class Inventory extends DialogFragment {
         items = new ImageView[list.size()];
         itemFrameCounts = new TextView[list.size()];
         itemFrame = new FrameLayout[list.size()];
-        for (int i = 0; i < list.size(); i++) {
+        for (int i = 0; i < list.size(); i++) { //動態產生新物品layout
             itemFrame[i] = new FrameLayout(context);
             itemFrame[i].setBackgroundResource(R.drawable.button_light);
             itemFrameCounts[i] = new TextView(context);
@@ -90,7 +90,7 @@ public class Inventory extends DialogFragment {
             inventory_bottomBag_showLine[(i/column)].addView(itemFrame[i]);
         }
 
-        if( list.size()>0) {
+        if( list.size()>0) { //初始設置
             itemFrame[0].setBackgroundResource(R.drawable.button_dark);
             imgItem.setImageResource(getResources().getIdentifier(String.valueOf(Loading.i_image_RList.get((int)list.get(0))), "drawable", Loading.APP_NAME));
             tvName.setText(String.valueOf(Loading.i_nametList.get((int)list.get(0))));
@@ -101,7 +101,7 @@ public class Inventory extends DialogFragment {
             tvPison.setText("毒性：" + String.valueOf(Loading.i_poisontList.get((int)list.get(0))));
             tvCure.setText("中和：" + String.valueOf(Loading.i_cureList.get((int)list.get(0))));
             tvDesc.setText(String.valueOf(Loading.i_descList.get((int)list.get(0))));
-        } else {
+        } else { //無物品顯示
             tvNoItem = new TextView(context);
             tvNoItem.setText("NO ITEM");
             inventory_bottomBag.addView(tvNoItem);
@@ -114,7 +114,7 @@ public class Inventory extends DialogFragment {
 
 
 
-    ImageView.OnClickListener btnItem = new View.OnClickListener() {
+    ImageView.OnClickListener btnItem = new View.OnClickListener() { //切換物品顯示
         @Override
         public void onClick(View view) {
             int tag = (int)view.getTag();
@@ -135,7 +135,7 @@ public class Inventory extends DialogFragment {
         }
     };
 
-    Button.OnClickListener btnTag = new View.OnClickListener() {
+    Button.OnClickListener btnTag = new View.OnClickListener() { //標籤按鈕
         @Override
         public void onClick(View view) {
             switch (view.getId()) {
