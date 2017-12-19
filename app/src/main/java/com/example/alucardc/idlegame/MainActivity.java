@@ -101,7 +101,9 @@ public class MainActivity extends AppCompatActivity {
         PInventory.getCurrentInventory(this);
 
         updateItem(100101,10);
+        updateItem(100103,10);
         getItemCounts(this);
+        showInventory();
     }
 
     public void getPlayerStatus(){
@@ -136,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static void getItemCounts(Context context){
+        Loading.i_countList.clear();
         GameDBHelper helper = GameDBHelper.getInstance(context);
         String[] column = {"i_count"};
         Cursor c = helper.getReadableDatabase().query("mobsloot", column, null, null, null, null, null);
@@ -148,6 +151,18 @@ public class MainActivity extends AppCompatActivity {
 
             c.moveToNext();
         }
+    }
+
+    private void showInventory() {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+        // Create and show the dialog.
+        android.app.DialogFragment newFragment = new Inventory();
+        newFragment.show(ft, "dialog");
     }
 
 

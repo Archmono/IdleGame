@@ -288,7 +288,7 @@ public class Loading extends Activity {
             Log.d(TAG2,"怪物圖鑑1001號生態介紹解鎖狀態 : " + String.valueOf(playInfo.playerMobsCollection[0].m1001.mobsBio));
 
             Log.d(TAG2,"關卡解鎖進度 : " + String.valueOf(playInfo.playerSceneProgress[0].Scene_1));
-
+            is.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
