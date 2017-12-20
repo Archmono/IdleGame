@@ -33,85 +33,102 @@ class MyPlayerMobsCollection
 }
 
 class mobs1001{
-    public int image;
-    public int name;
-    public int atk;
-    public int mobsBio;
-    public int loot1;
-    public int loot2;
-    public int loot3;
+    public boolean image;
+    public boolean name;
+    public boolean hp;
+    public boolean atk;
+    public boolean speed;
+    public boolean mobsBio;
+    public boolean loot1;
+    public boolean loot2;
+    public boolean loot3;
 }
 class mobs1002{
-    public int image;
-    public int name;
-    public int atk;
-    public int mobsBio;
-    public int loot1;
-    public int loot2;
-    public int loot3;
+    public boolean image;
+    public boolean name;
+    public boolean hp;
+    public boolean atk;
+    public boolean speed;
+    public boolean mobsBio;
+    public boolean loot1;
+    public boolean loot2;
+    public boolean loot3;
 }
 class mobs1003{
-    public int image;
-    public int name;
-    public int atk;
-    public int mobsBio;
-    public int loot1;
-    public int loot2;
-    public int loot3;
+    public boolean image;
+    public boolean name;
+    public boolean hp;
+    public boolean atk;
+    public boolean speed;
+    public boolean mobsBio;
+    public boolean loot1;
+    public boolean loot2;
+    public boolean loot3;
 }
 class mobs1101{
-    public int image;
-    public int name;
-    public int atk;
-    public int mobsBio;
-    public int loot1;
-    public int loot2;
-    public int loot3;
+    public boolean image;
+    public boolean name;
+    public boolean hp;
+    public boolean atk;
+    public boolean speed;
+    public boolean mobsBio;
+    public boolean loot1;
+    public boolean loot2;
+    public boolean loot3;
 }
 class mobs2001{
-    public int image;
-    public int name;
-    public int atk;
-    public int mobsBio;
-    public int loot1;
-    public int loot2;
-    public int loot3;
+    public boolean image;
+    public boolean name;
+    public boolean hp;
+    public boolean atk;
+    public boolean speed;
+    public boolean mobsBio;
+    public boolean loot1;
+    public boolean loot2;
+    public boolean loot3;
 }
 class mobs2002{
-    public int image;
-    public int name;
-    public int atk;
-    public int mobsBio;
-    public int loot1;
-    public int loot2;
-    public int loot3;
+    public boolean image;
+    public boolean name;
+    public boolean hp;
+    public boolean atk;
+    public boolean speed;
+    public boolean mobsBio;
+    public boolean loot1;
+    public boolean loot2;
+    public boolean loot3;
 }
 class mobs2003{
-    public int image;
-    public int name;
-    public int atk;
-    public int mobsBio;
-    public int loot1;
-    public int loot2;
-    public int loot3;
+    public boolean image;
+    public boolean name;
+    public boolean hp;
+    public boolean atk;
+    public boolean speed;
+    public boolean mobsBio;
+    public boolean loot1;
+    public boolean loot2;
+    public boolean loot3;
 }
 class mobs2101{
-    public int image;
-    public int name;
-    public int atk;
-    public int mobsBio;
-    public int loot1;
-    public int loot2;
-    public int loot3;
+    public boolean image;
+    public boolean name;
+    public boolean hp;
+    public boolean atk;
+    public boolean speed;
+    public boolean mobsBio;
+    public boolean loot1;
+    public boolean loot2;
+    public boolean loot3;
 }
 class mobs9101{
-    public int image;
-    public int name;
-    public int atk;
-    public int mobsBio;
-    public int loot1;
-    public int loot2;
-    public int loot3;
+    public boolean image;
+    public boolean name;
+    public boolean hp;
+    public boolean atk;
+    public boolean speed;
+    public boolean mobsBio;
+    public boolean loot1;
+    public boolean loot2;
 }
 class MyPlayerSceneProgress{
     public boolean Scene_1;

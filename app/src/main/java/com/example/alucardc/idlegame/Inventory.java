@@ -32,7 +32,7 @@ import java.util.List;
 public class Inventory extends DialogFragment {
 
     final int column = 4; //列數
-    View v,item;
+    View v;
     Context context;
     LinearLayout inventory_bottomBag;
     LinearLayout[] inventory_bottomBag_showLine;
@@ -41,7 +41,7 @@ public class Inventory extends DialogFragment {
     TextView tvNoItem,tvName,tvCount,tvPrice,tvHeal,tvPison,tvCure,tvDesc;
     ImageView[] items;
     TextView[] itemFrameCounts;
-    ArrayList list = new ArrayList();
+    ArrayList index = new ArrayList();
     Button btnSell,btnAll,btnMaterial,btnConsumables;
     int img;
 
@@ -63,51 +63,51 @@ public class Inventory extends DialogFragment {
 
         for (int i = 0; i < Loading.i_countList.size(); i++) {
             if ( (int)Loading.i_countList.get(i) > 0)
-                list.add(i);
+                index.add(i);
         }
-        inventory_bottomBag_showLine = new LinearLayout[(list.size()/column)+1]; //動態產生新行
-        for(int i=0; i < (list.size()/column)+1; i++) {
+        inventory_bottomBag_showLine = new LinearLayout[(index.size()/column)+1]; //動態產生新行
+        for(int i=0; i < (index.size()/column)+1; i++) {
             inventory_bottomBag_showLine[i] = new LinearLayout(context);
             inventory_bottomBag.addView(inventory_bottomBag_showLine[i]);
         }
-        items = new ImageView[list.size()];
-        itemFrameCounts = new TextView[list.size()];
-        itemFrame = new FrameLayout[list.size()];
-        for (int i = 0; i < list.size(); i++) { //動態產生新物品layout
+        items = new ImageView[index.size()];
+        itemFrameCounts = new TextView[index.size()];
+        itemFrame = new FrameLayout[index.size()];
+        for (int i = 0; i < index.size(); i++) { //動態產生新物品layout
             itemFrame[i] = new FrameLayout(context);
             itemFrame[i].setBackgroundResource(R.drawable.button_light);
             itemFrameCounts[i] = new TextView(context);
-            itemFrameCounts[i].setText(String.valueOf(Loading.i_countList.get((int)list.get(i))));
+            itemFrameCounts[i].setText(String.valueOf(Loading.i_countList.get((int)index.get(i))));
             itemFrameCounts[i].setGravity(Gravity.END|Gravity.BOTTOM);
-            itemFrameCounts[i].setTextColor(Color.WHITE);
+//            itemFrameCounts[i].setTextColor(Color.WHITE);
             items[i] = new ImageView(context);
             items[i].setTag(i);
             items[i].setOnClickListener(btnItem);
-            img = getResources().getIdentifier(String.valueOf(Loading.i_image_RList.get((int)list.get(i))), "drawable", Loading.APP_NAME);
+            img = getResources().getIdentifier(String.valueOf(Loading.i_image_RList.get((int)index.get(i))), "drawable", Loading.APP_NAME);
             items[i].setImageResource(img);
             itemFrame[i].addView(items[i]);
             itemFrame[i].addView(itemFrameCounts[i]);
             inventory_bottomBag_showLine[(i/column)].addView(itemFrame[i]);
         }
 
-        if( list.size()>0) { //初始設置
+        if( index.size()>0) { //初始設置
             itemFrame[0].setBackgroundResource(R.drawable.button_dark);
-            imgItem.setImageResource(getResources().getIdentifier(String.valueOf(Loading.i_image_RList.get((int)list.get(0))), "drawable", Loading.APP_NAME));
-            tvName.setText(String.valueOf(Loading.i_nametList.get((int)list.get(0))));
+            imgItem.setImageResource(getResources().getIdentifier(String.valueOf(Loading.i_image_RList.get((int)index.get(0))), "drawable", Loading.APP_NAME));
+            tvName.setText(String.valueOf(Loading.i_nametList.get((int)index.get(0))));
 //            tvCount.setText("數量：" + String.valueOf(Loading.i_countList.get((int)list.get(0))));
             tvCount.setText("");
-            tvPrice.setText("售價：" + String.valueOf(Loading.i_priceList.get((int)list.get(0))));
-            tvHeal.setText("回復量：" + String.valueOf(Loading.i_healList.get((int)list.get(0))));
-            tvPison.setText("毒性：" + String.valueOf(Loading.i_poisontList.get((int)list.get(0))));
-            tvCure.setText("中和：" + String.valueOf(Loading.i_cureList.get((int)list.get(0))));
-            tvDesc.setText(String.valueOf(Loading.i_descList.get((int)list.get(0))));
+            tvPrice.setText("售價：" + String.valueOf(Loading.i_priceList.get((int)index.get(0))));
+            tvHeal.setText("回復量：" + String.valueOf(Loading.i_healList.get((int)index.get(0))));
+            tvPison.setText("毒性：" + String.valueOf(Loading.i_poisontList.get((int)index.get(0))));
+            tvCure.setText("中和：" + String.valueOf(Loading.i_cureList.get((int)index.get(0))));
+            tvDesc.setText(String.valueOf(Loading.i_descList.get((int)index.get(0))));
         } else { //無物品顯示
             tvNoItem = new TextView(context);
             tvNoItem.setText("NO ITEM");
             inventory_bottomBag.addView(tvNoItem);
         }
 
-        Log.d("Inventory", list.size()+"");
+        Log.d("Inventory", index.size()+"");
 
         return v;
     }
@@ -119,19 +119,19 @@ public class Inventory extends DialogFragment {
         public void onClick(View view) {
             int tag = (int)view.getTag();
 
-            for (int i = 0; i < list.size(); i++) {
+            for (int i = 0; i < index.size(); i++) {
                 itemFrame[i].setBackgroundResource(R.drawable.button_light);
             }
-            imgItem.setImageResource(getResources().getIdentifier(String.valueOf(Loading.i_image_RList.get((int)list.get(tag))), "drawable", Loading.APP_NAME));
+            imgItem.setImageResource(getResources().getIdentifier(String.valueOf(Loading.i_image_RList.get((int)index.get(tag))), "drawable", Loading.APP_NAME));
             itemFrame[tag].setBackgroundResource(R.drawable.button_dark);
-            tvName.setText(String.valueOf(Loading.i_nametList.get((int)list.get(tag))));
+            tvName.setText(String.valueOf(Loading.i_nametList.get((int)index.get(tag))));
 //            tvCount.setText("數量：" + String.valueOf(Loading.i_countList.get((int)list.get(tag))));
             tvCount.setText("");
-            tvPrice.setText("售價：" + String.valueOf(Loading.i_priceList.get((int)list.get(tag))));
-            tvHeal.setText("回復量：" + String.valueOf(Loading.i_healList.get((int)list.get(tag))));
-            tvPison.setText("毒性：" + String.valueOf(Loading.i_poisontList.get((int)list.get(tag))));
-            tvCure.setText("中和：" + String.valueOf(Loading.i_cureList.get((int)list.get(tag))));
-            tvDesc.setText(String.valueOf(Loading.i_descList.get((int)list.get(tag))));
+            tvPrice.setText("售價：" + String.valueOf(Loading.i_priceList.get((int)index.get(tag))));
+            tvHeal.setText("回復量：" + String.valueOf(Loading.i_healList.get((int)index.get(tag))));
+            tvPison.setText("毒性：" + String.valueOf(Loading.i_poisontList.get((int)index.get(tag))));
+            tvCure.setText("中和：" + String.valueOf(Loading.i_cureList.get((int)index.get(tag))));
+            tvDesc.setText(String.valueOf(Loading.i_descList.get((int)index.get(tag))));
         }
     };
 

@@ -109,14 +109,24 @@ public class MainActivity extends AppCompatActivity {
         it.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(it);
     }
-
+    //=======================按鈕==========================
     public void btnInventory(View v){
-        PlayerInventory PInventory = new PlayerInventory();
-        PInventory.getCurrentInventory(this);
-//        updateItem(100101,1);
         showInventory();
         getItemCounts(this);
     }
+
+    public void btnHandBook(View v){
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+        // Create and show the dialog.
+        android.app.DialogFragment newFragment = new MobsHandBook();
+        newFragment.show(ft, "dialog");
+    }
+    //=======================按鈕==========================
 
     public void getPlayerStatus(){
         try {

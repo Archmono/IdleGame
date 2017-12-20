@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.example.alucardc.idlegame.MobsHandBook">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="300dp"
+            android:layout_height="500dp"
+            android:orientation="vertical"
+            android:background="@drawable/bottomimg_1"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/handbook_selectedMob_image"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/button_dark" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="2"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="#000000"
+                        android:text="名稱" />
+
+                    <TextView
+                        android:id="@+id/handbook_mobsname_tv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="25sp"
+                        android:text="" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="2"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/handbook_mobsHP_tv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        android:textColor="#000000"
+                        android:text="血量 :" />
+
+                    <TextView
+                        android:id="@+id/handbook_mobsAtk_tv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        android:textColor="#000000"
+                        android:text="攻擊 :" />
+
+                    <TextView
+                        android:id="@+id/handbook_mobsSpd_tv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        android:textColor="#000000"
+                        android:text="速度 :" />
+                </LinearLayout>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <ScrollView
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp">
+
+                    <TextView
+                        android:id="@+id/handbook_mobsDesc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:text=""
+                        android:textColor="#FFF"
+                        android:textSize="14dp" />
+
+                </ScrollView>
+                <LinearLayout
+                    android:layout_weight="2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    >
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top"
+                        android:textColor="#000000"
+                        android:gravity="center"
+                        android:textSize="18sp"
+                        android:layout_marginTop="5dp"
+                        android:text="掉落物"
+                        />
+                    <TextView
+                        android:id="@+id/handbook_loots1_tv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginTop="5dp"
+                        android:text="\???"/>
+                    <TextView
+                        android:id="@+id/handbook_loots2_tv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginTop="5dp"
+                        android:text="\???"/>
+                    <TextView
+                        android:id="@+id/handbook_loots3_tv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginTop="5dp"
+                        android:text="\???"/>
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:orientation="horizontal">
+
+                <ScrollView
+                    android:layout_width="300dp"
+                    android:layout_height="300dp"
+                    android:background="@drawable/button_light">
+
+                    <LinearLayout
+                        android:id="@+id/handbook_bottom_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp"
+                        android:layout_gravity="left"
+                        android:orientation="vertical" />
+                </ScrollView>
+
+
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:orientation="vertical">
+            <LinearLayout
+            android:layout_width="26dp"
+            android:layout_height="200dp"
+            android:layout_gravity="right"
+            android:orientation="vertical"></LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="26dp"
+                    android:layout_height="300dp"
+                    android:layout_gravity="right"
+                    android:orientation="vertical">
+
+
+                    <Button
+                        android:id="@+id/handbook_btnAll"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/btn_tag_on"
+                        android:text="全\n部" />
+
+                    <Button
+                        android:id="@+id/handbook_btnForest"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/btn_tag_off"
+                        android:text="森\n林" />
+
+                    <Button
+                        android:id="@+id/handbook_btnGraveYard"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/btn_tag_off"
+                        android:text="\n墓\n園\n" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+    </LinearLayout>
+
+
+
+
+</FrameLayout>

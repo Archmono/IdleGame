@@ -109,6 +109,7 @@ public class pre_battle_scene extends AppCompatActivity {
             for(int j = 0; j<Loading.mobsSlotFilled_S1.length; j++){
                 if(modView[j].getY() > afterPosY){
                     modView[j].bringToFront();
+                    Log.d("Y number",j + "   " +modView[j].getY()+"");
                 }
             }
         }
@@ -215,5 +216,10 @@ public class pre_battle_scene extends AppCompatActivity {
                 }
             }
         }
+    }
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(0, 0);
     }
 }

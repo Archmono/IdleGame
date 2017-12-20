@@ -12,40 +12,40 @@
   "playerMobsCollection":
   {
     "m1001": {
-      "image":0,"name":0,"atk":0,"mobsBio":0,
-      "loot1":0,"loot2":0,"loot3":0
+      "image":false,"name":false,"hp":false,"atk":false,"speed":false,
+      "mobsBio":false,"loot1":false,"loot2":false,"loot3":false
     },
     "m1002":{
-      "image":0,"name":0,"atk":0,"mobsBio":0,
-      "loot1":0,"loot2":0,"loot3":0
+      "image":false,"name":false,"hp":false,"atk":false,"speed":false,
+      "mobsBio":false,"loot1":false,"loot2":false,"loot3":false
     },
     "m1003":{
-      "image":0,"name":0,"atk":0,"mobsBio":0,
-      "loot1":0,"loot2":0,"loot3":0
+      "image":false,"name":false,"hp":false,"atk":false,"speed":false,
+      "mobsBio":false,"loot1":false,"loot2":false,"loot3":false
     },
     "m1101":{
-      "image":0,"name":0,"atk":0,"mobsBio":0,
-      "loot1":0,"loot2":0,"loot3":0
+      "image":false,"name":false,"hp":false,"atk":false,"speed":false,
+      "mobsBio":false,"loot1":false,"loot2":false,"loot3":false
     },
     "m2001":{
-      "image":0,"name":0,"atk":0,"mobsBio":0,
-      "loot1":0,"loot2":0,"loot3":0
+      "image":false,"name":false,"hp":false,"atk":false,"speed":false,
+      "mobsBio":false,"loot1":false,"loot2":false,"loot3":false
     },
     "m2002":{
-      "image":0,"name":0,"atk":0,"mobsBio":0,
-      "loot1":0,"loot2":0,"loot3":0
+      "image":false,"name":false,"hp":false,"atk":false,"speed":false,
+      "mobsBio":false,"loot1":false,"loot2":false,"loot3":false
     },
     "m2003":{
-      "image":0,"name":0,"atk":0,"mobsBio":0,
-      "loot1":0,"loot2":0,"loot3":0
+      "image":false,"name":false,"hp":false,"atk":false,"speed":false,
+      "mobsBio":false,"loot1":false,"loot2":false,"loot3":false
     },
     "m2101":{
-      "image":0,"name":0,"atk":0,"mobsBio":0,
-      "loot1":0,"loot2":0,"loot3":0
+      "image":false,"name":false,"hp":false,"atk":false,"speed":false,
+      "mobsBio":false,"loot1":false,"loot2":false,"loot3":false
     },
     "m9101":{
-      "image":0,"name":0,"atk":0,"mobsBio":0,
-      "loot1":0,"loot2":0,"loot3":0
+      "image":false,"name":false,"hp":false,"atk":false,"speed":false,
+      "mobsBio":false,"loot1":false,"loot2":false
     }
   }
   ,
