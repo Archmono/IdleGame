@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     String TAG2 = "MainPlayerTest";
     TextView textView2;
     LinearLayout playerStatusBar;
-    TextView tvPlayerID,tvPlayerHP,tvPlayerMoney;
+    public static TextView tvPlayerID,tvPlayerHP,tvPlayerMoney;
 
     private SQLiteDatabase db;
 

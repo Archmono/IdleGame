@@ -149,9 +149,9 @@ public class Inventory extends DialogFragment {
     Button.OnClickListener onSell = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            updateItem(Integer.parseInt(Loading.id_lootList.get((int)list.get(tag))+""), Integer.parseInt(Loading.i_countList.get((int)list.get(tag))+"")-1);
-            updatePlayerMoney(Integer.parseInt(Loading.i_priceList.get((int)list.get(tag))+""));
-            itemFrameCounts[tag].setText((Loading.i_countList.get((int)list.get(tag))+"")+"");
+            updateItem(Integer.parseInt(Loading.id_lootList.get((int)index.get(tag))+""), Integer.parseInt(Loading.i_countList.get((int)index.get(tag))+"")-1);
+            updatePlayerMoney(Integer.parseInt(Loading.i_priceList.get((int)index.get(tag))+""));
+            itemFrameCounts[tag].setText((Loading.i_countList.get((int)index.get(tag))+"")+"");
         }
     };
 
@@ -216,7 +216,7 @@ public class Inventory extends DialogFragment {
             os.write(json_2.getBytes());
 
             Log.d("tvPlayerMoney",tvPlayerMoney.toString());
-            tvPlayerMoney.setText("持有金錢 :" + playInfo.playerStatus.playerMoney);
+            MainActivity.tvPlayerMoney.setText("持有金錢 :" + playInfo.playerStatus.playerMoney);
 
             os.close();
             is.close();

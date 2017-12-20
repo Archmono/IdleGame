@@ -9,16 +9,20 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 
 public class MobsHandBook extends DialogFragment {
@@ -61,7 +65,9 @@ public class MobsHandBook extends DialogFragment {
 
         getData("0");
 
-        aaa();
+        setBottomView();
+
+        getUnlockStatus();
 
         return v;
     }
@@ -85,7 +91,7 @@ public class MobsHandBook extends DialogFragment {
         btnGraveYard.setOnClickListener(btnTag);
     }
 
-    void aaa(){
+    void setBottomView(){
         index = new ArrayList();
         bottomView.removeAllViews();
 
@@ -108,6 +114,23 @@ public class MobsHandBook extends DialogFragment {
             img = getResources().getIdentifier(String.valueOf(imageList.get((int)index.get(i))), "drawable", Loading.APP_NAME);
             mobsIcon[i].setImageResource(img);
             bottomViewLine[(i/column)].addView(mobsIcon[i]);
+        }
+    }
+
+    public void getUnlockStatus(){
+        try {
+            InputStream is = context.openFileInput("playerdata.json");
+            byte[] buffer = new byte[is.available()];
+            is.read(buffer);
+            String json = new String(buffer, "UTF-8");
+            Gson gson = new Gson();
+            Player playInfo = gson.fromJson(json, Player.class);
+
+
+            is.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -236,7 +259,7 @@ public class MobsHandBook extends DialogFragment {
                     btnAll.setBackgroundResource(R.drawable.btn_tag_off);
                     break;
             }
-            aaa();
+            setBottomView();
         }
     };
 }
