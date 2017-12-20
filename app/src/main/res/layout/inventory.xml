@@ -57,19 +57,19 @@
                     android:id="@+id/inventory_selectedItem_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:text="" />
 
                 <TextView
                     android:id="@+id/inventory_selectedItem_counts"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:text="" />
 
                 <TextView
                     android:id="@+id/inventory_selectedItem_price"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:text="" />
             </LinearLayout>
 
             <LinearLayout
@@ -83,19 +83,19 @@
                     android:id="@+id/inventory_selectedItem_heal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:text="" />
 
                 <TextView
                     android:id="@+id/inventory_selectedItem_poison"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:text="" />
 
                 <TextView
                     android:id="@+id/inventory_selectedItem_cure"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:text="" />
             </LinearLayout>
 
             <Button
@@ -103,6 +103,7 @@
                 style="@style/Widget.AppCompat.Button.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
                 android:layout_gravity="center"
                 android:background="@drawable/button_dark"
                 android:text="sell"
@@ -131,7 +132,7 @@
 
             <ScrollView
                 android:layout_width="277dp"
-                android:layout_height="300dp"
+                android:layout_height="250dp"
                 android:background="@drawable/button_light">
 
                 <LinearLayout

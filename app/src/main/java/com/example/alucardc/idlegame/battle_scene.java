@@ -291,12 +291,12 @@ public class battle_scene extends AppCompatActivity {
         this.mobIndex = mobIndex;
         Log.d("isChecked", isChecked[mobIndex]+"");
         if (attackable[mobIndex]) { //可被攻擊
-            mobs[mobIndex].startAnimation(shake);
             mobsCurrentHP[mobIndex]--;   //-玩家攻擊力
             if (mobsCurrentHP[mobIndex] > 0) {
                 mobsHPbar[mobIndex].setScaleX((float) mobsCurrentHP[mobIndex] / (float) mobsMaxHP[mobIndex]);
                 float mobs1HPbarLocateX = mobsHPbar[mobIndex].getX();
                 mobsHPbar[mobIndex].setPivotX(mobs1HPbarLocateX);
+                mobs[mobIndex].startAnimation(shake);
             } else {
                 mobs[mobIndex].setVisibility(View.GONE);
 //                mob1ActionTimer.cancel();
