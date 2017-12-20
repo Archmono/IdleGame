@@ -4,11 +4,9 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -31,8 +29,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * Created by auser on 2017/12/18.
@@ -47,7 +43,7 @@ public class Inventory extends DialogFragment {
     LinearLayout[] inventory_bottomBag_showLine;
     FrameLayout[] itemFrame;
     ImageView imgItem;
-    TextView tvNoItem,tvName,tvCount,tvPrice,tvHeal,tvPison,tvCure,tvDesc,tvPlayerMoney;
+    TextView tvNoItem,tvName,tvCount,tvPrice,tvHeal, tvPoison,tvCure,tvDesc,tvPlayerMoney;
     ImageView[] items;
     TextView[] itemFrameCounts;
     ArrayList index = new ArrayList();
@@ -68,7 +64,6 @@ public class Inventory extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.inventory, container, false);
-        mainView = inflater.inflate(R.layout.activity_main, null);
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         findViews();
 
@@ -105,11 +100,10 @@ public class Inventory extends DialogFragment {
             itemFrame[0].setBackgroundResource(R.drawable.button_dark);
             imgItem.setImageResource(getResources().getIdentifier(String.valueOf(Loading.i_image_RList.get((int)index.get(0))), "drawable", Loading.APP_NAME));
             tvName.setText(String.valueOf(Loading.i_nametList.get((int)index.get(0))));
-//            tvCount.setText("數量：" + String.valueOf(Loading.i_countList.get((int)list.get(0))));
             tvCount.setText("");
             tvPrice.setText("售價：" + String.valueOf(Loading.i_priceList.get((int)index.get(0))));
             tvHeal.setText("回復量：" + String.valueOf(Loading.i_healList.get((int)index.get(0))));
-            tvPison.setText("毒性：" + String.valueOf(Loading.i_poisontList.get((int)index.get(0))));
+            tvPoison.setText("毒性：" + String.valueOf(Loading.i_poisontList.get((int)index.get(0))));
             tvCure.setText("中和：" + String.valueOf(Loading.i_cureList.get((int)index.get(0))));
             tvDesc.setText(String.valueOf(Loading.i_descList.get((int)index.get(0))));
         } else { //無物品顯示
@@ -140,7 +134,7 @@ public class Inventory extends DialogFragment {
             tvCount.setText("");
             tvPrice.setText("售價：" + String.valueOf(Loading.i_priceList.get((int)index.get(tag))));
             tvHeal.setText("回復量：" + String.valueOf(Loading.i_healList.get((int)index.get(tag))));
-            tvPison.setText("毒性：" + String.valueOf(Loading.i_poisontList.get((int)index.get(tag))));
+            tvPoison.setText("毒性：" + String.valueOf(Loading.i_poisontList.get((int)index.get(tag))));
             tvCure.setText("中和：" + String.valueOf(Loading.i_cureList.get((int)index.get(tag))));
             tvDesc.setText(String.valueOf(Loading.i_descList.get((int)index.get(tag))));
         }
@@ -153,6 +147,9 @@ public class Inventory extends DialogFragment {
                 updateItem(Integer.parseInt(Loading.id_lootList.get((int) index.get(tag)) + ""), Integer.parseInt(Loading.i_countList.get((int) index.get(tag)) + "") - 1);
                 updatePlayerMoney(Integer.parseInt(Loading.i_priceList.get((int) index.get(tag)) + ""));
                 itemFrameCounts[tag].setText((Loading.i_countList.get((int) index.get(tag)) + "") + "");
+                if( itemFrameCounts[tag].getText().toString().equals("0") ) {
+                    inventory_bottomBag_showLine[(tag/column)].removeViewAt(tag);
+                }
             }
         }
     };
@@ -181,14 +178,13 @@ public class Inventory extends DialogFragment {
     };
 
     void findViews() {
-        tvPlayerMoney = mainView.findViewById(R.id.tvPlayerMoney);
         inventory_bottomBag = v.findViewById(R.id.inventory_bottomBag);
         imgItem = (ImageView) v.findViewById(R.id.inventory_selectedItem_image);
         tvName = (TextView) v.findViewById(R.id.inventory_selectedItem_name);
         tvCount = (TextView) v.findViewById(R.id.inventory_selectedItem_counts);
         tvPrice = (TextView) v.findViewById(R.id.inventory_selectedItem_price);
         tvHeal = (TextView) v.findViewById(R.id.inventory_selectedItem_heal);
-        tvPison = (TextView) v.findViewById(R.id.inventory_selectedItem_poison);
+        tvPoison = (TextView) v.findViewById(R.id.inventory_selectedItem_poison);
         tvCure = (TextView) v.findViewById(R.id.inventory_selectedItem_cure);
         tvDesc = (TextView) v.findViewById(R.id.inventory_itemDesc);
         btnAll = (Button) v.findViewById(R.id.inventory_btnAll);
