@@ -216,4 +216,10 @@ public class pre_battle_scene extends AppCompatActivity {
             }
         }
     }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(0, 0);
+    }
 }

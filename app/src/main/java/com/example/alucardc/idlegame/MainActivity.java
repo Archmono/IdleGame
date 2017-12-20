@@ -202,6 +202,7 @@ public class MainActivity extends AppCompatActivity {
         countMobs();
         DateTest();
         onSave();
+        Log.d("tvPlayerMoney",tvPlayerMoney.toString());
     }
 
     protected void restorePrefs() { //讀取的位置

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -40,13 +41,13 @@ import java.util.List;
 public class Inventory extends DialogFragment {
 
     final int column = 4; //列數
-    View v;
+    View v,mainView;
     Context context;
     LinearLayout inventory_bottomBag;
     LinearLayout[] inventory_bottomBag_showLine;
     FrameLayout[] itemFrame;
     ImageView imgItem;
-    TextView tvNoItem,tvName,tvCount,tvPrice,tvHeal,tvPison,tvCure,tvDesc;
+    TextView tvNoItem,tvName,tvCount,tvPrice,tvHeal,tvPison,tvCure,tvDesc,tvPlayerMoney;
     ImageView[] items;
     TextView[] itemFrameCounts;
     ArrayList list = new ArrayList();
@@ -67,6 +68,7 @@ public class Inventory extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.inventory, container, false);
+        mainView = inflater.inflate(R.layout.activity_main, null);
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         findViews();
 
@@ -149,7 +151,7 @@ public class Inventory extends DialogFragment {
         public void onClick(View view) {
             updateItem(Integer.parseInt(Loading.id_lootList.get((int)list.get(tag))+""), Integer.parseInt(Loading.i_countList.get((int)list.get(tag))+"")-1);
             updatePlayerMoney(Integer.parseInt(Loading.i_priceList.get((int)list.get(tag))+""));
-            itemFrameCounts[tag].setText((Integer.parseInt(Loading.i_countList.get((int)list.get(tag))+"")-1)+"");
+            itemFrameCounts[tag].setText((Loading.i_countList.get((int)list.get(tag))+"")+"");
         }
     };
 
@@ -177,6 +179,7 @@ public class Inventory extends DialogFragment {
     };
 
     void findViews() {
+        tvPlayerMoney = mainView.findViewById(R.id.tvPlayerMoney);
         inventory_bottomBag = v.findViewById(R.id.inventory_bottomBag);
         imgItem = (ImageView) v.findViewById(R.id.inventory_selectedItem_image);
         tvName = (TextView) v.findViewById(R.id.inventory_selectedItem_name);
@@ -211,6 +214,10 @@ public class Inventory extends DialogFragment {
 
             OutputStream os = new FileOutputStream(DBInfo.JSON_FILE);
             os.write(json_2.getBytes());
+
+            Log.d("tvPlayerMoney",tvPlayerMoney.toString());
+            tvPlayerMoney.setText("持有金錢 :" + playInfo.playerStatus.playerMoney);
+
             os.close();
             is.close();
 
@@ -224,5 +231,7 @@ public class Inventory extends DialogFragment {
         ContentValues values = new ContentValues();
         values.put("i_count",ItemCount);
         db.update("mobsloot",values,"_id_loot="+ItemId,null);
+        MainActivity.getItemCounts(context);
     }
+
 }
