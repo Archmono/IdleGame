@@ -2,7 +2,9 @@ package com.example.alucardc.idlegame;
 
 import android.app.Activity;
 import android.app.DialogFragment;
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -21,6 +23,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -43,6 +51,7 @@ public class Inventory extends DialogFragment {
     TextView[] itemFrameCounts;
     ArrayList index = new ArrayList();
     Button btnSell,btnAll,btnMaterial,btnConsumables;
+    private SQLiteDatabase db;
     int img;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -113,11 +122,11 @@ public class Inventory extends DialogFragment {
     }
 
 
-
+    int tag;
     ImageView.OnClickListener btnItem = new View.OnClickListener() { //切換物品顯示
         @Override
         public void onClick(View view) {
-            int tag = (int)view.getTag();
+            tag = (int)view.getTag();
 
             for (int i = 0; i < index.size(); i++) {
                 itemFrame[i].setBackgroundResource(R.drawable.button_light);
@@ -132,6 +141,15 @@ public class Inventory extends DialogFragment {
             tvPison.setText("毒性：" + String.valueOf(Loading.i_poisontList.get((int)index.get(tag))));
             tvCure.setText("中和：" + String.valueOf(Loading.i_cureList.get((int)index.get(tag))));
             tvDesc.setText(String.valueOf(Loading.i_descList.get((int)index.get(tag))));
+        }
+    };
+
+    Button.OnClickListener onSell = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            updateItem(Integer.parseInt(Loading.id_lootList.get((int)list.get(tag))+""), Integer.parseInt(Loading.i_countList.get((int)list.get(tag))+"")-1);
+            updatePlayerMoney(Integer.parseInt(Loading.i_priceList.get((int)list.get(tag))+""));
+            itemFrameCounts[tag].setText((Integer.parseInt(Loading.i_countList.get((int)list.get(tag))+"")-1)+"");
         }
     };
 
@@ -171,8 +189,40 @@ public class Inventory extends DialogFragment {
         btnAll = (Button) v.findViewById(R.id.inventory_btnAll);
         btnMaterial = (Button) v.findViewById(R.id.inventory_btnMaterial);
         btnConsumables = (Button) v.findViewById(R.id.inventory_btnConsumables);
+        btnSell = (Button) v.findViewById(R.id.inventory_btnSell);
         btnAll.setOnClickListener(btnTag);
         btnMaterial.setOnClickListener(btnTag);
         btnConsumables.setOnClickListener(btnTag);
+        btnSell.setOnClickListener(onSell);
+    }
+
+    public void updatePlayerMoney(int addMoney){
+        try {
+            InputStream is = context.openFileInput("playerdata.json");
+            byte[] buffer = new byte[is.available()];
+            is.read(buffer);
+            String json = new String(buffer, "UTF-8");
+            Gson gson = new Gson();
+            Player playInfo = gson.fromJson(json, Player.class);
+
+            playInfo.playerStatus.playerMoney += addMoney;
+            String json_2 = gson.toJson(playInfo);
+            Log.d("JSON", json_2);
+
+            OutputStream os = new FileOutputStream(DBInfo.JSON_FILE);
+            os.write(json_2.getBytes());
+            os.close();
+            is.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public void updateItem(int ItemId, int ItemCount){
+        GameDBHelper itemHelper = GameDBHelper.getInstance(context);
+        db = itemHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("i_count",ItemCount);
+        db.update("mobsloot",values,"_id_loot="+ItemId,null);
     }
 }

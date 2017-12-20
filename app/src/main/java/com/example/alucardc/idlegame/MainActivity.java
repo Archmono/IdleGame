@@ -205,6 +205,7 @@ public class MainActivity extends AppCompatActivity {
             onSave();
             settle = false;
         }
+        getPlayerStatus();
         rightNow = Calendar.getInstance();
         newTime = rightNow.getTimeInMillis();
         restorePrefs();
