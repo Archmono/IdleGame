@@ -149,9 +149,11 @@ public class Inventory extends DialogFragment {
     Button.OnClickListener onSell = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            updateItem(Integer.parseInt(Loading.id_lootList.get((int)index.get(tag))+""), Integer.parseInt(Loading.i_countList.get((int)index.get(tag))+"")-1);
-            updatePlayerMoney(Integer.parseInt(Loading.i_priceList.get((int)index.get(tag))+""));
-            itemFrameCounts[tag].setText((Loading.i_countList.get((int)index.get(tag))+"")+"");
+            if (index.size()>0) {
+                updateItem(Integer.parseInt(Loading.id_lootList.get((int) index.get(tag)) + ""), Integer.parseInt(Loading.i_countList.get((int) index.get(tag)) + "") - 1);
+                updatePlayerMoney(Integer.parseInt(Loading.i_priceList.get((int) index.get(tag)) + ""));
+                itemFrameCounts[tag].setText((Loading.i_countList.get((int) index.get(tag)) + "") + "");
+            }
         }
     };
 
