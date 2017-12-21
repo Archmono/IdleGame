@@ -1,5 +1,7 @@
 package com.example.alucardc.idlegame;
 
+import java.util.ArrayList;
+
 /**
  * Created by AlucardC on 2017/12/6.
  */
@@ -42,6 +44,8 @@ class mobs1001{
     public boolean loot1;
     public boolean loot2;
     public boolean loot3;
+
+
 }
 class mobs1002{
     public boolean image;

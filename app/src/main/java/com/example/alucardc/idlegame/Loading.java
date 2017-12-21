@@ -40,9 +40,10 @@ public class Loading extends Activity {
     /*↓SharedPreferences裡儲存的資料名稱↓*/
     public static final String DATE_PREF = "DATE_PREF";
     public static final String PREF_OLD_TIME = "DATE_OldTime";
+    public static final String DATE_NEXT_DATE = "DATE_NextTime";
     public static final String[] PREF_MOBS_SLOT_FILLED_S1 = {"S1_P1", "S1_P2", "S1_P3", "S1_P4", "S1_P5", "S1_P6"};
     public static final String[] PREF_MOBS_SLOT_FILLED_S2 = {"S2_P1", "S2_P2", "S2_P3", "S2_P4", "S2_P5", "S2_P6"};
-    public static final String DATE_NEXT_DATE = "DATE_NextTime";
+    public static final String LAST_REG_HP_TIME = "TIME_LAST_REG";  //隨時間回血用
     /*↑SharedPreferences裡儲存的資料名稱↑*/
 
     /*↓SQLite取出的資料↓*/
