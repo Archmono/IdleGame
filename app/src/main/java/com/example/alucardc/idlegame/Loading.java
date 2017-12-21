@@ -140,7 +140,7 @@ public class Loading extends Activity {
 
         ImageView img = (ImageView) findViewById(R.id.animeImg);
         //動畫路徑設定(x1,x2,y1,y2)
-        Animation am = new TranslateAnimation(-120,120,200,200);
+        Animation am = new TranslateAnimation(-150,150,200,200);
         //動畫開始到結束的時間，2秒
         am.setDuration( 2100 );
         // 動畫重覆次數 (-1表示一直重覆，0表示不重覆執行，所以只會執行一次)
