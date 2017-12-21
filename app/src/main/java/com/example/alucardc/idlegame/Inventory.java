@@ -38,18 +38,18 @@ import java.util.ArrayList;
 public class Inventory extends DialogFragment {
 
     final int column = 4; //列數
-    View v,cv;
+    View v, cv;
     Context context;
     LinearLayout inventory_bottomBag;
     LinearLayout[] inventory_bottomBag_showLine;
     FrameLayout inventory;
     FrameLayout[] itemFrame;
-    ImageView imgItem,cItem1,cItem2,cItem3,cItem4;
-    TextView tvNoItem,tvName,tvCount,tvPrice,tvHeal, tvPoison,tvCure,tvDesc,tvPlayerMoney;
+    ImageView imgItem, cItem1, cItem2, cItem3, cItem4;
+    TextView tvNoItem, tvName, tvCount, tvPrice, tvHeal, tvPoison, tvCure, tvDesc, tvPlayerMoney;
     ImageView[] items;
     TextView[] itemFrameCounts;
     ArrayList index = new ArrayList();
-    Button btnSell,btnAll,btnMaterial,btnConsumables,btnComposite;
+    Button btnSell, btnAll, btnMaterial, btnConsumables, btnComposite;
     private SQLiteDatabase db;
     int img;
 
@@ -104,11 +104,11 @@ public class Inventory extends DialogFragment {
         inventory_bottomBag.removeAllViews();
 
         for (int i = 0; i < Loading.i_countList.size(); i++) {
-            if ( (int)Loading.i_countList.get(i) > 0)
+            if ((int) Loading.i_countList.get(i) > 0)
                 index.add(i);
         }
-        inventory_bottomBag_showLine = new LinearLayout[(index.size()/column)+1]; //動態產生新行
-        for(int i=0; i < (index.size()/column)+1; i++) {
+        inventory_bottomBag_showLine = new LinearLayout[(index.size() / column) + 1]; //動態產生新行
+        for (int i = 0; i < (index.size() / column) + 1; i++) {
             inventory_bottomBag_showLine[i] = new LinearLayout(context);
             inventory_bottomBag.addView(inventory_bottomBag_showLine[i]);
         }
@@ -117,35 +117,37 @@ public class Inventory extends DialogFragment {
         itemFrame = new FrameLayout[index.size()];
         for (int i = 0; i < index.size(); i++) { //動態產生新物品layout
             itemFrame[i] = new FrameLayout(context);
-            itemFrame[i].setBackgroundResource(R.drawable.button_light);
+            itemFrame[i].setBackgroundResource(R.drawable.button_dark_65);
             itemFrameCounts[i] = new TextView(context);
-            itemFrameCounts[i].setText(String.valueOf(Loading.i_countList.get((int)index.get(i))));
-            itemFrameCounts[i].setGravity(Gravity.END|Gravity.BOTTOM);
-//            itemFrameCounts[i].setTextColor(Color.WHITE);
+            itemFrameCounts[i].setText(String.valueOf(Loading.i_countList.get((int) index.get(i))));
+            itemFrameCounts[i].setGravity(Gravity.END | Gravity.BOTTOM);
+            itemFrameCounts[i].setTextColor(Color.WHITE);
             items[i] = new ImageView(context);
             items[i].setTag(i);
             items[i].setOnClickListener(btnItem);
-            img = getResources().getIdentifier(String.valueOf(Loading.i_image_RList.get((int)index.get(i))), "drawable", Loading.APP_NAME);
+            img = getResources().getIdentifier(String.valueOf(Loading.i_image_RList.get((int) index.get(i))), "drawable", Loading.APP_NAME);
             items[i].setImageResource(img);
             itemFrame[i].addView(items[i]);
             itemFrame[i].addView(itemFrameCounts[i]);
-            inventory_bottomBag_showLine[(i/column)].addView(itemFrame[i]);
+            inventory_bottomBag_showLine[(i / column)].addView(itemFrame[i]);
         }
 
-        if( index.size()>0) { //初始設置
-            itemFrame[0].setBackgroundResource(R.drawable.button_dark);
-            imgItem.setImageResource(getResources().getIdentifier(String.valueOf(Loading.i_image_RList.get((int)index.get(0))), "drawable", Loading.APP_NAME));
-            tvName.setText(String.valueOf(Loading.i_nametList.get((int)index.get(0))));
+        if (index.size() > 0) { //初始設置
+            itemFrame[0].setBackgroundResource(R.drawable.button_dark_65);
+            imgItem.setImageResource(getResources().getIdentifier(String.valueOf(Loading.i_image_RList.get((int) index.get(0))), "drawable", Loading.APP_NAME));
+            tvName.setText(String.valueOf(Loading.i_nametList.get((int) index.get(0))));
             tvCount.setText("");
-            tvPrice.setText("售價：" + String.valueOf(Loading.i_priceList.get((int)index.get(0))));
-            tvHeal.setText("回復量：" + String.valueOf(Loading.i_healList.get((int)index.get(0))));
-            tvPoison.setText("毒性：" + String.valueOf(Loading.i_poisontList.get((int)index.get(0))));
-            tvCure.setText("中和：" + String.valueOf(Loading.i_cureList.get((int)index.get(0))));
-            tvDesc.setText(String.valueOf(Loading.i_descList.get((int)index.get(0))));
+            tvPrice.setText("售價：" + String.valueOf(Loading.i_priceList.get((int) index.get(0))));
+            tvHeal.setText("回復量：" + String.valueOf(Loading.i_healList.get((int) index.get(0))));
+            tvPoison.setText("毒性：" + String.valueOf(Loading.i_poisontList.get((int) index.get(0))));
+            tvCure.setText("中和：" + String.valueOf(Loading.i_cureList.get((int) index.get(0))));
+            tvDesc.setText(String.valueOf(Loading.i_descList.get((int) index.get(0))));
         } else { //無物品顯示
             tvNoItem = new TextView(context);
-            imgItem.setImageResource(R.drawable.bottom_light);
-            tvNoItem.setText("NO ITEM");
+//            imgItem.setImageResource(R.drawable.button_light);
+            tvNoItem.setText("沒有物品!");
+            tvNoItem.setTextColor(Color.WHITE);
+            tvNoItem.setGravity(Gravity.CENTER);
             inventory_bottomBag.addView(tvNoItem);
             tvName.setText("");
             tvCount.setText("");
@@ -161,21 +163,21 @@ public class Inventory extends DialogFragment {
     ImageView.OnClickListener btnItem = new View.OnClickListener() { //切換物品顯示
         @Override
         public void onClick(View view) {
-            tag = (int)view.getTag();
+            tag = (int) view.getTag();
 
             for (int i = 0; i < index.size(); i++) {
-                itemFrame[i].setBackgroundResource(R.drawable.button_light);
+                itemFrame[i].setBackgroundResource(R.drawable.button_dark_65);
             }
-            imgItem.setImageResource(getResources().getIdentifier(String.valueOf(Loading.i_image_RList.get((int)index.get(tag))), "drawable", Loading.APP_NAME));
-            itemFrame[tag].setBackgroundResource(R.drawable.button_dark);
-            tvName.setText(String.valueOf(Loading.i_nametList.get((int)index.get(tag))));
+            imgItem.setImageResource(getResources().getIdentifier(String.valueOf(Loading.i_image_RList.get((int) index.get(tag))), "drawable", Loading.APP_NAME));
+            itemFrame[tag].setBackgroundResource(R.drawable.button_light);
+            tvName.setText(String.valueOf(Loading.i_nametList.get((int) index.get(tag))));
 //            tvCount.setText("數量：" + String.valueOf(Loading.i_countList.get((int)list.get(tag))));
             tvCount.setText("");
-            tvPrice.setText("售價：" + String.valueOf(Loading.i_priceList.get((int)index.get(tag))));
-            tvHeal.setText("回復量：" + String.valueOf(Loading.i_healList.get((int)index.get(tag))));
-            tvPoison.setText("毒性：" + String.valueOf(Loading.i_poisontList.get((int)index.get(tag))));
-            tvCure.setText("中和：" + String.valueOf(Loading.i_cureList.get((int)index.get(tag))));
-            tvDesc.setText(String.valueOf(Loading.i_descList.get((int)index.get(tag))));
+            tvPrice.setText("售價：" + String.valueOf(Loading.i_priceList.get((int) index.get(tag))));
+            tvHeal.setText("回復量：" + String.valueOf(Loading.i_healList.get((int) index.get(tag))));
+            tvPoison.setText("毒性：" + String.valueOf(Loading.i_poisontList.get((int) index.get(tag))));
+            tvCure.setText("中和：" + String.valueOf(Loading.i_cureList.get((int) index.get(tag))));
+            tvDesc.setText(String.valueOf(Loading.i_descList.get((int) index.get(tag))));
         }
     };
 
@@ -183,8 +185,8 @@ public class Inventory extends DialogFragment {
     Button.OnClickListener onComposite = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if(!opComposite) {
-                inventory.addView(cv, (int)convertDpToPixel(300,context), (int)convertDpToPixel(200,context));
+            if (!opComposite) {
+                inventory.addView(cv, (int) convertDpToPixel(300, context), (int) convertDpToPixel(200, context));
                 opComposite = true;
             } else {
                 inventory.removeView(cv);
@@ -196,11 +198,11 @@ public class Inventory extends DialogFragment {
     Button.OnClickListener onSell = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if (index.size()>0) {
+            if (index.size() > 0) {
                 updateItem(Integer.parseInt(Loading.id_lootList.get((int) index.get(tag)) + ""), Integer.parseInt(Loading.i_countList.get((int) index.get(tag)) + "") - 1);
                 updatePlayerMoney(Integer.parseInt(Loading.i_priceList.get((int) index.get(tag)) + ""));
                 itemFrameCounts[tag].setText((Loading.i_countList.get((int) index.get(tag)) + "") + "");
-                if( itemFrameCounts[tag].getText().toString().equals("0") ) {
+                if (itemFrameCounts[tag].getText().toString().equals("0")) {
                     setBottomView(); //執行重排
                 }
             }
@@ -212,25 +214,25 @@ public class Inventory extends DialogFragment {
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.inventory_btnAll:
-                    btnAll.setBackgroundResource(R.drawable.btn_tag_on);
-                    btnMaterial.setBackgroundResource(R.drawable.btn_tag_off);
-                    btnConsumables.setBackgroundResource(R.drawable.btn_tag_off);
+                    btnAll.setBackgroundResource(R.drawable.btn_tag_darkon);
+                    btnMaterial.setBackgroundResource(R.drawable.btn_tag_darkoff);
+                    btnConsumables.setBackgroundResource(R.drawable.btn_tag_darkoff);
                     break;
                 case R.id.inventory_btnMaterial:
-                    btnMaterial.setBackgroundResource(R.drawable.btn_tag_on);
-                    btnAll.setBackgroundResource(R.drawable.btn_tag_off);
-                    btnConsumables.setBackgroundResource(R.drawable.btn_tag_off);
+                    btnMaterial.setBackgroundResource(R.drawable.btn_tag_darkon);
+                    btnAll.setBackgroundResource(R.drawable.btn_tag_darkoff);
+                    btnConsumables.setBackgroundResource(R.drawable.btn_tag_darkoff);
                     break;
                 case R.id.inventory_btnConsumables:
-                    btnConsumables.setBackgroundResource(R.drawable.btn_tag_on);
-                    btnMaterial.setBackgroundResource(R.drawable.btn_tag_off);
-                    btnAll.setBackgroundResource(R.drawable.btn_tag_off);
+                    btnConsumables.setBackgroundResource(R.drawable.btn_tag_darkon);
+                    btnMaterial.setBackgroundResource(R.drawable.btn_tag_darkoff);
+                    btnAll.setBackgroundResource(R.drawable.btn_tag_darkoff);
                     break;
             }
         }
     };
 
-    public void updatePlayerMoney(int addMoney){
+    public void updatePlayerMoney(int addMoney) {
         try {
             InputStream is = context.openFileInput("playerdata.json");
             byte[] buffer = new byte[is.available()];
@@ -255,21 +257,22 @@ public class Inventory extends DialogFragment {
             e.printStackTrace();
         }
     }
-    public void updateItem(int ItemId, int ItemCount){
+
+    public void updateItem(int ItemId, int ItemCount) {
         GameDBHelper itemHelper = GameDBHelper.getInstance(context);
         db = itemHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put("i_count",ItemCount);
-        db.update("mobsloot",values,"_id_loot="+ItemId,null);
+        values.put("i_count", ItemCount);
+        db.update("mobsloot", values, "_id_loot=" + ItemId, null);
         MainActivity.getItemCounts(context);
     }
 
-    public static float convertDpToPixel(float dp, Context context){
+    public static float convertDpToPixel(float dp, Context context) {
         float px = dp * getDensity(context);
         return px;
     }
 
-    public static float getDensity(Context context){
+    public static float getDensity(Context context) {
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         return metrics.density;
     }

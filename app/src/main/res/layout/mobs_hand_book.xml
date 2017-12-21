@@ -14,9 +14,8 @@
         <LinearLayout
             android:layout_width="300dp"
             android:layout_height="500dp"
-            android:orientation="vertical"
             android:background="@drawable/button_dark_65"
-            >
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -30,7 +29,7 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:background="@drawable/button_dark" />
+                    android:background="@drawable/button_dark_65" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -42,15 +41,16 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="#000000"
-                        android:text="名稱" />
+                        android:text="名稱"
+                        android:textColor="#FFF" />
 
                     <TextView
                         android:id="@+id/handbook_mobsname_tv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="25sp"
-                        android:text="" />
+                        android:text=""
+                        android:textColor="#FFF"
+                        android:textSize="25sp" />
 
                 </LinearLayout>
 
@@ -66,37 +66,37 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="4dp"
-                        android:textColor="#000000"
-                        android:text="血量 :" />
+                        android:text="血量 :"
+                        android:textColor="#FFF" />
 
                     <TextView
                         android:id="@+id/handbook_mobsAtk_tv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="4dp"
-                        android:textColor="#000000"
-                        android:text="攻擊 :" />
+                        android:text="攻擊 :"
+                        android:textColor="#FFF" />
 
                     <TextView
                         android:id="@+id/handbook_mobsSpd_tv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="4dp"
-                        android:textColor="#000000"
-                        android:text="速度 :" />
+                        android:text="速度 :"
+                        android:textColor="#FFF" />
                 </LinearLayout>
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                >
+                android:orientation="horizontal">
 
                 <ScrollView
-                    android:layout_weight="1"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp">
+                    android:layout_height="100dp"
+                    android:layout_weight="1">
 
                     <TextView
                         android:id="@+id/handbook_mobsDesc"
@@ -108,43 +108,49 @@
                         android:textSize="14dp" />
 
                 </ScrollView>
+
                 <LinearLayout
-                    android:layout_weight="2"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    >
+                    android:layout_weight="2"
+                    android:orientation="vertical">
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="top"
-                        android:textColor="#000000"
-                        android:gravity="center"
-                        android:textSize="18sp"
                         android:layout_marginTop="5dp"
+                        android:gravity="center"
                         android:text="掉落物"
-                        />
+                        android:textColor="#FFF"
+                        android:textSize="18sp" />
+
                     <TextView
                         android:id="@+id/handbook_loots1_tv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
                         android:layout_marginTop="5dp"
-                        android:text="\???"/>
+                        android:gravity="center"
+                        android:text="\???"
+                        android:textColor="#FFF" />
+
                     <TextView
                         android:id="@+id/handbook_loots2_tv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
                         android:layout_marginTop="5dp"
-                        android:text="\???"/>
+                        android:gravity="center"
+                        android:text="\???"
+                        android:textColor="#FFF" />
+
                     <TextView
                         android:id="@+id/handbook_loots3_tv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
                         android:layout_marginTop="5dp"
-                        android:text="\???"/>
+                        android:gravity="center"
+                        android:text="\???"
+                        android:textColor="#FFF" />
                 </LinearLayout>
 
 
@@ -169,7 +175,6 @@
                 </ScrollView>
 
 
-
             </FrameLayout>
 
         </LinearLayout>
@@ -179,46 +184,48 @@
             android:layout_height="match_parent"
             android:layout_gravity="right"
             android:orientation="vertical">
+
             <LinearLayout
-            android:layout_width="26dp"
-            android:layout_height="200dp"
-            android:layout_gravity="right"
-            android:orientation="vertical"></LinearLayout>
+                android:layout_width="26dp"
+                android:layout_height="200dp"
+                android:layout_gravity="right"
+                android:orientation="vertical"></LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="26dp"
-                    android:layout_height="300dp"
-                    android:layout_gravity="right"
-                    android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="26dp"
+                android:layout_height="300dp"
+                android:layout_gravity="right"
+                android:orientation="vertical">
 
 
-                    <Button
-                        android:id="@+id/handbook_btnAll"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/btn_tag_on"
-                        android:text="全\n部" />
+                <Button
+                    android:id="@+id/handbook_btnAll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/btn_tag_darkon"
+                    android:text="全\n部"
+                    android:textColor="#FFF" />
 
-                    <Button
-                        android:id="@+id/handbook_btnForest"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/btn_tag_off"
-                        android:text="森\n林" />
+                <Button
+                    android:id="@+id/handbook_btnForest"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/btn_tag_darkoff"
+                    android:text="森\n林"
+                    android:textColor="#FFF" />
 
-                    <Button
-                        android:id="@+id/handbook_btnGraveYard"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/btn_tag_off"
-                        android:text="\n墓\n園\n" />
-                </LinearLayout>
-
+                <Button
+                    android:id="@+id/handbook_btnGraveYard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/btn_tag_darkoff"
+                    android:text="\n墓\n園\n"
+                    android:textColor="#FFF" />
             </LinearLayout>
 
+        </LinearLayout>
+
     </LinearLayout>
-
-
 
 
 </FrameLayout>

@@ -121,7 +121,7 @@ public class MobsHandBook extends DialogFragment {
 //            itemFrameCounts[i].setTextColor(Color.WHITE);
             mobsIcon[i] = new ImageView(context);
             mobsIcon[i].setTag(i);
-            mobsIcon[i].setBackgroundResource(R.drawable.button_light);
+            mobsIcon[i].setBackgroundResource(R.drawable.button_dark_65);
             mobsIcon[i].setLayoutParams(new LinearLayout.LayoutParams(200 , 200));
             mobsIcon[i].setOnClickListener(btnIcon);
             img = getResources().getIdentifier(String.valueOf(imageList.get((int)index.get(i))), "drawable", Loading.APP_NAME);
@@ -258,7 +258,7 @@ public class MobsHandBook extends DialogFragment {
             int tag = (int)view.getTag();
 
             for (int i = 0; i < index.size(); i++) {
-                mobsIcon[i].setBackgroundResource(R.drawable.button_light);
+                mobsIcon[i].setBackgroundResource(R.drawable.button_dark_65);
             }
 
             if(unlockImage.get(unlockID.indexOf(idList.get((int)index.get(tag)))) == 1){
@@ -297,7 +297,7 @@ public class MobsHandBook extends DialogFragment {
                 mobsDesc.setText("怪物資訊 : ???");
             }
 
-            mobsIcon[tag].setBackgroundResource(R.drawable.button_dark);
+            mobsIcon[tag].setBackgroundResource(R.drawable.button_light);
 
             int[] loots = (int[]) lootsList.get(tag);
             if(unlockLoots1.get(unlockID.indexOf(idList.get((int)index.get(tag)))) == 1){
@@ -327,21 +327,21 @@ public class MobsHandBook extends DialogFragment {
             switch (view.getId()) {
                 case R.id.handbook_btnAll:
                     getData("0");
-                    btnAll.setBackgroundResource(R.drawable.btn_tag_on);
-                    btnForest.setBackgroundResource(R.drawable.btn_tag_off);
-                    btnGraveYard.setBackgroundResource(R.drawable.btn_tag_off);
+                    btnAll.setBackgroundResource(R.drawable.btn_tag_darkon);
+                    btnForest.setBackgroundResource(R.drawable.btn_tag_darkoff);
+                    btnGraveYard.setBackgroundResource(R.drawable.btn_tag_darkoff);
                     break;
                 case R.id.handbook_btnForest:
                     getData("1");
-                    btnForest.setBackgroundResource(R.drawable.btn_tag_on);
-                    btnAll.setBackgroundResource(R.drawable.btn_tag_off);
-                    btnGraveYard.setBackgroundResource(R.drawable.btn_tag_off);
+                    btnForest.setBackgroundResource(R.drawable.btn_tag_darkon);
+                    btnAll.setBackgroundResource(R.drawable.btn_tag_darkoff);
+                    btnGraveYard.setBackgroundResource(R.drawable.btn_tag_darkoff);
                     break;
                 case R.id.handbook_btnGraveYard:
                     getData("2");
-                    btnGraveYard.setBackgroundResource(R.drawable.btn_tag_on);
-                    btnForest.setBackgroundResource(R.drawable.btn_tag_off);
-                    btnAll.setBackgroundResource(R.drawable.btn_tag_off);
+                    btnGraveYard.setBackgroundResource(R.drawable.btn_tag_darkon);
+                    btnForest.setBackgroundResource(R.drawable.btn_tag_darkoff);
+                    btnAll.setBackgroundResource(R.drawable.btn_tag_darkoff);
                     break;
             }
 
