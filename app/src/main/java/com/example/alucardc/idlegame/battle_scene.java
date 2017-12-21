@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.media.AudioManager;
@@ -32,8 +33,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import static com.example.alucardc.idlegame.Loading.DATE_PREF;
+import static com.example.alucardc.idlegame.Loading.LAST_REG_HP_TIME;
 
 public class battle_scene extends AppCompatActivity {
 
@@ -52,8 +57,15 @@ public class battle_scene extends AppCompatActivity {
     int[] currentActionTime = new int[6];
     int[] currentStunTime = new int[6];
 
+    //音效用變數
     SoundPool soundPool;
     private int getHit,hitMobs;
+    //音效用變數
+
+    //時間變數
+    Calendar rightNow = Calendar.getInstance();
+    long tempNowTime;
+    //時間變數
 
     TextView tvPrepareFight,playerHP;
     LinearLayout questionLayout,blockView;
@@ -173,9 +185,8 @@ public class battle_scene extends AppCompatActivity {
             Gson gson = new Gson();
             Player playInfo = gson.fromJson(json, Player.class);
 
-//            playInfo.playerStatus.playerMaxHP = 50;
             String json_2 = gson.toJson(playInfo);
-            Log.d("JSON", json_2);
+//            Log.d("JSON", json_2);
 
             tvPlayerID.setText("ID :" + playInfo.playerStatus.playerID);
             tvPlayerMoney.setText("持有金錢 :" + playInfo.playerStatus.playerMoney);
@@ -199,7 +210,7 @@ public class battle_scene extends AppCompatActivity {
 
             playInfo.playerStatus.playerCurrentHP = playerCurrentHP;
             String json_2 = gson.toJson(playInfo);
-            Log.d("JSON", json_2);
+//            Log.d("JSON", json_2);
 
             OutputStream os = new FileOutputStream(DBInfo.JSON_FILE);
             os.write(json_2.getBytes());
@@ -511,6 +522,7 @@ public class battle_scene extends AppCompatActivity {
                     unlockStatus(Integer.parseInt(str),"name",1);
                 }
                 showSettlement();
+                resetLastRegTime();
                 timerMobsProgress.cancel();
                 endFight = true;
             }
@@ -552,6 +564,13 @@ public class battle_scene extends AppCompatActivity {
                 mobSum++;
             }
         }
+    }
+
+    void resetLastRegTime(){
+        rightNow = Calendar.getInstance();
+        tempNowTime = rightNow.getTimeInMillis();
+        SharedPreferences settings = getSharedPreferences(DATE_PREF, 0);
+        settings.edit().putString(LAST_REG_HP_TIME,String.valueOf(tempNowTime)).commit();
     }
 
     @Override

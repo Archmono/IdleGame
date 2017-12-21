@@ -4,13 +4,10 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Environment;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,30 +18,27 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.channels.FileChannel;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Iterator;
-import java.util.List;
+
+import static com.example.alucardc.idlegame.Loading.DATE_PREF;
+import static com.example.alucardc.idlegame.Loading.LAST_REG_HP_TIME;
 
 public class MainActivity extends AppCompatActivity {
 
     int timeGap,nextTime; //運算用變數
     long newTime,oldTime; //運算用變數
+
+    public static int hpRegKey = 10;   //回復HP的時間秒數
+    String lastRegTime;
+    long tempNowTime;
     String tempOldTime,tempNextTime="0"; //暫存用變數
     Calendar rightNow = Calendar.getInstance(); //提取時間用的方法
+
+    int playerCurrentHP,playerMaxHP;
 
     String TAG = "MainDataTest";
     String TAG2 = "MainPlayerTest";
@@ -65,17 +59,18 @@ public class MainActivity extends AppCompatActivity {
         findViews();
         getPlayerStatus();
         countMobs();
-        Log.d(TAG, Loading.idList.toString());
-        Log.d(TAG, Loading.nameList.toString());
-        Log.d(TAG, Loading.healthPointList.toString());
-        Log.d(TAG, Loading.rarityList.toString());
-        Log.d(TAG, Loading.speedList.toString());
-        Log.d(TAG, Loading.qCountsList.toString());
-        Log.d(TAG, Loading.qTypesList.toString());
-        Log.d(TAG, Loading.qRangeList.toString());
-        Log.d(TAG, Loading.stunTimeList.toString());
-        Log.d(TAG, Loading.atkList.toString());
-        Log.d(TAG, Loading.imageList.toString());
+
+//        Log.d(TAG, Loading.idList.toString());
+//        Log.d(TAG, Loading.nameList.toString());
+//        Log.d(TAG, Loading.healthPointList.toString());
+//        Log.d(TAG, Loading.rarityList.toString());
+//        Log.d(TAG, Loading.speedList.toString());
+//        Log.d(TAG, Loading.qCountsList.toString());
+//        Log.d(TAG, Loading.qTypesList.toString());
+//        Log.d(TAG, Loading.qRangeList.toString());
+//        Log.d(TAG, Loading.stunTimeList.toString());
+//        Log.d(TAG, Loading.atkList.toString());
+//        Log.d(TAG, Loading.imageList.toString());
 //        int[] loots = (int[]) Loading.lootsList.get(0);
 //        Log.d(TAG, loots[0]+", "+loots[1]+", "+loots[2]);
 //        int[] lootsDP = (int[]) Loading.lootsDropRateList.get(0);
@@ -145,6 +140,9 @@ public class MainActivity extends AppCompatActivity {
 //            playInfo.playerStatus.playerMaxHP = 50;
             String json_2 = gson.toJson(playInfo);
             Log.d("JSON", json_2);
+            playerCurrentHP = playInfo.playerStatus.playerCurrentHP;
+            playerMaxHP = playInfo.playerStatus.playerMaxHP;
+            regPlayerHPbyTime();
 
             tvPlayerID.setText("ID :" + playInfo.playerStatus.playerID);
             tvPlayerMoney.setText("持有金錢 :" + playInfo.playerStatus.playerMoney);
@@ -217,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
 
     protected void restorePrefs() { //讀取的位置
         Log.d(TAG,"onResume");
-        SharedPreferences settings = getSharedPreferences(Loading.DATE_PREF, 0);
+        SharedPreferences settings = getSharedPreferences(DATE_PREF, 0);
         for(int i=0; i<6; i++){
             Loading.mobsSlotFilled_S1[i] = settings.getString(Loading.PREF_MOBS_SLOT_FILLED_S1[i], "");
         }
@@ -230,7 +228,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     protected void onSave() { //儲存的位置
-        SharedPreferences settings = getSharedPreferences(Loading.DATE_PREF, 0);
+        SharedPreferences settings = getSharedPreferences(DATE_PREF, 0);
         settings.edit().putString(Loading.PREF_OLD_TIME, String.valueOf(rightNow.getTimeInMillis())).commit();
         for(int i=0; i<6; i++){
             settings.edit().putString(Loading.PREF_MOBS_SLOT_FILLED_S1[i], Loading.mobsSlotFilled_S1[i]).commit();
@@ -259,6 +257,53 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     Loading.mobsSlotFilled_S1[i] = RandomTest.cId; //放入生怪ID至怪物陣列
                 }
+            }
+        }
+    }
+
+    public void regPlayerHPbyTime(){
+        boolean isHealed = false;
+        SharedPreferences settings = getSharedPreferences(DATE_PREF, 0);
+        rightNow = Calendar.getInstance();
+        tempNowTime = rightNow.getTimeInMillis();
+        lastRegTime = settings.getString(LAST_REG_HP_TIME,"");
+        if(lastRegTime.equals("")){
+            settings.edit().putString(LAST_REG_HP_TIME,String.valueOf(tempNowTime)).commit();
+            Log.d("HP_REG","沒有上次恢復時間,設定為現在時刻");
+        }
+        int regTimeGap = (int)(tempNowTime - Long.parseLong(lastRegTime))/1000;
+        int regCounts = regTimeGap / hpRegKey;
+        Log.d("HP_REG","時間間隔 : "+regTimeGap + "  回復次數 : "+regCounts);
+        for(int i = 0; i<regCounts ; i++){
+            if(playerCurrentHP < playerMaxHP) {
+                playerCurrentHP += 1;
+                isHealed = true;
+                Log.d("HP_REG","HP+1 這次有被治療");
+            }
+        }
+        if(isHealed) {
+            settings.edit().putString(LAST_REG_HP_TIME, String.valueOf(tempNowTime)).commit();
+            Log.d("HP_REG","確認有被治療,上次治療時間寫入SharePref中");
+            try {
+                InputStream is = this.openFileInput("playerdata.json");
+                byte[] buffer = new byte[is.available()];
+                is.read(buffer);
+                String json = new String(buffer, "UTF-8");
+                Gson gson = new Gson();
+                Player playInfo = gson.fromJson(json, Player.class);
+
+                playInfo.playerStatus.playerCurrentHP = playerCurrentHP;
+                Log.d("HP_REG","寫JSON部分,將JSON中目前HP設置為剛剛回復過的暫存血量");
+                String json_2 = gson.toJson(playInfo);
+//                Log.d("JSON", json_2);
+
+                OutputStream os = new FileOutputStream(DBInfo.JSON_FILE);
+                os.write(json_2.getBytes());
+                os.close();
+                is.close();
+
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }

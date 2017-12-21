@@ -11,6 +11,9 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -40,9 +43,10 @@ public class Loading extends Activity {
     /*↓SharedPreferences裡儲存的資料名稱↓*/
     public static final String DATE_PREF = "DATE_PREF";
     public static final String PREF_OLD_TIME = "DATE_OldTime";
+    public static final String DATE_NEXT_DATE = "DATE_NextTime";
     public static final String[] PREF_MOBS_SLOT_FILLED_S1 = {"S1_P1", "S1_P2", "S1_P3", "S1_P4", "S1_P5", "S1_P6"};
     public static final String[] PREF_MOBS_SLOT_FILLED_S2 = {"S2_P1", "S2_P2", "S2_P3", "S2_P4", "S2_P5", "S2_P6"};
-    public static final String DATE_NEXT_DATE = "DATE_NextTime";
+    public static final String LAST_REG_HP_TIME = "TIME_LAST_REG";  //隨時間回血用
     /*↑SharedPreferences裡儲存的資料名稱↑*/
 
     /*↓SQLite取出的資料↓*/
@@ -100,6 +104,7 @@ public class Loading extends Activity {
 
         getItem();
         getPlayerStatus();
+        anime();
 
 //        Log.d(TAG, idList.toString());
 //        Log.d(TAG, nameList.toString());
@@ -129,6 +134,21 @@ public class Loading extends Activity {
                 startActivity(i);
             }
         }, 2000);
+    }
+
+    void anime(){
+
+        ImageView img = (ImageView) findViewById(R.id.animeImg);
+        //動畫路徑設定(x1,x2,y1,y2)
+        Animation am = new TranslateAnimation(-150,150,200,200);
+        //動畫開始到結束的時間，2秒
+        am.setDuration( 2100 );
+        // 動畫重覆次數 (-1表示一直重覆，0表示不重覆執行，所以只會執行一次)
+        am.setRepeatCount( 0 );
+        //將動畫寫入ImageView
+        img.setAnimation(am);
+        //開始動畫
+        am.startNow();
     }
 
     public void restorePrefs() { //讀取的位置
