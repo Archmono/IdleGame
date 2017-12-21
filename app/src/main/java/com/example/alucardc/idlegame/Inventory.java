@@ -66,6 +66,36 @@ public class Inventory extends DialogFragment {
         v = inflater.inflate(R.layout.inventory, container, false);
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         findViews();
+        setBottomView();
+//        Log.d("Inventory", index.size()+"");
+
+        return v;
+    }
+
+    void findViews() {
+        inventory_bottomBag = v.findViewById(R.id.inventory_bottomBag);
+        imgItem = (ImageView) v.findViewById(R.id.inventory_selectedItem_image);
+        tvName = (TextView) v.findViewById(R.id.inventory_selectedItem_name);
+        tvCount = (TextView) v.findViewById(R.id.inventory_selectedItem_counts);
+        tvPrice = (TextView) v.findViewById(R.id.inventory_selectedItem_price);
+        tvHeal = (TextView) v.findViewById(R.id.inventory_selectedItem_heal);
+        tvPoison = (TextView) v.findViewById(R.id.inventory_selectedItem_poison);
+        tvCure = (TextView) v.findViewById(R.id.inventory_selectedItem_cure);
+        tvDesc = (TextView) v.findViewById(R.id.inventory_itemDesc);
+        btnAll = (Button) v.findViewById(R.id.inventory_btnAll);
+        btnMaterial = (Button) v.findViewById(R.id.inventory_btnMaterial);
+        btnConsumables = (Button) v.findViewById(R.id.inventory_btnConsumables);
+        btnSell = (Button) v.findViewById(R.id.inventory_btnSell);
+        btnAll.setOnClickListener(btnTag);
+        btnMaterial.setOnClickListener(btnTag);
+        btnConsumables.setOnClickListener(btnTag);
+        btnSell.setOnClickListener(onSell);
+    }
+
+    void setBottomView() {
+
+        index = new ArrayList();
+        inventory_bottomBag.removeAllViews();
 
         for (int i = 0; i < Loading.i_countList.size(); i++) {
             if ( (int)Loading.i_countList.get(i) > 0)
@@ -108,15 +138,18 @@ public class Inventory extends DialogFragment {
             tvDesc.setText(String.valueOf(Loading.i_descList.get((int)index.get(0))));
         } else { //無物品顯示
             tvNoItem = new TextView(context);
+            imgItem.setImageResource(R.drawable.bottom_light);
             tvNoItem.setText("NO ITEM");
             inventory_bottomBag.addView(tvNoItem);
+            tvName.setText("");
+            tvCount.setText("");
+            tvPrice.setText("");
+            tvHeal.setText("");
+            tvPoison.setText("");
+            tvCure.setText("");
+            tvDesc.setText("");
         }
-
-        Log.d("Inventory", index.size()+"");
-
-        return v;
     }
-
 
     int tag;
     ImageView.OnClickListener btnItem = new View.OnClickListener() { //切換物品顯示
@@ -148,7 +181,8 @@ public class Inventory extends DialogFragment {
                 updatePlayerMoney(Integer.parseInt(Loading.i_priceList.get((int) index.get(tag)) + ""));
                 itemFrameCounts[tag].setText((Loading.i_countList.get((int) index.get(tag)) + "") + "");
                 if( itemFrameCounts[tag].getText().toString().equals("0") ) {
-                    inventory_bottomBag_showLine[(tag/column)].removeViewAt(tag);
+                    setBottomView();
+//                    inventory_bottomBag_showLine[(tag/column)].removeViewAt(tag); //執行重排
                 }
             }
         }
@@ -177,26 +211,6 @@ public class Inventory extends DialogFragment {
         }
     };
 
-    void findViews() {
-        inventory_bottomBag = v.findViewById(R.id.inventory_bottomBag);
-        imgItem = (ImageView) v.findViewById(R.id.inventory_selectedItem_image);
-        tvName = (TextView) v.findViewById(R.id.inventory_selectedItem_name);
-        tvCount = (TextView) v.findViewById(R.id.inventory_selectedItem_counts);
-        tvPrice = (TextView) v.findViewById(R.id.inventory_selectedItem_price);
-        tvHeal = (TextView) v.findViewById(R.id.inventory_selectedItem_heal);
-        tvPoison = (TextView) v.findViewById(R.id.inventory_selectedItem_poison);
-        tvCure = (TextView) v.findViewById(R.id.inventory_selectedItem_cure);
-        tvDesc = (TextView) v.findViewById(R.id.inventory_itemDesc);
-        btnAll = (Button) v.findViewById(R.id.inventory_btnAll);
-        btnMaterial = (Button) v.findViewById(R.id.inventory_btnMaterial);
-        btnConsumables = (Button) v.findViewById(R.id.inventory_btnConsumables);
-        btnSell = (Button) v.findViewById(R.id.inventory_btnSell);
-        btnAll.setOnClickListener(btnTag);
-        btnMaterial.setOnClickListener(btnTag);
-        btnConsumables.setOnClickListener(btnTag);
-        btnSell.setOnClickListener(onSell);
-    }
-
     public void updatePlayerMoney(int addMoney){
         try {
             InputStream is = context.openFileInput("playerdata.json");
@@ -213,7 +227,7 @@ public class Inventory extends DialogFragment {
             OutputStream os = new FileOutputStream(DBInfo.JSON_FILE);
             os.write(json_2.getBytes());
 
-            Log.d("tvPlayerMoney",tvPlayerMoney.toString());
+//            Log.d("tvPlayerMoney",tvPlayerMoney.toString());
             MainActivity.tvPlayerMoney.setText("持有金錢 :" + playInfo.playerStatus.playerMoney);
 
             os.close();
