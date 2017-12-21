@@ -36,6 +36,7 @@ public class MobsHandBook extends DialogFragment {
     Button btnAll,btnForest,btnGraveYard;
     LinearLayout bottomView;
     LinearLayout[] bottomViewLine;
+    private ArrayList idList = new ArrayList();
     private ArrayList nameList = new ArrayList();
     private ArrayList healthPointList = new ArrayList();
     private ArrayList speedList = new ArrayList();
@@ -45,7 +46,18 @@ public class MobsHandBook extends DialogFragment {
     private ArrayList lootsList = new ArrayList();
     private ArrayList descList = new ArrayList();
 
-    private ArrayList index = new ArrayList();
+    private ArrayList<Integer> unlockID = new ArrayList();
+    private ArrayList<Integer> unlockImage = new ArrayList();
+    private ArrayList<Integer>  unlockName = new ArrayList();
+    private ArrayList<Integer>  unlockHP = new ArrayList();
+    private ArrayList<Integer>  unlockATK = new ArrayList();
+    private ArrayList<Integer>  unlockSpeed = new ArrayList();
+    private ArrayList<Integer>  unlockDesc = new ArrayList();
+    private ArrayList<Integer>  unlockLoots1 = new ArrayList();
+    private ArrayList<Integer>  unlockLoots2 = new ArrayList();
+    private ArrayList<Integer>  unlockLoots3 = new ArrayList();
+
+    private ArrayList<Integer> index = new ArrayList();
     int img;
 
 
@@ -65,9 +77,10 @@ public class MobsHandBook extends DialogFragment {
 
         getData("0");
 
+        getUnlockStatus();
+
         setBottomView();
 
-        getUnlockStatus();
 
         return v;
     }
@@ -112,25 +125,49 @@ public class MobsHandBook extends DialogFragment {
             mobsIcon[i].setLayoutParams(new LinearLayout.LayoutParams(200 , 200));
             mobsIcon[i].setOnClickListener(btnIcon);
             img = getResources().getIdentifier(String.valueOf(imageList.get((int)index.get(i))), "drawable", Loading.APP_NAME);
-            mobsIcon[i].setImageResource(img);
+
+
+            if(unlockID.get(unlockID.indexOf(idList.get((int)index.get(i))))!= -1 && unlockImage.get(unlockID.indexOf(idList.get((int)index.get(i))))==1){
+                mobsIcon[i].setImageResource(img);
+            } else {
+                mobsIcon[i].setImageResource(R.drawable.q_mark);
+            }
+
             bottomViewLine[(i/column)].addView(mobsIcon[i]);
         }
     }
 
     public void getUnlockStatus(){
-        try {
-            InputStream is = context.openFileInput("playerdata.json");
-            byte[] buffer = new byte[is.available()];
-            is.read(buffer);
-            String json = new String(buffer, "UTF-8");
-            Gson gson = new Gson();
-            Player playInfo = gson.fromJson(json, Player.class);
+        GameDBHelper helper = GameDBHelper.getInstance(context);
 
+        Cursor c = helper.getReadableDatabase().query("mobshandbook", null, null, null, null, null, null);
 
-            is.close();
+        c.moveToFirst();
+        for (int i = 0; i < c.getCount(); i++) {
+            int id = c.getInt(c.getColumnIndex("_id"));
+            int image = c.getInt(c.getColumnIndex("image"));
+            int name = c.getInt(c.getColumnIndex("name"));
+            int hp = c.getInt(c.getColumnIndex("healthpoint"));
+            int atk = c.getInt(c.getColumnIndex("attack"));
+            int speed = c.getInt(c.getColumnIndex("speed"));
+//            int stunTime = c.getInt(c.getColumnIndex("stunTime"));  //預留數值,目前無顯示
+            int desc = c.getInt(c.getColumnIndex("desc"));
+            int loots_1 = c.getInt(c.getColumnIndex("loots_1"));
+            int loots_2 = c.getInt(c.getColumnIndex("loots_2"));
+            int loots_3 = c.getInt(c.getColumnIndex("loots_3"));
 
-        } catch (IOException e) {
-            e.printStackTrace();
+            unlockID.add(id);
+            unlockImage.add(image);
+            unlockName.add(name);
+            unlockHP.add(hp);
+            unlockATK.add(atk);
+            unlockSpeed.add(speed);
+            unlockDesc.add(desc);
+            unlockLoots1.add(loots_1);
+            unlockLoots2.add(loots_2);
+            unlockLoots3.add(loots_3);
+
+            c.moveToNext();
         }
     }
 
@@ -150,6 +187,7 @@ public class MobsHandBook extends DialogFragment {
 
             c.moveToFirst();
             for (int i = 0; i < c.getCount(); i++) {
+                int id = c.getInt(c.getColumnIndex("_id"));
                 String name = c.getString(c.getColumnIndex("name"));
                 int hp = c.getInt(c.getColumnIndex("healthPoint"));
                 int speed = c.getInt(c.getColumnIndex("speed"));
@@ -163,6 +201,7 @@ public class MobsHandBook extends DialogFragment {
                 int lootsInside[] = {loots_1,loots_2,loots_3};
 
                 if(i!=0) {
+                    idList.add(id);
                     nameList.add(name);
                     healthPointList.add(hp);
                     speedList.add(speed);
@@ -181,6 +220,7 @@ public class MobsHandBook extends DialogFragment {
 
             c.moveToFirst();
             for (int i = 0; i < c.getCount(); i++) {
+                int id = c.getInt(c.getColumnIndex("_id"));
                 String name = c.getString(c.getColumnIndex("name"));
                 int hp = c.getInt(c.getColumnIndex("healthPoint"));
                 int speed = c.getInt(c.getColumnIndex("speed"));
@@ -193,6 +233,7 @@ public class MobsHandBook extends DialogFragment {
                 int loots_3 = c.getInt(c.getColumnIndex("loots_3"));
                 int lootsInside[] = {loots_1,loots_2,loots_3};
 
+                idList.add(id);
                 nameList.add(name);
                 healthPointList.add(hp);
                 speedList.add(speed);
@@ -215,24 +256,64 @@ public class MobsHandBook extends DialogFragment {
             for (int i = 0; i < index.size(); i++) {
                 mobsIcon[i].setBackgroundResource(R.drawable.button_light);
             }
-            mobsImg.setImageResource(getResources().getIdentifier(String.valueOf(imageList.get((int)index.get(tag))), "drawable", Loading.APP_NAME));
+
+            if(unlockImage.get(unlockID.indexOf(idList.get((int)index.get(tag)))) == 1){
+                mobsImg.setImageResource(getResources().getIdentifier(String.valueOf(imageList.get((int)index.get(tag))), "drawable", Loading.APP_NAME));
+            }else{
+                mobsImg.setImageResource(R.drawable.q_mark);
+            }
+
+            if(unlockName.get(unlockID.indexOf(idList.get((int)index.get(tag)))) == 1){
+                mobsName.setText(String.valueOf(nameList.get((int)index.get(tag))));
+            }else{
+                mobsName.setText("???");
+            }
+
+            if(unlockHP.get(unlockID.indexOf(idList.get((int)index.get(tag)))) == 1){
+                mobsHP.setText("血量：" + String.valueOf(healthPointList.get((int)index.get(tag))));
+            }else{
+                mobsHP.setText("血量 : ???");
+            }
+
+            if(unlockHP.get(unlockID.indexOf(idList.get((int)index.get(tag)))) == 1){
+                mobsAtk.setText("攻擊：" + String.valueOf(atkList.get((int)index.get(tag))));
+            }else{
+                mobsAtk.setText("攻擊：???");
+            }
+
+            if(unlockHP.get(unlockID.indexOf(idList.get((int)index.get(tag)))) == 1){
+                mobsSpd.setText("速度：" + (Float.parseFloat(speedList.get((int)index.get(tag))+"")/1000f)+"sec");
+            }else{
+                mobsSpd.setText("速度：???");
+            }
+
+            if(unlockDesc.get(unlockID.indexOf(idList.get((int)index.get(tag)))) == 1){
+                mobsDesc.setText(String.valueOf(descList.get((int)index.get(tag))));
+            }else{
+                mobsDesc.setText("怪物資訊 : ???");
+            }
+
             mobsIcon[tag].setBackgroundResource(R.drawable.button_dark);
-            mobsName.setText(String.valueOf(nameList.get((int)index.get(tag))));
-            mobsHP.setText("血量：" + String.valueOf(healthPointList.get((int)index.get(tag))));
-            mobsAtk.setText("攻擊：" + String.valueOf(atkList.get((int)index.get(tag))));
-            mobsSpd.setText("速度：" + (Float.parseFloat(speedList.get((int)index.get(tag))+"")/1000f)+"sec");
-
-
 
             int[] loots = (int[]) lootsList.get(tag);
+            if(unlockLoots1.get(unlockID.indexOf(idList.get((int)index.get(tag)))) == 1){
                 mobsLoots1.setText(Loading.i_nametList.get(Loading.id_lootList.indexOf(String.valueOf(loots[0])))+"");
+            }else{
+                mobsLoots2.setText("???");
+            }
+            if(unlockLoots2.get(unlockID.indexOf(idList.get((int)index.get(tag)))) == 1){
                 mobsLoots2.setText(Loading.i_nametList.get(Loading.id_lootList.indexOf(String.valueOf(loots[1])))+"");
-            if(String.valueOf(loots[2]).equals("0")){
+            }else{
+                mobsLoots2.setText("???");
+            }
+            if(unlockLoots3.get(unlockID.indexOf(idList.get((int)index.get(tag)))) == 1) {
+                mobsLoots3.setText(Loading.i_nametList.get(Loading.id_lootList.indexOf(String.valueOf(loots[2]))) + "");
+            } else if(String.valueOf(loots[2]).equals("0")){
                 mobsLoots3.setText("");
             } else {
-                mobsLoots3.setText(Loading.i_nametList.get(Loading.id_lootList.indexOf(String.valueOf(loots[2]))) + "");
+                mobsLoots3.setText("???");
             }
-            mobsDesc.setText(String.valueOf(descList.get((int)index.get(tag))));
+
         }
     };
 
@@ -259,7 +340,9 @@ public class MobsHandBook extends DialogFragment {
                     btnAll.setBackgroundResource(R.drawable.btn_tag_off);
                     break;
             }
+
             setBottomView();
+            Log.d("switch", "hello hello");
         }
     };
 }

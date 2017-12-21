@@ -3,6 +3,9 @@ package com.example.alucardc.idlegame;
 import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Handler;
@@ -33,6 +36,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class battle_scene extends AppCompatActivity {
+
+    private SQLiteDatabase db;
 
     ProgressBar PB;
     int prepareTime = 3;
@@ -70,12 +75,6 @@ public class battle_scene extends AppCompatActivity {
     LinearLayout playerStatusBar;
     TextView tvPlayerID,tvPlayerHP,tvPlayerMoney;
     //玩家狀態區
-
-    int mobsMaxHP1,mobsMaxHP2,mobsMaxHP3,mobsMaxHP4,mobsMaxHP5,mobsMaxHP6;
-    int mobsCurrentHP1,mobsCurrentHP2,mobsCurrentHP3,mobsCurrentHP4,mobsCurrentHP5,mobsCurrentHP6;
-    int mobsATK1,mobsATK2,mobsATK3,mobsATK4,mobsATK5,mobsATK6;
-    int mobsSpeed1,mobsSpeed2,mobsSpeed3,mobsSpeed4,mobsSpeed5,mobsSpeed6;
-
 
     Handler mHandler = new Handler(){
         @Override
@@ -202,6 +201,16 @@ public class battle_scene extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void unlockStatus(int mobsID, String unlockKey, int unlockValue){
+        Context context = this;
+        GameDBHelper itemHelper = GameDBHelper.getInstance(context);
+        db = itemHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(unlockKey,unlockValue);
+        db.update("mobshandbook",values,"_id="+mobsID,null);
+        MainActivity.getItemCounts(context);
     }
 
     void findViews(){
@@ -488,6 +497,11 @@ public class battle_scene extends AppCompatActivity {
                 Log.d("TAG", LootFail.lootSet+"");
                 showSettlement();
                 updatePlayerHP();   //更新目前血量到JSON
+                for(int i = 0; i<mobSum; i++){
+                    String str = Loading.mobsSlotFilled_S1[i];
+                    unlockStatus(Integer.parseInt(str),"image",1);
+                    unlockStatus(Integer.parseInt(str),"name",1);
+                }
                 timerMobsProgress.cancel();
                 endFight = true;
             }
