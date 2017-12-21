@@ -282,11 +282,11 @@ public class Inventory extends DialogFragment {
 
             cTvHeal.setText("回復量  " + heal);
             cTvPoison.setText("毒性  " + poison);
-            cTvCure.setText("中和  " + -(cure-100));
+            cTvCure.setText("中和  " + -(cure-100) + "%");
 
             restore = heal - ( poison * cure )/100;
 
-            tvRestore.setText("回復量  " + restore);
+            tvRestore.setText("和成效果  " + restore);
         }
     }
 
