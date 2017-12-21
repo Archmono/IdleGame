@@ -414,22 +414,22 @@ public class battle_scene extends AppCompatActivity {
     public View.OnClickListener blockListener = new View.OnClickListener(){ //為畫面遮罩設置點擊監聽器
         @Override
         public void onClick(View view) {
-            if(introFight){
-                tvPrepareFight.setText("");                                         //點擊時將中央文字欄位清空
-                BattlePrepareTimerTask bpTimerTask = new BattlePrepareTimerTask();  //new新的準備畫面timerTask
-                timerPrepare.schedule(bpTimerTask, 500, 1000);                      //為timer timerPrepare設置timerTask
-                introFight = false;                                                 //點擊後進入場景,將檢查值設置為false
-                Log.d("Click test", "view block is clicked");
-                Log.d("TAG","condition:" + condition+", !intro fight" + introFight + ", isPaused" + isPaused);
-            } else {
-                if(isPaused) {
-                    Message msg = mHandler.obtainMessage();
-                    msg.what = 2;                               //發送msg2,將暫停用遮擋畫面設定為GONE的可見度
-                    msg.sendToTarget();
-                    condition = true;
-                    Log.d("TAG","condition:" + condition+", !intro fight" + introFight + ", isPaused" + isPaused + ", msg=2");
-                }
+        if(introFight){
+            tvPrepareFight.setText("");                                         //點擊時將中央文字欄位清空
+            BattlePrepareTimerTask bpTimerTask = new BattlePrepareTimerTask();  //new新的準備畫面timerTask
+            timerPrepare.schedule(bpTimerTask, 500, 1000);                      //為timer timerPrepare設置timerTask
+            introFight = false;                                                 //點擊後進入場景,將檢查值設置為false
+            Log.d("Click test", "view block is clicked");
+            Log.d("TAG","condition:" + condition+", !intro fight" + introFight + ", isPaused" + isPaused);
+        } else {
+            if(isPaused) {
+                Message msg = mHandler.obtainMessage();
+                msg.what = 2;                               //發送msg2,將暫停用遮擋畫面設定為GONE的可見度
+                msg.sendToTarget();
+                condition = true;
+                Log.d("TAG","condition:" + condition+", !intro fight" + introFight + ", isPaused" + isPaused + ", msg=2");
             }
+        }
         }
     };
 
