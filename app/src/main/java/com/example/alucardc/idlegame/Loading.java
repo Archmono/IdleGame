@@ -35,6 +35,7 @@ public class Loading extends Activity {
     String TAG2 = "MainPlayerTest";
 
     public static String APP_NAME;
+    public static int randMobTime = 5;
 
     /*↓SharedPreferences裡儲存的資料名稱↓*/
     public static final String DATE_PREF = "DATE_PREF";
@@ -170,7 +171,7 @@ public class Loading extends Activity {
         for(int i=0;i<6;i++) { //迴圈檢查，如怪物陣列滿了將不會進入
             if (mobsSlotFilled_S1[i].equals("0")) { //如果怪物陣列裡的ID為0
                 getRarity();
-                random = (int) (Math.random() * 25) + 5; //隨機 5-30秒
+                random = (int) (Math.random() * randMobTime); //隨機 5-30秒
                 if(nextTime > 0) { //如果有紀錄上次未生成怪物時間
                     random = nextTime; //覆蓋掉隨機時間
                     nextTime = 0; //重置下次生怪時間
