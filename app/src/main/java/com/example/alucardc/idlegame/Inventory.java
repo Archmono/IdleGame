@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -37,17 +38,18 @@ import java.util.ArrayList;
 public class Inventory extends DialogFragment {
 
     final int column = 4; //列數
-    View v,mainView;
+    View v,cv;
     Context context;
     LinearLayout inventory_bottomBag;
     LinearLayout[] inventory_bottomBag_showLine;
+    FrameLayout inventory;
     FrameLayout[] itemFrame;
-    ImageView imgItem;
+    ImageView imgItem,cItem1,cItem2,cItem3,cItem4;
     TextView tvNoItem,tvName,tvCount,tvPrice,tvHeal, tvPoison,tvCure,tvDesc,tvPlayerMoney;
     ImageView[] items;
     TextView[] itemFrameCounts;
     ArrayList index = new ArrayList();
-    Button btnSell,btnAll,btnMaterial,btnConsumables;
+    Button btnSell,btnAll,btnMaterial,btnConsumables,btnComposite;
     private SQLiteDatabase db;
     int img;
 
@@ -64,6 +66,7 @@ public class Inventory extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.inventory, container, false);
+        cv = inflater.inflate(R.layout.composite, container, false);
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         findViews();
         setBottomView();
@@ -73,6 +76,7 @@ public class Inventory extends DialogFragment {
     }
 
     void findViews() {
+        inventory = (FrameLayout) v.findViewById(R.id.inventory);
         inventory_bottomBag = v.findViewById(R.id.inventory_bottomBag);
         imgItem = (ImageView) v.findViewById(R.id.inventory_selectedItem_image);
         tvName = (TextView) v.findViewById(R.id.inventory_selectedItem_name);
@@ -86,10 +90,12 @@ public class Inventory extends DialogFragment {
         btnMaterial = (Button) v.findViewById(R.id.inventory_btnMaterial);
         btnConsumables = (Button) v.findViewById(R.id.inventory_btnConsumables);
         btnSell = (Button) v.findViewById(R.id.inventory_btnSell);
+        btnComposite = (Button) v.findViewById(R.id.btnComposite);
         btnAll.setOnClickListener(btnTag);
         btnMaterial.setOnClickListener(btnTag);
         btnConsumables.setOnClickListener(btnTag);
         btnSell.setOnClickListener(onSell);
+        btnComposite.setOnClickListener(onComposite);
     }
 
     void setBottomView() {
@@ -173,6 +179,20 @@ public class Inventory extends DialogFragment {
         }
     };
 
+    Boolean opComposite = false;
+    Button.OnClickListener onComposite = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            if(!opComposite) {
+                inventory.addView(cv, (int)convertDpToPixel(300,context), (int)convertDpToPixel(200,context));
+                opComposite = true;
+            } else {
+                inventory.removeView(cv);
+                opComposite = false;
+            }
+        }
+    };
+
     Button.OnClickListener onSell = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -181,8 +201,7 @@ public class Inventory extends DialogFragment {
                 updatePlayerMoney(Integer.parseInt(Loading.i_priceList.get((int) index.get(tag)) + ""));
                 itemFrameCounts[tag].setText((Loading.i_countList.get((int) index.get(tag)) + "") + "");
                 if( itemFrameCounts[tag].getText().toString().equals("0") ) {
-                    setBottomView();
-//                    inventory_bottomBag_showLine[(tag/column)].removeViewAt(tag); //執行重排
+                    setBottomView(); //執行重排
                 }
             }
         }
@@ -227,7 +246,6 @@ public class Inventory extends DialogFragment {
             OutputStream os = new FileOutputStream(DBInfo.JSON_FILE);
             os.write(json_2.getBytes());
 
-//            Log.d("tvPlayerMoney",tvPlayerMoney.toString());
             MainActivity.tvPlayerMoney.setText("持有金錢 :" + playInfo.playerStatus.playerMoney);
 
             os.close();
@@ -244,6 +262,16 @@ public class Inventory extends DialogFragment {
         values.put("i_count",ItemCount);
         db.update("mobsloot",values,"_id_loot="+ItemId,null);
         MainActivity.getItemCounts(context);
+    }
+
+    public static float convertDpToPixel(float dp, Context context){
+        float px = dp * getDensity(context);
+        return px;
+    }
+
+    public static float getDensity(Context context){
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        return metrics.density;
     }
 
 }
