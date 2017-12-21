@@ -11,6 +11,9 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -101,6 +104,7 @@ public class Loading extends Activity {
 
         getItem();
         getPlayerStatus();
+        anime();
 
 //        Log.d(TAG, idList.toString());
 //        Log.d(TAG, nameList.toString());
@@ -130,6 +134,21 @@ public class Loading extends Activity {
                 startActivity(i);
             }
         }, 2000);
+    }
+
+    void anime(){
+
+        ImageView img = (ImageView) findViewById(R.id.animeImg);
+        //動畫路徑設定(x1,x2,y1,y2)
+        Animation am = new TranslateAnimation(-120,120,200,200);
+        //動畫開始到結束的時間，2秒
+        am.setDuration( 2100 );
+        // 動畫重覆次數 (-1表示一直重覆，0表示不重覆執行，所以只會執行一次)
+        am.setRepeatCount( 0 );
+        //將動畫寫入ImageView
+        img.setAnimation(am);
+        //開始動畫
+        am.startNow();
     }
 
     public void restorePrefs() { //讀取的位置
