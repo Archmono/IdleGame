@@ -10,12 +10,22 @@
         android:layout_height="60dp"
         android:orientation="horizontal"
         android:gravity="right">
+
+        <Button
+            android:id="@+id/btnPlayerMoney"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:background="@drawable/button_dark_65"
+            android:text="持有金錢 : 0"
+            android:layout_marginRight="24dp"
+            android:textColor="#FFF" />
+
         <Button
             android:id="@+id/btnComposite"
             style="@style/Widget.AppCompat.Button.Small"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
-            android:background="@drawable/button_dark_65"
+            android:background="@drawable/bottom_dark_65"
             android:text="合成"
             android:textColor="#FFF" />
 
@@ -45,7 +55,7 @@
                     android:layout_height="60dp"
                     android:layout_gravity="center"
                     android:layout_marginLeft="12dp"
-                    android:background="@drawable/bottom_light" />
+                    android:background="@drawable/bottom_dark_65" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -179,7 +189,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/btn_tag_darkoff"
-                        android:text="消\n耗\n品\n"
+                        android:text="\n消\n耗\n品\n"
                         android:textColor="#FFF" />
                 </LinearLayout>
 

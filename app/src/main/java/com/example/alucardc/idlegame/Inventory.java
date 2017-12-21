@@ -22,6 +22,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -45,13 +46,14 @@ public class Inventory extends DialogFragment {
     FrameLayout inventory;
     FrameLayout[] itemFrame;
     ImageView imgItem, cItem1, cItem2, cItem3, cItem4;
-    TextView tvNoItem, tvName, tvCount, tvPrice, tvHeal, tvPoison, tvCure, tvDesc, tvPlayerMoney;
+    TextView tvNoItem, tvName, tvCount, tvPrice, tvHeal, tvPoison, tvCure, tvDesc, cTvHeal, cTvPoison, cTvCure, tvRestore;
     ImageView[] items;
     TextView[] itemFrameCounts;
     ArrayList index = new ArrayList();
-    Button btnSell, btnAll, btnMaterial, btnConsumables, btnComposite;
+    Button btnSell, btnAll, btnMaterial, btnConsumables, btnComposite, btnPlayerMoney, btnRestore;
     private SQLiteDatabase db;
     int img;
+    int[] tempCount;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
 
@@ -69,6 +71,11 @@ public class Inventory extends DialogFragment {
         cv = inflater.inflate(R.layout.composite, container, false);
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         findViews();
+        updatePlayerStatus(0,0);
+        tempCount = new  int[Loading.i_countList.size()];
+        for (int i = 0; i < Loading.i_countList.size(); i++) {
+            tempCount[i] = (int)Loading.i_countList.get(i);
+        }
         setBottomView();
 //        Log.d("Inventory", index.size()+"");
 
@@ -91,11 +98,28 @@ public class Inventory extends DialogFragment {
         btnConsumables = (Button) v.findViewById(R.id.inventory_btnConsumables);
         btnSell = (Button) v.findViewById(R.id.inventory_btnSell);
         btnComposite = (Button) v.findViewById(R.id.btnComposite);
+        btnPlayerMoney = (Button) v.findViewById(R.id.btnPlayerMoney);
         btnAll.setOnClickListener(btnTag);
         btnMaterial.setOnClickListener(btnTag);
         btnConsumables.setOnClickListener(btnTag);
         btnSell.setOnClickListener(onSell);
-        btnComposite.setOnClickListener(onComposite);
+        btnComposite.setOnClickListener(toComposite);
+
+    /*-----合成view物件-----*/
+        cTvHeal = (TextView) cv.findViewById(R.id.cTvHeal);
+        cTvPoison = (TextView) cv.findViewById(R.id.cTvPoison);
+        cTvCure = (TextView)  cv.findViewById(R.id.cTvCure);
+        tvRestore = (TextView) cv.findViewById(R.id.tvRestore);
+        cItem1 = (ImageView) cv.findViewById(R.id.cItem1);
+        cItem2 = (ImageView) cv.findViewById(R.id.cItem2);
+        cItem3 = (ImageView) cv.findViewById(R.id.cItem3);
+        cItem4 = (ImageView) cv.findViewById(R.id.cItem4);
+        cItem1.setOnClickListener(onComposite);
+        cItem2.setOnClickListener(onComposite);
+        cItem3.setOnClickListener(onComposite);
+        cItem4.setOnClickListener(onComposite);
+        btnRestore = (Button) cv.findViewById(R.id.btnRestore);
+        btnRestore.setOnClickListener(onRestore);
     }
 
     void setBottomView() {
@@ -117,7 +141,7 @@ public class Inventory extends DialogFragment {
         itemFrame = new FrameLayout[index.size()];
         for (int i = 0; i < index.size(); i++) { //動態產生新物品layout
             itemFrame[i] = new FrameLayout(context);
-            itemFrame[i].setBackgroundResource(R.drawable.button_dark_65);
+            itemFrame[i].setBackgroundResource(R.drawable.bottom_dark_65);
             itemFrameCounts[i] = new TextView(context);
             itemFrameCounts[i].setText(String.valueOf(Loading.i_countList.get((int) index.get(i))));
             itemFrameCounts[i].setGravity(Gravity.END | Gravity.BOTTOM);
@@ -164,12 +188,11 @@ public class Inventory extends DialogFragment {
         @Override
         public void onClick(View view) {
             tag = (int) view.getTag();
-
             for (int i = 0; i < index.size(); i++) {
-                itemFrame[i].setBackgroundResource(R.drawable.button_dark_65);
+                itemFrame[i].setBackgroundResource(R.drawable.bottom_dark_65);
             }
             imgItem.setImageResource(getResources().getIdentifier(String.valueOf(Loading.i_image_RList.get((int) index.get(tag))), "drawable", Loading.APP_NAME));
-            itemFrame[tag].setBackgroundResource(R.drawable.button_light);
+            itemFrame[tag].setBackgroundResource(R.drawable.button_dark_65);
             tvName.setText(String.valueOf(Loading.i_nametList.get((int) index.get(tag))));
 //            tvCount.setText("數量：" + String.valueOf(Loading.i_countList.get((int)list.get(tag))));
             tvCount.setText("");
@@ -182,15 +205,109 @@ public class Inventory extends DialogFragment {
     };
 
     Boolean opComposite = false;
-    Button.OnClickListener onComposite = new View.OnClickListener() {
+    Button.OnClickListener toComposite = new View.OnClickListener() { //切換合成系統
         @Override
         public void onClick(View view) {
             if (!opComposite) {
                 inventory.addView(cv, (int) convertDpToPixel(300, context), (int) convertDpToPixel(200, context));
+                btnComposite.setBackgroundResource(R.drawable.button_dark_65);
                 opComposite = true;
             } else {
                 inventory.removeView(cv);
+                btnComposite.setBackgroundResource(R.drawable.bottom_dark_65);
                 opComposite = false;
+            }
+        }
+    };
+
+    int cTag = 0;
+    int cViewId;
+    ImageView.OnClickListener onComposite = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            cViewId = view.getId();
+            cItemImg();
+        }
+    };
+
+    String[] cId = {"0","0","0","0"};
+    void cItemImg() {
+        switch (cViewId) {
+            case R.id.cItem1 :
+                cTag = 1;
+                cItem1.setImageResource(getResources().getIdentifier(String.valueOf(Loading.i_image_RList.get((int) index.get(tag))), "drawable", Loading.APP_NAME));
+                cId[0] = Loading.id_lootList.get((int) index.get(tag)).toString();
+                break;
+            case R.id.cItem2 :
+                cTag = 2;
+                cItem2.setImageResource(getResources().getIdentifier(String.valueOf(Loading.i_image_RList.get((int) index.get(tag))), "drawable", Loading.APP_NAME));
+                cId[1] = Loading.id_lootList.get((int) index.get(tag)).toString();
+                break;
+            case R.id.cItem3 :
+                cTag = 3;
+                cItem3.setImageResource(getResources().getIdentifier(String.valueOf(Loading.i_image_RList.get((int) index.get(tag))), "drawable", Loading.APP_NAME));
+                cId[2] = Loading.id_lootList.get((int) index.get(tag)).toString();
+                break;
+            case R.id.cItem4 :
+                cTag = 4;
+                cItem4.setImageResource(getResources().getIdentifier(String.valueOf(Loading.i_image_RList.get((int) index.get(tag))), "drawable", Loading.APP_NAME));
+                cId[3] = Loading.id_lootList.get((int) index.get(tag)).toString();
+                break;
+        }
+        countRestore(cId);
+    }
+
+    Boolean compositeAble = true;
+    int heal,poison,cure,restore;
+    int[] aCure;
+    void countRestore (String[] cId) {
+        compositeAble = true;
+        for(int i = 0; i < cId.length; i++) {
+            if(cId[i] == "0") {
+                compositeAble = false;
+            }
+        }
+        heal = 0;
+        poison = 0;
+        aCure = new int[] { 0,0,0 };
+        restore = 0; //回復量 - (毒性 * 中和(%)[] )
+
+        if (compositeAble) {
+            for (int i = 0; i < cId.length-1; i++) {
+                heal += (int)Loading.i_healList.get(Loading.id_lootList.indexOf(cId[i]));
+                poison += (int)Loading.i_poisontList.get(Loading.id_lootList.indexOf(cId[i]));
+                aCure[i] = 100 - (int)Loading.i_cureList.get(Loading.id_lootList.indexOf(cId[i]));
+            }
+            cure = aCure[0] * aCure[1] * aCure[2] / 10000;
+
+            cTvHeal.setText("回復量  " + heal);
+            cTvPoison.setText("毒性  " + poison);
+            cTvCure.setText("中和  " + -(cure-100) + "%");
+
+            restore = heal - ( poison * cure )/100;
+
+            tvRestore.setText("和成效果  " + restore);
+        }
+    }
+
+    Button.OnClickListener onRestore = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+
+            if (compositeAble) {
+                updatePlayerStatus(0,restore); //補血
+                for (int i = 0; i < cId.length; i++) {
+                    updateItem(Integer.parseInt(cId[i]),(int)Loading.i_countList.get(Loading.id_lootList.indexOf(String.valueOf(cId[i])))-1);
+                }
+                cId = new String[]{"0","0","0","0"};
+                cItem1.setImageResource(0); //重置圖片
+                cItem2.setImageResource(0);
+                cItem3.setImageResource(0);
+                cItem4.setImageResource(0);
+                countRestore(cId);
+                setBottomView();
+            } else {
+                Toast.makeText(context,"請確定所有欄位放置物品再進行合成",Toast.LENGTH_SHORT).show();
             }
         }
     };
@@ -200,7 +317,7 @@ public class Inventory extends DialogFragment {
         public void onClick(View view) {
             if (index.size() > 0) {
                 updateItem(Integer.parseInt(Loading.id_lootList.get((int) index.get(tag)) + ""), Integer.parseInt(Loading.i_countList.get((int) index.get(tag)) + "") - 1);
-                updatePlayerMoney(Integer.parseInt(Loading.i_priceList.get((int) index.get(tag)) + ""));
+                updatePlayerStatus(Integer.parseInt(Loading.i_priceList.get((int) index.get(tag)) + ""), 0);
                 itemFrameCounts[tag].setText((Loading.i_countList.get((int) index.get(tag)) + "") + "");
                 if (itemFrameCounts[tag].getText().toString().equals("0")) {
                     setBottomView(); //執行重排
@@ -232,7 +349,7 @@ public class Inventory extends DialogFragment {
         }
     };
 
-    public void updatePlayerMoney(int addMoney) {
+    public void updatePlayerStatus(int addMoney, int addHp) {
         try {
             InputStream is = context.openFileInput("playerdata.json");
             byte[] buffer = new byte[is.available()];
@@ -242,6 +359,7 @@ public class Inventory extends DialogFragment {
             Player playInfo = gson.fromJson(json, Player.class);
 
             playInfo.playerStatus.playerMoney += addMoney;
+            playInfo.playerStatus.playerCurrentHP += addHp;
             String json_2 = gson.toJson(playInfo);
             Log.d("JSON", json_2);
 
@@ -249,6 +367,8 @@ public class Inventory extends DialogFragment {
             os.write(json_2.getBytes());
 
             MainActivity.tvPlayerMoney.setText("持有金錢 :" + playInfo.playerStatus.playerMoney);
+            MainActivity.tvPlayerHP.setText("HP : " + playInfo.playerStatus.playerCurrentHP + " / " + playInfo.playerStatus.playerMaxHP);
+            btnPlayerMoney.setText("持有金錢 :" + playInfo.playerStatus.playerMoney);
 
             os.close();
             is.close();
