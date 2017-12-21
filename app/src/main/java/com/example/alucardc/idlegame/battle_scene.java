@@ -495,13 +495,13 @@ public class battle_scene extends AppCompatActivity {
                 LootFail lootFail = new LootFail();
                 lootFail.count();
                 Log.d("TAG", LootFail.lootSet+"");
-                showSettlement();
                 updatePlayerHP();   //更新目前血量到JSON
                 for(int i = 0; i<mobSum; i++){
                     String str = Loading.mobsSlotFilled_S1[i];
                     unlockStatus(Integer.parseInt(str),"image",1);
                     unlockStatus(Integer.parseInt(str),"name",1);
                 }
+                showSettlement();
                 timerMobsProgress.cancel();
                 endFight = true;
             }

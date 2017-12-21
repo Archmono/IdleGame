@@ -85,6 +85,7 @@ public class SettlementDialog extends DialogFragment {
             item.put ("item", Loading.i_nametList.get(Loading.id_lootList.indexOf(lootSet[i].toString())));
             count = (Integer.parseInt(num[i].toString().substring(1,num[i].toString().indexOf(","))));
             item.put ("num", num[i].toString().substring(0,num[i].toString().indexOf(",")));
+            Log.d("oldCount",Loading.i_countList.size()+"");
             updateItem(itemId,(int)Loading.i_countList.get(Loading.id_lootList.indexOf(String.valueOf(itemId)))+count);
             data.add(item);  //把HashMap添加到ArrayList中
         }

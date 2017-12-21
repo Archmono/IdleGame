@@ -229,6 +229,7 @@ public class Loading extends Activity {
 
             c.moveToNext();
         }
+        c.close();
     }
 
     public void getItem(){
@@ -240,6 +241,7 @@ public class Loading extends Activity {
             String id = citem.getString(citem.getColumnIndex("_id_loot"));
             String imageR = citem.getString(citem.getColumnIndex("i_image_R"));
             String name = citem.getString(citem.getColumnIndex("i_name"));
+            int counts = citem.getInt(citem.getColumnIndex("i_count"));
             int price = citem.getInt(citem.getColumnIndex("i_price"));
             int heal = citem.getInt(citem.getColumnIndex("i_heal"));
             int poison = citem.getInt(citem.getColumnIndex("i_poison"));
@@ -256,6 +258,7 @@ public class Loading extends Activity {
 
             citem.moveToNext();
         }
+        citem.close();
     }
 
     static void getRarity() {

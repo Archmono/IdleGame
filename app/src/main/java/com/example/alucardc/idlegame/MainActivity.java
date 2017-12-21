@@ -64,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
 //        getData("1");
         findViews();
         getPlayerStatus();
-
         countMobs();
         Log.d(TAG, Loading.idList.toString());
         Log.d(TAG, Loading.nameList.toString());
@@ -178,6 +177,7 @@ public class MainActivity extends AppCompatActivity {
 
             c.moveToNext();
         }
+        c.close();
     }
 
     private void showInventory() {

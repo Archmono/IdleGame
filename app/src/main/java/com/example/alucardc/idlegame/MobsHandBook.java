@@ -126,6 +126,7 @@ public class MobsHandBook extends DialogFragment {
             mobsIcon[i].setOnClickListener(btnIcon);
             img = getResources().getIdentifier(String.valueOf(imageList.get((int)index.get(i))), "drawable", Loading.APP_NAME);
 
+            Log.d("IDtest",unlockImage.get(unlockID.indexOf(idList.get((int)index.get(i))))+"");
 
             if(unlockID.get(unlockID.indexOf(idList.get((int)index.get(i))))!= -1 && unlockImage.get(unlockID.indexOf(idList.get((int)index.get(i))))==1){
                 mobsIcon[i].setImageResource(img);
@@ -174,6 +175,7 @@ public class MobsHandBook extends DialogFragment {
     public void getData(String scene){
 
         GameDBHelper helper = GameDBHelper.getInstance(context);
+        idList.clear();
         nameList.clear();
         healthPointList.clear();
         speedList.clear();
@@ -214,6 +216,7 @@ public class MobsHandBook extends DialogFragment {
 
                 c.moveToNext();
             }
+            c.close();
         } else {
 //        String[] column = { "_id", "rareWeight","scene_1", "scene_2"};
             Cursor c = helper.getReadableDatabase().query("mobsdata", null, "scene_" + scene + "=?", new String[]{"1"}, null, null, null);
@@ -245,6 +248,7 @@ public class MobsHandBook extends DialogFragment {
 
                 c.moveToNext();
             }
+            c.close();
         }
     }
 
