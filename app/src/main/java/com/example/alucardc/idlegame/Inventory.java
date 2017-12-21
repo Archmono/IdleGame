@@ -163,8 +163,8 @@ public class Inventory extends DialogFragment {
             tvCount.setText("");
             tvPrice.setText("售價：" + String.valueOf(Loading.i_priceList.get((int) index.get(0))));
             tvHeal.setText("回復量：" + String.valueOf(Loading.i_healList.get((int) index.get(0))));
-            tvPoison.setText("毒性：" + String.valueOf(Loading.i_poisontList.get((int) index.get(0))));
-            tvCure.setText("中和：" + String.valueOf(Loading.i_cureList.get((int) index.get(0))));
+            tvPoison.setText("毒性：" + String.valueOf(Loading.i_poisontList.get((int) index.get(0))) + "%");
+            tvCure.setText("中和：" + String.valueOf(Loading.i_cureList.get((int) index.get(0))) + "%");
             tvDesc.setText(String.valueOf(Loading.i_descList.get((int) index.get(0))));
         } else { //無物品顯示
             tvNoItem = new TextView(context);
@@ -198,8 +198,8 @@ public class Inventory extends DialogFragment {
             tvCount.setText("");
             tvPrice.setText("售價：" + String.valueOf(Loading.i_priceList.get((int) index.get(tag))));
             tvHeal.setText("回復量：" + String.valueOf(Loading.i_healList.get((int) index.get(tag))));
-            tvPoison.setText("毒性：" + String.valueOf(Loading.i_poisontList.get((int) index.get(tag))));
-            tvCure.setText("中和：" + String.valueOf(Loading.i_cureList.get((int) index.get(tag))));
+            tvPoison.setText("毒性：" + String.valueOf(Loading.i_poisontList.get((int) index.get(tag))) + "%");
+            tvCure.setText("中和：" + String.valueOf(Loading.i_cureList.get((int) index.get(tag))) + "%");
             tvDesc.setText(String.valueOf(Loading.i_descList.get((int) index.get(tag))));
         }
     };
@@ -280,13 +280,13 @@ public class Inventory extends DialogFragment {
             }
             cure = aCure[0] * aCure[1] * aCure[2] / 10000;
 
-            cTvHeal.setText("回復量  " + heal);
-            cTvPoison.setText("毒性  " + poison);
-            cTvCure.setText("中和  " + -(cure-100) + "%");
+            cTvHeal.setText("回復量：" + heal);
+            cTvPoison.setText("毒性：" + poison + "%");
+            cTvCure.setText("中和：" + -(cure-100) + "%");
 
             restore = heal - ( poison * cure )/100;
 
-            tvRestore.setText("和成效果  " + restore);
+            tvRestore.setText("合成效果  " + restore);
         }
     }
 
@@ -306,11 +306,19 @@ public class Inventory extends DialogFragment {
                 cItem4.setImageResource(0);
                 countRestore(cId);
                 setBottomView();
+                resetCombineText();
             } else {
                 Toast.makeText(context,"請確定所有欄位放置物品再進行合成",Toast.LENGTH_SHORT).show();
             }
         }
     };
+
+    void resetCombineText(){
+        cTvHeal.setText("回復量：");
+        cTvPoison.setText("毒性：");
+        cTvCure.setText("中和：");
+        tvRestore.setText("合成效果：");
+    }
 
     Button.OnClickListener onSell = new View.OnClickListener() {
         @Override
