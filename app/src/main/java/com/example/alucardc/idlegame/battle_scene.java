@@ -7,6 +7,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
@@ -14,8 +16,6 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -51,6 +51,9 @@ public class battle_scene extends AppCompatActivity {
     int playerMaxHP;        //玩家最大HP
     int[] currentActionTime = new int[6];
     int[] currentStunTime = new int[6];
+
+    SoundPool soundPool;
+    private int getHit,hitMobs;
 
     TextView tvPrepareFight,playerHP;
     LinearLayout questionLayout,blockView;
@@ -96,6 +99,7 @@ public class battle_scene extends AppCompatActivity {
             }  else if(msg.what == 9) {
                 tvPlayerHP.setText("HP : " + playerCurrentHP + " / " + playerMaxHP);
 
+                soundPool.play(getHit, 1.0F, 1.0F, 0, 0, 1.0F);
             }
             super.handleMessage(msg);
         }
@@ -117,6 +121,10 @@ public class battle_scene extends AppCompatActivity {
 
         Typeface font = Typeface.createFromAsset(this.getAssets(), "fonts/witches_magic.ttf");
         playerHP.setTypeface(font);
+
+        soundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 5);
+        getHit = soundPool.load(this, R.raw.get_hitted, 1);
+        hitMobs = soundPool.load(this, R.raw.mobs_hitted, 1);
     }
 
     @Override
@@ -306,6 +314,7 @@ public class battle_scene extends AppCompatActivity {
                 float mobs1HPbarLocateX = mobsHPbar[mobIndex].getX();
                 mobsHPbar[mobIndex].setPivotX(mobs1HPbarLocateX);
                 mobs[mobIndex].startAnimation(shake);
+                soundPool.play(hitMobs, 1.0F, 1.0F, 0, 0, 1.0F);    //播放打擊音效
             } else {
                 mobs[mobIndex].setVisibility(View.GONE);
 //                mob1ActionTimer.cancel();
@@ -534,54 +543,6 @@ public class battle_scene extends AppCompatActivity {
         newFragment.show(ft, "dialog");
     }
 
-//    void loadData()
-//    {
-//        int mobsId = Integer.parseInt(RandomTest.cId);
-//        try {
-//            InputStream is = this.getResources().openRawResource(R.raw.mobsdata);
-//            byte[] buffer = new byte[is.available()];
-//            is.read(buffer);
-//            //讀取json到buffer中
-//            String json = new String(buffer, "UTF-8");
-//            //轉換編碼
-//            JSONObject jsonObject = new JSONObject(json);
-//            //把json丟到jsonObject中
-//            JSONArray array = jsonObject.getJSONArray("mobsdata");
-//            //取出"mobsdata"中的資料,放入JSONArray array
-//
-//            JSONObject mobs_1 = array.getJSONObject(mobsId);
-//            //設置mobs_1變數放入JSON中對應位置的資料;
-//            String mobs_1_id = mobs_1.getString("_id");
-//            String mobs_1_name = mobs_1.getString("name");
-//
-//            JSONObject mobs_pics = mobs_1.getJSONObject("pics");
-//            String mobs_1_img1 = mobs_pics.getString("pic1");
-//
-//            int mobs_1_HP = mobs_1.getInt("HP");
-//            int mobs_1_elementTypes = mobs_1.getInt("elementTypes");
-//            int mobs_1_elementQRange = mobs_1.getInt("elementQRange");
-//            int mobs_1_actionbarDuration = mobs_1.getInt("actionbarDuration");
-//            int mobs_1_img_resID = getResources().getIdentifier(mobs_1_img1,"drawable", getPackageName());
-//            //設置變數存取mobs_1中對應標籤""的資料
-//
-//            mobsName[0].setText(mobs_1_name);
-//            mobsImage[0].setImageResource(mobs_1_img_resID);
-//            mobsMaxHP1 = mobs_1_HP;
-//            mobsCurrentHP1 = mobs_1_HP;
-//            mobsSpeed1 = mobs_1_actionbarDuration;
-//            currentActionTime = mobsSpeed1;
-//
-//            Log.d("Mobs HP Load",mobsMaxHP1 + " " +mobsCurrentHP1);
-//
-//            gameTest = new GameTest(mobs_1_elementTypes,mobs_1_elementQRange);
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//
-//    }
     public static int mobSum=0;
     void countMobs() {
         mobSum = 0;
@@ -595,26 +556,6 @@ public class battle_scene extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {  //返回鍵事件
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        builder.setTitle("確認視窗");
-//        builder.setMessage("確定要結束應用程式嗎?");
-//        builder.setIcon(R.mipmap.ic_launcher);
-//        builder.setPositiveButton("確定",
-//                new DialogInterface.OnClickListener() {
-//
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        finish();
-//                    }
-//                });
-//        builder.setNegativeButton("取消",
-//                new DialogInterface.OnClickListener() {
-//
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//
-//                    }
-//                });
-//        builder.show();
+
     }
 }

@@ -15,7 +15,7 @@
             android:layout_width="300dp"
             android:layout_height="500dp"
             android:orientation="vertical"
-            android:background="@drawable/bottomimg_1"
+            android:background="@drawable/button_dark_65"
             >
 
             <LinearLayout
@@ -158,8 +158,7 @@
 
                 <ScrollView
                     android:layout_width="300dp"
-                    android:layout_height="300dp"
-                    android:background="@drawable/button_light">
+                    android:layout_height="300dp">
 
                     <LinearLayout
                         android:id="@+id/handbook_bottom_view"

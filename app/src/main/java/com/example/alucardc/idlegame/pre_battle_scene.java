@@ -90,7 +90,7 @@ public class pre_battle_scene extends AppCompatActivity {
             if(tempY[i] < 150){
                 modView[i].setScaleX(0.5f);
                 modView[i].setScaleY(0.5f);
-            }else if(tempY[i] < 260){
+            }else if(tempY[i] < 210){
                 modView[i].setScaleX(0.65f);
                 modView[i].setScaleY(0.65f);
             }else if(tempY[i] < 400){
