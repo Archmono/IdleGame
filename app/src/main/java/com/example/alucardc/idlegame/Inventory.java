@@ -49,7 +49,7 @@ public class Inventory extends DialogFragment {
     TextView tvNoItem, tvName, tvCount, tvPrice, tvHeal, tvPoison, tvCure, tvDesc, cTvHeal, cTvPoison, cTvCure, tvRestore;
     ImageView[] items;
     TextView[] itemFrameCounts;
-    ArrayList index = new ArrayList();
+    ArrayList<Integer> index = new ArrayList();
     Button btnSell, btnAll, btnMaterial, btnConsumables, btnComposite, btnPlayerMoney, btnRestore;
     private SQLiteDatabase db;
     int img;
@@ -72,11 +72,9 @@ public class Inventory extends DialogFragment {
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         findViews();
         updatePlayerStatus(0,0);
-        tempCount = new  int[Loading.i_countList.size()];
-        for (int i = 0; i < Loading.i_countList.size(); i++) {
-            tempCount[i] = (int)Loading.i_countList.get(i);
-        }
         setBottomView();
+
+
 //        Log.d("Inventory", index.size()+"");
 
         return v;
@@ -143,13 +141,13 @@ public class Inventory extends DialogFragment {
             itemFrame[i] = new FrameLayout(context);
             itemFrame[i].setBackgroundResource(R.drawable.bottom_dark_65);
             itemFrameCounts[i] = new TextView(context);
-            itemFrameCounts[i].setText(String.valueOf(Loading.i_countList.get((int) index.get(i))));
+            itemFrameCounts[i].setText(String.valueOf(Loading.i_countList.get(index.get(i))));
             itemFrameCounts[i].setGravity(Gravity.END | Gravity.BOTTOM);
             itemFrameCounts[i].setTextColor(Color.WHITE);
             items[i] = new ImageView(context);
             items[i].setTag(i);
             items[i].setOnClickListener(btnItem);
-            img = getResources().getIdentifier(String.valueOf(Loading.i_image_RList.get((int) index.get(i))), "drawable", Loading.APP_NAME);
+            img = getResources().getIdentifier(String.valueOf(Loading.i_image_RList.get(index.get(i))), "drawable", Loading.APP_NAME);
             items[i].setImageResource(img);
             itemFrame[i].addView(items[i]);
             itemFrame[i].addView(itemFrameCounts[i]);
@@ -158,17 +156,17 @@ public class Inventory extends DialogFragment {
 
         if (index.size() > 0) { //初始設置
             itemFrame[0].setBackgroundResource(R.drawable.button_dark_65);
-            imgItem.setImageResource(getResources().getIdentifier(String.valueOf(Loading.i_image_RList.get((int) index.get(0))), "drawable", Loading.APP_NAME));
-            tvName.setText(String.valueOf(Loading.i_nametList.get((int) index.get(0))));
+            imgItem.setImageResource(getResources().getIdentifier(String.valueOf(Loading.i_image_RList.get(index.get(0))), "drawable", Loading.APP_NAME));
+            tvName.setText(String.valueOf(Loading.i_nametList.get(index.get(0))));
             tvCount.setText("");
-            tvPrice.setText("售價：" + String.valueOf(Loading.i_priceList.get((int) index.get(0))));
-            tvHeal.setText("回復量：" + String.valueOf(Loading.i_healList.get((int) index.get(0))));
-            tvPoison.setText("毒性：" + String.valueOf(Loading.i_poisontList.get((int) index.get(0))) + "%");
-            tvCure.setText("中和：" + String.valueOf(Loading.i_cureList.get((int) index.get(0))) + "%");
-            tvDesc.setText(String.valueOf(Loading.i_descList.get((int) index.get(0))));
+            tvPrice.setText("售價：" + String.valueOf(Loading.i_priceList.get(index.get(0))));
+            tvHeal.setText("回復量：" + String.valueOf(Loading.i_healList.get(index.get(0))));
+            tvPoison.setText("毒性：" + String.valueOf(Loading.i_poisontList.get(index.get(0))) + "%");
+            tvCure.setText("中和：" + String.valueOf(Loading.i_cureList.get(index.get(0))) + "%");
+            tvDesc.setText(String.valueOf(Loading.i_descList.get(index.get(0))));
         } else { //無物品顯示
             tvNoItem = new TextView(context);
-//            imgItem.setImageResource(R.drawable.button_light);
+            imgItem.setImageResource(0);
             tvNoItem.setText("沒有物品!");
             tvNoItem.setTextColor(Color.WHITE);
             tvNoItem.setGravity(Gravity.CENTER);
@@ -191,16 +189,16 @@ public class Inventory extends DialogFragment {
             for (int i = 0; i < index.size(); i++) {
                 itemFrame[i].setBackgroundResource(R.drawable.bottom_dark_65);
             }
-            imgItem.setImageResource(getResources().getIdentifier(String.valueOf(Loading.i_image_RList.get((int) index.get(tag))), "drawable", Loading.APP_NAME));
+            imgItem.setImageResource(getResources().getIdentifier(String.valueOf(Loading.i_image_RList.get(index.get(tag))), "drawable", Loading.APP_NAME));
             itemFrame[tag].setBackgroundResource(R.drawable.button_dark_65);
-            tvName.setText(String.valueOf(Loading.i_nametList.get((int) index.get(tag))));
+            tvName.setText(String.valueOf(Loading.i_nametList.get(index.get(tag))));
 //            tvCount.setText("數量：" + String.valueOf(Loading.i_countList.get((int)list.get(tag))));
             tvCount.setText("");
-            tvPrice.setText("售價：" + String.valueOf(Loading.i_priceList.get((int) index.get(tag))));
-            tvHeal.setText("回復量：" + String.valueOf(Loading.i_healList.get((int) index.get(tag))));
-            tvPoison.setText("毒性：" + String.valueOf(Loading.i_poisontList.get((int) index.get(tag))) + "%");
-            tvCure.setText("中和：" + String.valueOf(Loading.i_cureList.get((int) index.get(tag))) + "%");
-            tvDesc.setText(String.valueOf(Loading.i_descList.get((int) index.get(tag))));
+            tvPrice.setText("售價：" + String.valueOf(Loading.i_priceList.get(index.get(tag))));
+            tvHeal.setText("回復量：" + String.valueOf(Loading.i_healList.get(index.get(tag))));
+            tvPoison.setText("毒性：" + String.valueOf(Loading.i_poisontList.get(index.get(tag))) + "%");
+            tvCure.setText("中和：" + String.valueOf(Loading.i_cureList.get(index.get(tag))) + "%");
+            tvDesc.setText(String.valueOf(Loading.i_descList.get(index.get(tag))));
         }
     };
 
@@ -232,29 +230,43 @@ public class Inventory extends DialogFragment {
 
     String[] cId = {"0","0","0","0"};
     void cItemImg() {
+
+        tempCount = new int[Loading.i_countList.size()];
+        for (int i =0; i < Loading.i_countList.size(); i++) {
+            tempCount[i] = (int)Loading.i_countList.get(i);
+        }
+
         switch (cViewId) {
             case R.id.cItem1 :
                 cTag = 1;
-                cItem1.setImageResource(getResources().getIdentifier(String.valueOf(Loading.i_image_RList.get((int) index.get(tag))), "drawable", Loading.APP_NAME));
-                cId[0] = Loading.id_lootList.get((int) index.get(tag)).toString();
+                cItem1.setImageResource(getResources().getIdentifier(String.valueOf(Loading.i_image_RList.get(index.get(tag))), "drawable", Loading.APP_NAME));
+                cId[0] = Loading.id_lootList.get(index.get(tag)).toString();
                 break;
             case R.id.cItem2 :
                 cTag = 2;
-                cItem2.setImageResource(getResources().getIdentifier(String.valueOf(Loading.i_image_RList.get((int) index.get(tag))), "drawable", Loading.APP_NAME));
-                cId[1] = Loading.id_lootList.get((int) index.get(tag)).toString();
+                cItem2.setImageResource(getResources().getIdentifier(String.valueOf(Loading.i_image_RList.get(index.get(tag))), "drawable", Loading.APP_NAME));
+                cId[1] = Loading.id_lootList.get(index.get(tag)).toString();
                 break;
             case R.id.cItem3 :
                 cTag = 3;
-                cItem3.setImageResource(getResources().getIdentifier(String.valueOf(Loading.i_image_RList.get((int) index.get(tag))), "drawable", Loading.APP_NAME));
-                cId[2] = Loading.id_lootList.get((int) index.get(tag)).toString();
+                cItem3.setImageResource(getResources().getIdentifier(String.valueOf(Loading.i_image_RList.get(index.get(tag))), "drawable", Loading.APP_NAME));
+                cId[2] = Loading.id_lootList.get(index.get(tag)).toString();
                 break;
             case R.id.cItem4 :
                 cTag = 4;
-                cItem4.setImageResource(getResources().getIdentifier(String.valueOf(Loading.i_image_RList.get((int) index.get(tag))), "drawable", Loading.APP_NAME));
-                cId[3] = Loading.id_lootList.get((int) index.get(tag)).toString();
+                cItem4.setImageResource(getResources().getIdentifier(String.valueOf(Loading.i_image_RList.get(index.get(tag))), "drawable", Loading.APP_NAME));
+                cId[3] = Loading.id_lootList.get(index.get(tag)).toString();
                 break;
         }
+        for(int i =0; i< cId.length; i++) {
+            tempCount[Loading.id_lootList.indexOf(cId[i])]--;
+            itemFrameCounts[   Loading.id_lootList.indexOf(cId[i])  ].setText(tempCount[ Loading.id_lootList.indexOf(cId[i]) ] + "");
+        }
         countRestore(cId);
+    }
+
+    void tempView() {
+
     }
 
     Boolean compositeAble = true;
@@ -324,8 +336,8 @@ public class Inventory extends DialogFragment {
         @Override
         public void onClick(View view) {
             if (index.size() > 0) {
-                updateItem(Integer.parseInt(Loading.id_lootList.get((int) index.get(tag)) + ""), Integer.parseInt(Loading.i_countList.get((int) index.get(tag)) + "") - 1);
-                updatePlayerStatus(Integer.parseInt(Loading.i_priceList.get((int) index.get(tag)) + ""), 0);
+                updateItem(Integer.parseInt(Loading.id_lootList.get(index.get(tag)) + ""), Integer.parseInt(Loading.i_countList.get(index.get(tag)) + "") - 1);
+                updatePlayerStatus(Integer.parseInt(Loading.i_priceList.get(index.get(tag)) + ""), 0);
                 itemFrameCounts[tag].setText((Loading.i_countList.get((int) index.get(tag)) + "") + "");
                 if (itemFrameCounts[tag].getText().toString().equals("0")) {
                     setBottomView(); //執行重排
