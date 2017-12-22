@@ -163,7 +163,7 @@ public class Inventory extends DialogFragment {
             tvCount.setText("");
             tvPrice.setText("售價：" + String.valueOf(Loading.i_priceList.get((int) index.get(0))));
             tvHeal.setText("回復量：" + String.valueOf(Loading.i_healList.get((int) index.get(0))));
-            tvPoison.setText("毒性：" + String.valueOf(Loading.i_poisontList.get((int) index.get(0))) + "%");
+            tvPoison.setText("毒性：" + String.valueOf(Loading.i_poisontList.get((int) index.get(0))));
             tvCure.setText("中和：" + String.valueOf(Loading.i_cureList.get((int) index.get(0))) + "%");
             tvDesc.setText(String.valueOf(Loading.i_descList.get((int) index.get(0))));
         } else { //無物品顯示
@@ -198,7 +198,7 @@ public class Inventory extends DialogFragment {
             tvCount.setText("");
             tvPrice.setText("售價：" + String.valueOf(Loading.i_priceList.get((int) index.get(tag))));
             tvHeal.setText("回復量：" + String.valueOf(Loading.i_healList.get((int) index.get(tag))));
-            tvPoison.setText("毒性：" + String.valueOf(Loading.i_poisontList.get((int) index.get(tag))) + "%");
+            tvPoison.setText("毒性：" + String.valueOf(Loading.i_poisontList.get((int) index.get(tag))));
             tvCure.setText("中和：" + String.valueOf(Loading.i_cureList.get((int) index.get(tag))) + "%");
             tvDesc.setText(String.valueOf(Loading.i_descList.get((int) index.get(tag))));
         }
@@ -281,7 +281,7 @@ public class Inventory extends DialogFragment {
             cure = aCure[0] * aCure[1] * aCure[2] / 10000;
 
             cTvHeal.setText("回復量：" + heal);
-            cTvPoison.setText("毒性：" + poison + "%");
+            cTvPoison.setText("毒性：" + poison);
             cTvCure.setText("中和：" + -(cure-100) + "%");
 
             restore = heal - ( poison * cure )/100;

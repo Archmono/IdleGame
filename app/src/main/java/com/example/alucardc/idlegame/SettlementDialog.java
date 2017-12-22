@@ -37,7 +37,7 @@ public class SettlementDialog extends DialogFragment {
 
     Context context;
     View v;
-    TextView tvGetItem;
+    TextView tvGetItem,tvVictory;
     ListView listView;
     Button lootViewBtn;
     Object[] lootSet, num;
@@ -122,10 +122,12 @@ public class SettlementDialog extends DialogFragment {
 
     void findViews() {
         tvGetItem = (TextView)v.findViewById(R.id.tvGetItem);
+        tvVictory = (TextView)v.findViewById(R.id.tvVictory);
         listView = (ListView)v.findViewById(R.id.lootViwe);
         lootViewBtn = (Button)v.findViewById(R.id.lootViewBtn);
         lootViewBtn.setOnClickListener(listener);
         Typeface font = Typeface.createFromAsset(context.getAssets(), "fonts/witches_magic.ttf");
         tvGetItem.setTypeface(font);
+        tvVictory.setTypeface(font);
     }
 }

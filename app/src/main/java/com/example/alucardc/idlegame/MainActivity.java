@@ -270,6 +270,7 @@ public class MainActivity extends AppCompatActivity {
         if(lastRegTime.equals("")){
             settings.edit().putString(LAST_REG_HP_TIME,String.valueOf(tempNowTime)).commit();
             Log.d("HP_REG","沒有上次恢復時間,設定為現在時刻");
+            lastRegTime = settings.getString(LAST_REG_HP_TIME,"");
         }
         int regTimeGap = (int)(tempNowTime - Long.parseLong(lastRegTime))/1000;
         int regCounts = regTimeGap / hpRegKey;

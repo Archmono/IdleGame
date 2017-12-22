@@ -492,7 +492,7 @@ public class battle_scene extends AppCompatActivity {
                         currentStunTime[i] -= 200;
                     }
                     if (currentActionTime[i] <= 0) {
-                        playerCurrentHP -= mobsATK[0];
+                        playerCurrentHP -= mobsATK[i];
                         currentActionTime[i] = mobsSpeed[i];
                         Message msg = mHandler.obtainMessage();
                         msg.what = 9;
