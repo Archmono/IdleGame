@@ -85,15 +85,15 @@ public class pre_battle_scene extends AppCompatActivity {
             posY = modView[i].getY();   //取得第1-6個modView位置y值
 
             tempX[i] = (float) (Math.random()*800) -400;
-            tempY[i] = (float) (Math.random()*750) -200;
+            tempY[i] = (float) (Math.random()*650) -150;
 
-            if(tempY[i] < 150){
+            if(tempY[i] < 100){
                 modView[i].setScaleX(0.5f);
                 modView[i].setScaleY(0.5f);
-            }else if(tempY[i] < 210){
-                modView[i].setScaleX(0.65f);
-                modView[i].setScaleY(0.65f);
-            }else if(tempY[i] < 400){
+            }else if(tempY[i] < 250){
+                modView[i].setScaleX(0.7f);
+                modView[i].setScaleY(0.7f);
+            }else if(tempY[i] < 370){
                 modView[i].setScaleX(0.8f);
                 modView[i].setScaleY(0.8f);
             }
@@ -106,6 +106,7 @@ public class pre_battle_scene extends AppCompatActivity {
 
             for(int j = 0; j<Loading.mobsSlotFilled_S1.length; j++){
                 if(modView[j].getY() > afterPosY){
+                    Log.d("Position", "i=" + i + " j=" + j + " 計算後的當前圖片Y:" + afterPosY + "  比對的圖片J的Y值:" + modView[j].getY());
                     modView[j].bringToFront();
                 }
             }
