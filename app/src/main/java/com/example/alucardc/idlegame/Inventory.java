@@ -53,7 +53,6 @@ public class Inventory extends DialogFragment {
     Button btnSell, btnAll, btnMaterial, btnConsumables, btnComposite, btnPlayerMoney, btnRestore;
     private SQLiteDatabase db;
     int img;
-    int[] tempCount;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
 
@@ -72,10 +71,6 @@ public class Inventory extends DialogFragment {
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         findViews();
         updatePlayerStatus(0,0);
-        tempCount = new  int[Loading.i_countList.size()];
-        for (int i = 0; i < Loading.i_countList.size(); i++) {
-            tempCount[i] = (int)Loading.i_countList.get(i);
-        }
         setBottomView();
 //        Log.d("Inventory", index.size()+"");
 
