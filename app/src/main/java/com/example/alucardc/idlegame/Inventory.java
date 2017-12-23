@@ -46,11 +46,11 @@ public class Inventory extends DialogFragment {
     FrameLayout inventory;
     FrameLayout[] itemFrame;
     ImageView imgItem, cItem1, cItem2, cItem3, cItem4;
-    TextView tvNoItem, tvName, tvCount, tvPrice, tvHeal, tvPoison, tvCure, tvDesc, cTvHeal, cTvPoison, cTvCure, tvRestore;
+    TextView btnPlayerMoney, tvNoItem, tvName, tvCount, tvPrice, tvHeal, tvPoison, tvCure, tvDesc, cTvHeal, cTvPoison, cTvCure, tvRestore;
     ImageView[] items;
     TextView[] itemFrameCounts;
     ArrayList index = new ArrayList();
-    Button btnSell, btnAll, btnMaterial, btnConsumables, btnComposite, btnPlayerMoney, btnRestore;
+    Button btnSell, btnAll, btnMaterial, btnConsumables, btnComposite, btnRestore;
     private SQLiteDatabase db;
     int img;
 
@@ -93,7 +93,7 @@ public class Inventory extends DialogFragment {
         btnConsumables = (Button) v.findViewById(R.id.inventory_btnConsumables);
         btnSell = (Button) v.findViewById(R.id.inventory_btnSell);
         btnComposite = (Button) v.findViewById(R.id.btnComposite);
-        btnPlayerMoney = (Button) v.findViewById(R.id.btnPlayerMoney);
+        btnPlayerMoney = (TextView) v.findViewById(R.id.tvPlayerMoney);
         btnAll.setOnClickListener(btnTag);
         btnMaterial.setOnClickListener(btnTag);
         btnConsumables.setOnClickListener(btnTag);
@@ -369,9 +369,9 @@ public class Inventory extends DialogFragment {
             OutputStream os = new FileOutputStream(DBInfo.JSON_FILE);
             os.write(json_2.getBytes());
 
-            MainActivity.tvPlayerMoney.setText("持有金錢 :" + playInfo.playerStatus.playerMoney);
+            MainActivity.tvPlayerMoney.setText("" + playInfo.playerStatus.playerMoney);
             MainActivity.tvPlayerHP.setText("HP : " + playInfo.playerStatus.playerCurrentHP + " / " + playInfo.playerStatus.playerMaxHP);
-            btnPlayerMoney.setText("持有金錢 :" + playInfo.playerStatus.playerMoney);
+            btnPlayerMoney.setText("" + playInfo.playerStatus.playerMoney);
 
             os.close();
             is.close();

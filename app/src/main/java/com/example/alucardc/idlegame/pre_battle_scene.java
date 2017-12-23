@@ -3,6 +3,7 @@ package com.example.alucardc.idlegame;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,7 +33,8 @@ public class pre_battle_scene extends AppCompatActivity {
     Calendar rightNow = Calendar.getInstance(); //提取時間用的方法
 
     LinearLayout playerStatusBar;
-    TextView tvPlayerID,tvPlayerHP,tvPlayerMoney;
+    TextView tvHP,tvPlayerID,tvPlayerHP,tvPlayerMoney;
+    ImageView playerHPBar;
 
     String TAG = "pre_battle_scene";
     ImageView modView[] = new ImageView[6];
@@ -60,8 +62,16 @@ public class pre_battle_scene extends AppCompatActivity {
 
         tvPlayerID = (TextView)findViewById(R.id.tvPlayerID);
         playerStatusBar = (LinearLayout)findViewById(R.id.playerStatusBar);
+        tvHP = (TextView) playerStatusBar.findViewById(R.id.tvHP);
         tvPlayerHP = (TextView) playerStatusBar.findViewById(R.id.tvPlayerHP);
         tvPlayerMoney = (TextView) playerStatusBar.findViewById(R.id.tvPlayerMoney);
+        playerHPBar = (ImageView) playerStatusBar.findViewById(R.id.playerHPBar);
+
+        Typeface font = Typeface.createFromAsset(getAssets(), "fonts/bank_gothic_medium_bt.ttf");
+        tvPlayerID.setTypeface(font);
+        tvPlayerHP.setTypeface(font);
+        tvPlayerMoney.setTypeface(font);
+        tvHP.setTypeface(font);
     }
 
     public void start_fight(View v){
@@ -126,9 +136,15 @@ public class pre_battle_scene extends AppCompatActivity {
             String json_2 = gson.toJson(playInfo);
             Log.d("JSON", json_2);
 
-            tvPlayerID.setText("ID :" + playInfo.playerStatus.playerID);
-            tvPlayerMoney.setText("持有金錢 :" + playInfo.playerStatus.playerMoney);
-            tvPlayerHP.setText("HP : " + playInfo.playerStatus.playerCurrentHP + " / " + playInfo.playerStatus.playerMaxHP);
+            tvPlayerID.setText("ID : " + playInfo.playerStatus.playerID);
+            tvPlayerMoney.setText("" + playInfo.playerStatus.playerMoney);
+            tvPlayerHP.setText("" + playInfo.playerStatus.playerCurrentHP + " / " + playInfo.playerStatus.playerMaxHP);
+
+            if (playInfo.playerStatus.playerCurrentHP > 0) {
+                playerHPBar.setScaleX((float) playInfo.playerStatus.playerCurrentHP / (float) playInfo.playerStatus.playerMaxHP);
+                float playerHPBarLocateX = playerHPBar.getX();
+                playerHPBar.setPivotX(playerHPBarLocateX);
+            }
 
         } catch (IOException e) {
             e.printStackTrace();

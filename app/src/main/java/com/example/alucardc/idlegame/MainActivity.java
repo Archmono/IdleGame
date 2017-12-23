@@ -8,11 +8,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -42,7 +44,8 @@ public class MainActivity extends AppCompatActivity {
 
     String TAG = "MainDataTest";
     String TAG2 = "MainPlayerTest";
-    TextView textView2;
+    TextView tvHP,tvEnemy,tvPollution;
+    ImageView playerHPBar;
     LinearLayout playerStatusBar;
     public static TextView tvPlayerID,tvPlayerHP,tvPlayerMoney;
 
@@ -80,14 +83,13 @@ public class MainActivity extends AppCompatActivity {
 
     void countMobs(){
         int sum=0;
-        textView2 = (TextView) findViewById(R.id.textView2);
         for(int i=0; i<6; i++){
             System.out.println(Loading.mobsSlotFilled_S1[i]);
             if( !Loading.mobsSlotFilled_S1[i].equals("0") ) {
                 sum++;
             }
         }
-        textView2.setText(sum+"/ "+nextTime+"s");
+        tvEnemy.setText("Emeny : "+sum);
     }
 
     public void findViews(){
@@ -95,6 +97,18 @@ public class MainActivity extends AppCompatActivity {
         playerStatusBar = (LinearLayout)findViewById(R.id.playerStatusBar);
         tvPlayerHP = (TextView) playerStatusBar.findViewById(R.id.tvPlayerHP);
         tvPlayerMoney = (TextView) playerStatusBar.findViewById(R.id.tvPlayerMoney);
+        tvHP = (TextView) playerStatusBar.findViewById(R.id.tvHP);
+        tvEnemy = (TextView) findViewById(R.id.tvEnemy);
+        tvPollution = (TextView) findViewById(R.id.tvPollution);
+        playerHPBar = (ImageView) playerStatusBar.findViewById(R.id.playerHPBar);
+
+        Typeface font = Typeface.createFromAsset(getAssets(), "fonts/bank_gothic_medium_bt.ttf");
+        tvPlayerID.setTypeface(font);
+        tvPlayerHP.setTypeface(font);
+        tvPlayerMoney.setTypeface(font);
+        tvHP.setTypeface(font);
+        tvEnemy.setTypeface(font);
+        tvPollution.setTypeface(font);
     }
 
     public void enter_scene_1(View view){
@@ -144,9 +158,15 @@ public class MainActivity extends AppCompatActivity {
             playerMaxHP = playInfo.playerStatus.playerMaxHP;
             regPlayerHPbyTime();
 
-            tvPlayerID.setText("ID :" + playInfo.playerStatus.playerID);
-            tvPlayerMoney.setText("持有金錢 :" + playInfo.playerStatus.playerMoney);
-            tvPlayerHP.setText("HP : " + playInfo.playerStatus.playerCurrentHP + " / " + playInfo.playerStatus.playerMaxHP);
+            tvPlayerID.setText("ID : " + playInfo.playerStatus.playerID);
+            tvPlayerMoney.setText("" + playInfo.playerStatus.playerMoney);
+            tvPlayerHP.setText(playInfo.playerStatus.playerCurrentHP + " / " + playInfo.playerStatus.playerMaxHP);
+
+            if (playInfo.playerStatus.playerCurrentHP > 0) {
+                playerHPBar.setScaleX((float) playInfo.playerStatus.playerCurrentHP / (float) playInfo.playerStatus.playerMaxHP);
+                float playerHPBarLocateX = playerHPBar.getX();
+                playerHPBar.setPivotX(playerHPBarLocateX);
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -188,11 +208,6 @@ public class MainActivity extends AppCompatActivity {
         // Create and show the dialog.
         android.app.DialogFragment newFragment = new Inventory();
         newFragment.show(ft, "dialog");
-    }
-
-    @Override
-    public void onBackPressed() {  //返回鍵事件
-
     }
 
     public static boolean settle =false;
@@ -313,6 +328,11 @@ public class MainActivity extends AppCompatActivity {
     public void finish() {
         super.finish();
         overridePendingTransition(0, 0);
+    }
+
+    @Override
+    public void onBackPressed() {  //返回鍵事件
+
     }
 }
 

@@ -77,7 +77,6 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_gravity="top"
-        android:background="@drawable/top_menu_ui_visual"
         android:gravity="center"
         android:orientation="vertical">
 

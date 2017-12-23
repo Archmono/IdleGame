@@ -11,14 +11,26 @@
         android:orientation="horizontal"
         android:gravity="right">
 
-        <Button
-            android:id="@+id/btnPlayerMoney"
+        <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="30dp"
-            android:background="@drawable/button_dark_65"
-            android:text="持有金錢 : 0"
             android:layout_marginRight="24dp"
-            android:textColor="#FFF" />
+            android:background="@drawable/button_dark_65">
+
+            <TextView
+                android:id="@+id/tvPlayerMoney"
+                android:layout_width="50dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="16dp"
+                android:text=" "
+                android:textColor="#FFF" />
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/coin" />
+
+        </FrameLayout>
 
         <Button
             android:id="@+id/btnComposite"
