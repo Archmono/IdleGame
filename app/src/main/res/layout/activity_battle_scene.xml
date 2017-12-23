@@ -8,7 +8,7 @@
 
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/battleBG"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="0dp"
@@ -165,6 +165,7 @@
             android:onClick="btnBattlePause"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            android:background="@drawable/button_dark_65"
             app:srcCompat="@android:drawable/ic_media_pause" />
 
         <Button
@@ -174,7 +175,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginTop="50dp"
             android:onClick="btnDoom"
-            android:text="D"
+            android:background="#0000"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -222,7 +223,6 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_gravity="top"
-        android:background="@drawable/top_menu_ui_visual"
         android:gravity="center"
         android:orientation="vertical">
 

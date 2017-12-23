@@ -88,7 +88,8 @@ public class battle_scene extends AppCompatActivity {
 
     //玩家狀態區
     LinearLayout playerStatusBar;
-    TextView tvPlayerID,tvPlayerHP,tvPlayerMoney;
+    TextView tvHP,tvPlayerID,tvPlayerHP,tvPlayerMoney;
+    ImageView playerHPBar;
     //玩家狀態區
 
     Handler mHandler = new Handler(){
@@ -110,7 +111,11 @@ public class battle_scene extends AppCompatActivity {
 
             }  else if(msg.what == 9) {
                 tvPlayerHP.setText("HP : " + playerCurrentHP + " / " + playerMaxHP);
-
+                if (playerCurrentHP > 0) { //更新玩家血條
+                    playerHPBar.setScaleX((float) playerCurrentHP / (float) playerMaxHP);
+                    float playerHPBarLocateX = playerHPBar.getX();
+                    playerHPBar.setPivotX(playerHPBarLocateX);
+                }
                 soundPool.play(getHit, 1.0F, 1.0F, 0, 0, 1.0F);
             }
             super.handleMessage(msg);
@@ -188,11 +193,17 @@ public class battle_scene extends AppCompatActivity {
             String json_2 = gson.toJson(playInfo);
 //            Log.d("JSON", json_2);
 
-            tvPlayerID.setText("ID :" + playInfo.playerStatus.playerID);
-            tvPlayerMoney.setText("持有金錢 :" + playInfo.playerStatus.playerMoney);
+            tvPlayerID.setText("ID : " + playInfo.playerStatus.playerID);
+            tvPlayerMoney.setText("" + playInfo.playerStatus.playerMoney);
             tvPlayerHP.setText("HP : " + playInfo.playerStatus.playerCurrentHP + " / " + playInfo.playerStatus.playerMaxHP);
             playerCurrentHP = playInfo.playerStatus.playerCurrentHP;
             playerMaxHP = playInfo.playerStatus.playerMaxHP;
+
+            if (playerCurrentHP > 0) { //更新玩家血條
+                playerHPBar.setScaleX((float) playerCurrentHP / (float) playerMaxHP);
+                float playerHPBarLocateX = playerHPBar.getX();
+                playerHPBar.setPivotX(playerHPBarLocateX);
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -249,9 +260,17 @@ public class battle_scene extends AppCompatActivity {
 
         tvPlayerID = (TextView)findViewById(R.id.tvPlayerID);
         playerStatusBar = (LinearLayout)findViewById(R.id.playerStatusBar);
+        tvHP = (TextView) playerStatusBar.findViewById(R.id.tvHP);
         tvPlayerHP = (TextView) playerStatusBar.findViewById(R.id.tvPlayerHP);
         tvPlayerMoney = (TextView) playerStatusBar.findViewById(R.id.tvPlayerMoney);
+        playerHPBar  = (ImageView) playerStatusBar.findViewById(R.id.playerHPBar);
 
+
+        Typeface font = Typeface.createFromAsset(getAssets(), "fonts/bank_gothic_medium_bt.ttf");
+        tvPlayerID.setTypeface(font);
+        tvPlayerHP.setTypeface(font);
+        tvPlayerMoney.setTypeface(font);
+        tvHP.setTypeface(font);
 
         for (int i = 0; i < 6; i++)
         {

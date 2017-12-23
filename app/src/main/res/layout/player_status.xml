@@ -1,55 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:orientation="horizontal"
-        android:background="@drawable/button_dark"
-        >
+        android:background="@drawable/button_dark_65"
+        android:orientation="horizontal">
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:orientation="vertical"
-            >
-            <TextView
-                android:id="@+id/tvPlayerID"
-                android:ems="10"
-                android:layout_marginLeft="8dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="TextView" />
+            android:layout_marginLeft="16dp"
+            android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tvPlayerMoney"
-                android:layout_marginLeft="8dp"
-                android:layout_gravity="left|bottom"
+                android:id="@+id/tvPlayerID"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:ems="10"
+                android:textColor="#FFF"
                 android:text="TextView" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imageView10"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_marginLeft="8dp"
+                    app:srcCompat="@drawable/coin" />
+
+                <TextView
+                    android:id="@+id/tvPlayerMoney"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="8dp"
+                    android:textColor="#FFF"
+                    android:text="TextView" />
+            </LinearLayout>
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginRight="24dp"
             android:layout_gravity="center"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tvPlayerHP"
-                android:ems="12"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvHP"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="2"
+                    android:textColor="#FFF"
+                    android:text="HP" />
+
+                <TextView
+                    android:id="@+id/tvPlayerHP"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:gravity="right"
+                    android:text="HP"
+                    android:textColor="#FFF" />
+
+            </LinearLayout>
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:background="@drawable/bottom_light"
-                android:text="TextView" />
+                android:gravity="left"
+                android:background="@drawable/hp_bar_top"
+                >
+            <ImageView
+                android:id="@+id/playerHPBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/hp_bar_bottom" />
+            </RelativeLayout>
 
         </LinearLayout>
 
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imageView9"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#000"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/ad_banner" />
+
 </LinearLayout>

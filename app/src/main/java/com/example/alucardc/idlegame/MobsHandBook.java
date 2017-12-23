@@ -121,7 +121,7 @@ public class MobsHandBook extends DialogFragment {
 //            itemFrameCounts[i].setTextColor(Color.WHITE);
             mobsIcon[i] = new ImageView(context);
             mobsIcon[i].setTag(i);
-            mobsIcon[i].setBackgroundResource(R.drawable.button_dark_65);
+            mobsIcon[i].setBackgroundResource(R.drawable.bottom_dark_65);
             mobsIcon[i].setLayoutParams(new LinearLayout.LayoutParams(200 , 200));
             mobsIcon[i].setOnClickListener(btnIcon);
             img = getResources().getIdentifier(String.valueOf(imageList.get((int)index.get(i))), "drawable", Loading.APP_NAME);
@@ -258,7 +258,7 @@ public class MobsHandBook extends DialogFragment {
             int tag = (int)view.getTag();
 
             for (int i = 0; i < index.size(); i++) {
-                mobsIcon[i].setBackgroundResource(R.drawable.button_dark_65);
+                mobsIcon[i].setBackgroundResource(R.drawable.bottom_dark_65);
             }
 
             if(unlockImage.get(unlockID.indexOf(idList.get((int)index.get(tag)))) == 1){
@@ -297,7 +297,7 @@ public class MobsHandBook extends DialogFragment {
                 mobsDesc.setText("怪物資訊 : ???");
             }
 
-            mobsIcon[tag].setBackgroundResource(R.drawable.button_light);
+            mobsIcon[tag].setBackgroundResource(R.drawable.button_dark_65);
 
             int[] loots = (int[]) lootsList.get(tag);
             if(unlockLoots1.get(unlockID.indexOf(idList.get((int)index.get(tag)))) == 1){

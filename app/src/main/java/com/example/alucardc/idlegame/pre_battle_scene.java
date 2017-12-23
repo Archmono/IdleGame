@@ -1,8 +1,11 @@
 package com.example.alucardc.idlegame;
 
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,10 +35,15 @@ public class pre_battle_scene extends AppCompatActivity {
     Calendar rightNow = Calendar.getInstance(); //提取時間用的方法
 
     LinearLayout playerStatusBar;
-    TextView tvPlayerID,tvPlayerHP,tvPlayerMoney;
+    TextView tvHP,tvPlayerID;
+    public static TextView tvPlayerHP,tvPlayerMoney;
+    public static ImageView playerHPBar;
 
     String TAG = "pre_battle_scene";
     ImageView modView[] = new ImageView[6];
+    ImageView prepareBG;
+    int[] prepareBGR = {R.drawable.bg001, R.drawable.bg002}; //準備畫面背景資源
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,  //隱藏狀態列
@@ -60,8 +68,46 @@ public class pre_battle_scene extends AppCompatActivity {
 
         tvPlayerID = (TextView)findViewById(R.id.tvPlayerID);
         playerStatusBar = (LinearLayout)findViewById(R.id.playerStatusBar);
+        tvHP = (TextView) playerStatusBar.findViewById(R.id.tvHP);
         tvPlayerHP = (TextView) playerStatusBar.findViewById(R.id.tvPlayerHP);
         tvPlayerMoney = (TextView) playerStatusBar.findViewById(R.id.tvPlayerMoney);
+        playerHPBar = (ImageView) playerStatusBar.findViewById(R.id.playerHPBar);
+
+        prepareBG = (ImageView) findViewById(R.id.prepareBG);
+        prepareBG.setImageResource(prepareBGR[MainActivity.toScene-1]);
+
+        Typeface font = Typeface.createFromAsset(getAssets(), "fonts/bank_gothic_medium_bt.ttf");
+        tvPlayerID.setTypeface(font);
+        tvPlayerHP.setTypeface(font);
+        tvPlayerMoney.setTypeface(font);
+        tvHP.setTypeface(font);
+    }
+
+    /*------按鈕------*/
+
+    public void btnInventory(View v){
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+        // Create and show the dialog.
+        android.app.DialogFragment newFragment = new Inventory();
+        newFragment.show(ft, "dialog");
+        MainActivity.getItemCounts(this);
+    }
+
+    public void btnHandBook(View v){
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+        // Create and show the dialog.
+        android.app.DialogFragment newFragment = new MobsHandBook();
+        newFragment.show(ft, "dialog");
     }
 
     public void start_fight(View v){
@@ -74,6 +120,8 @@ public class pre_battle_scene extends AppCompatActivity {
         }
     }
 
+    /*------按鈕------*/
+
     public void randomViewPosition(){
         float posX,posY;
         float afterPosX,afterPosY;
@@ -84,8 +132,11 @@ public class pre_battle_scene extends AppCompatActivity {
             posX = modView[i].getX();   //取得第1-6個modView位置x值
             posY = modView[i].getY();   //取得第1-6個modView位置y值
 
-            tempX[i] = (float) (Math.random()*800) -400;
-            tempY[i] = (float) (Math.random()*650) -150;
+            tempX[i] = (float) (Math.random()*2000) -1000;
+            if ( MainActivity.toScene==1 )
+                tempY[i] = (float) (Math.random()*650) -150;
+            else if ( MainActivity.toScene==2 )
+                tempY[i] = (float) (Math.random()*300) -150;
 
             if(tempY[i] < 100){
                 modView[i].setScaleX(0.5f);
@@ -126,9 +177,15 @@ public class pre_battle_scene extends AppCompatActivity {
             String json_2 = gson.toJson(playInfo);
             Log.d("JSON", json_2);
 
-            tvPlayerID.setText("ID :" + playInfo.playerStatus.playerID);
-            tvPlayerMoney.setText("持有金錢 :" + playInfo.playerStatus.playerMoney);
-            tvPlayerHP.setText("HP : " + playInfo.playerStatus.playerCurrentHP + " / " + playInfo.playerStatus.playerMaxHP);
+            tvPlayerID.setText("ID : " + playInfo.playerStatus.playerID);
+            tvPlayerMoney.setText("" + playInfo.playerStatus.playerMoney);
+            tvPlayerHP.setText("" + playInfo.playerStatus.playerCurrentHP + " / " + playInfo.playerStatus.playerMaxHP);
+
+            if (playInfo.playerStatus.playerCurrentHP > 0) {
+                playerHPBar.setScaleX((float) playInfo.playerStatus.playerCurrentHP / (float) playInfo.playerStatus.playerMaxHP);
+                float playerHPBarLocateX = playerHPBar.getX();
+                playerHPBar.setPivotX(playerHPBarLocateX);
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -199,7 +256,7 @@ public class pre_battle_scene extends AppCompatActivity {
         for(int i=0;i<6;i++) { //迴圈檢查，如怪物陣列滿了將不會進入
             if (Loading.mobsSlotFilled_S1[i].equals("0")) { //如果怪物陣列裡的ID為0
                 Loading.getRarity();
-                random = (int) (Math.random() * Loading.randMobTime); //隨機 5-30秒
+                random = (int) (Math.random() * Loading.randMobMaxTime - Loading.randMobMinTime) - Loading.randMobMinTime;
                 if(nextTime > 0) { //如果有紀錄上次未生成怪物時間
                     random = nextTime; //覆蓋掉隨機時間
                     nextTime = 0; //重置下次生怪時間

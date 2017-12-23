@@ -38,7 +38,8 @@ public class Loading extends Activity {
     String TAG2 = "MainPlayerTest";
 
     public static String APP_NAME;
-    public static int randMobTime = 5;
+    public static int randMobMaxTime = 5; //最大生怪時間(秒)
+    public static int randMobMinTime = 0; //最小生怪時間(秒)
 
     /*↓SharedPreferences裡儲存的資料名稱↓*/
     public static final String DATE_PREF = "DATE_PREF";
@@ -80,7 +81,8 @@ public class Loading extends Activity {
     int timeGap,nextTime; //運算用變數
     long newTime,oldTime; //運算用變數
     String tempOldTime,tempNextTime="0"; //暫存用變數
-    public static String[] mobsSlotFilled_S1 = new String[6]; //暫存用變數
+    String[][] mobsSlotFilled = new String[][] {mobsSlotFilled_S1,mobsSlotFilled_S2};
+    public static String[] mobsSlotFilled_S1 = new String[6];
     public static String[] mobsSlotFilled_S2 = new String[6];
     Calendar rightNow = Calendar.getInstance(); //提取時間用的方法
 
@@ -99,7 +101,8 @@ public class Loading extends Activity {
         newTime = rightNow.getTimeInMillis();
         restorePrefs();
         DateTest();
-        Log.d("LOGDATE_Mobs", mobsSlotFilled_S1[0] +" "+ mobsSlotFilled_S1[1] +" "+ mobsSlotFilled_S1[2] +" "+ mobsSlotFilled_S1[3] +" "+ mobsSlotFilled_S1[4] +" "+ mobsSlotFilled_S1[5]+" ");
+        Log.d("LOGDATE_Mobs", mobsSlotFilled_S1[0] +" "+ mobsSlotFilled_S1[1] +" "+ mobsSlotFilled_S1[2] +" "+ mobsSlotFilled_S1[3] +" "+ mobsSlotFilled_S1[4] +" "+ mobsSlotFilled_S1[5]);
+        Log.d("LOGDATE_Mobs", mobsSlotFilled_S2[0] +" "+ mobsSlotFilled_S2[1] +" "+ mobsSlotFilled_S2[2] +" "+ mobsSlotFilled_S2[3] +" "+ mobsSlotFilled_S2[4] +" "+ mobsSlotFilled_S2[5]);
         onSave();
 
         getItem();
@@ -177,6 +180,7 @@ public class Loading extends Activity {
         settings.edit().putString(PREF_OLD_TIME, String.valueOf(rightNow.getTimeInMillis())).commit();
         for(int i=0; i<6; i++){
             settings.edit().putString(PREF_MOBS_SLOT_FILLED_S1[i], mobsSlotFilled_S1[i]).commit();
+            settings.edit().putString(PREF_MOBS_SLOT_FILLED_S2[i], mobsSlotFilled_S2[i]).commit();
         }
         settings.edit().putString(DATE_NEXT_DATE, String.valueOf(nextTime)).commit();
     }
@@ -185,24 +189,23 @@ public class Loading extends Activity {
     int random;
     void DateTest () {
         timeGap = (int)(newTime-oldTime)/1000; //計算上次開啟遊戲與本次開啟遊戲時間差
-        Log.d("LOGDATE_timeGap", timeGap + "");
-        Log.d("LOGDATE_NextTime", nextTime+"");
-        getData("1"); //取得場景1一隨機怪物ID (變數存在RandomTest.cId)
-        for(int i=0;i<6;i++) { //迴圈檢查，如怪物陣列滿了將不會進入
-            if (mobsSlotFilled_S1[i].equals("0")) { //如果怪物陣列裡的ID為0
-                getRarity();
-                random = (int) (Math.random() * randMobTime); //隨機 5-30秒
-                if(nextTime > 0) { //如果有紀錄上次未生成怪物時間
-                    random = nextTime; //覆蓋掉隨機時間
-                    nextTime = 0; //重置下次生怪時間
-                }
-                Log.d("LOGDATE_Random", random + "");
-                timeGap -= random; //利用時間差運算是否繼續生怪
-                if (timeGap < 0) { //無時間繼續生怪
-                    nextTime = (-timeGap); //將剩餘時間存入下次生怪時間
-                    break; //跳出迴圈
-                } else {
-                    mobsSlotFilled_S1[i] = RandomTest.cId; //放入生怪ID至怪物陣列
+        for (int s = 0; s < mobsSlotFilled.length; s++ ) { //根據場景數跑迴圈生怪
+            getData((s+1)+""); //取得場景一隨機怪物ID (變數存在RandomTest.cId)
+            for (int i = 0; i < 6; i++) { //迴圈檢查，如怪物陣列滿了將不會進入
+                if (mobsSlotFilled[s][i].equals("0")) { //如果怪物陣列裡的ID為0
+                    getRarity();
+                    random = (int) (Math.random() * randMobMaxTime - randMobMinTime) - randMobMinTime;
+                    if (nextTime > 0) { //如果有紀錄上次未生成怪物時間
+                        random = nextTime; //覆蓋掉隨機時間
+                        nextTime = 0; //重置下次生怪時間
+                    }
+                    timeGap -= random; //利用時間差運算是否繼續生怪
+                    if (timeGap < 0) { //無時間繼續生怪
+                        nextTime = (-timeGap); //將剩餘時間存入下次生怪時間
+                        break; //跳出迴圈
+                    } else {
+                        mobsSlotFilled[s][i] = RandomTest.cId; //放入生怪ID至怪物陣列
+                    }
                 }
             }
         }
