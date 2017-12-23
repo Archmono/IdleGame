@@ -45,9 +45,9 @@ public class MainActivity extends AppCompatActivity {
     String TAG = "MainDataTest";
     String TAG2 = "MainPlayerTest";
     TextView tvHP,tvEnemy,tvPollution;
-    ImageView playerHPBar;
     LinearLayout playerStatusBar;
     public static TextView tvPlayerID,tvPlayerHP,tvPlayerMoney;
+    public static ImageView playerHPBar;
 
     private SQLiteDatabase db;
 

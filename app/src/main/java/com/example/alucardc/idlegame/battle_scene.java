@@ -199,6 +199,12 @@ public class battle_scene extends AppCompatActivity {
             playerCurrentHP = playInfo.playerStatus.playerCurrentHP;
             playerMaxHP = playInfo.playerStatus.playerMaxHP;
 
+            if (playerCurrentHP > 0) { //更新玩家血條
+                playerHPBar.setScaleX((float) playerCurrentHP / (float) playerMaxHP);
+                float playerHPBarLocateX = playerHPBar.getX();
+                playerHPBar.setPivotX(playerHPBarLocateX);
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }

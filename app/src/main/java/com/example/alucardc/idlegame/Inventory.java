@@ -46,7 +46,7 @@ public class Inventory extends DialogFragment {
     FrameLayout inventory;
     FrameLayout[] itemFrame;
     ImageView imgItem, cItem1, cItem2, cItem3, cItem4;
-    TextView btnPlayerMoney, tvNoItem, tvName, tvCount, tvPrice, tvHeal, tvPoison, tvCure, tvDesc, cTvHeal, cTvPoison, cTvCure, tvRestore;
+    TextView btnPlayerMoney, tvNoItem, tvName, tvCount, tvPrice, tvHeal, tvPoison, tvCure, tvDesc, cTvHeal, cTvPoison, cTvCure, tvRestore, cTvPlayerHP;
     ImageView[] items;
     TextView[] itemFrameCounts;
     ArrayList index = new ArrayList();
@@ -94,6 +94,7 @@ public class Inventory extends DialogFragment {
         btnSell = (Button) v.findViewById(R.id.inventory_btnSell);
         btnComposite = (Button) v.findViewById(R.id.btnComposite);
         btnPlayerMoney = (TextView) v.findViewById(R.id.tvPlayerMoney);
+
         btnAll.setOnClickListener(btnTag);
         btnMaterial.setOnClickListener(btnTag);
         btnConsumables.setOnClickListener(btnTag);
@@ -109,6 +110,7 @@ public class Inventory extends DialogFragment {
         cItem2 = (ImageView) cv.findViewById(R.id.cItem2);
         cItem3 = (ImageView) cv.findViewById(R.id.cItem3);
         cItem4 = (ImageView) cv.findViewById(R.id.cItem4);
+        cTvPlayerHP = (TextView) cv.findViewById(R.id.cTvPlayerHP);
         cItem1.setOnClickListener(onComposite);
         cItem2.setOnClickListener(onComposite);
         cItem3.setOnClickListener(onComposite);
@@ -204,7 +206,7 @@ public class Inventory extends DialogFragment {
         @Override
         public void onClick(View view) {
             if (!opComposite) {
-                inventory.addView(cv, (int) convertDpToPixel(300, context), (int) convertDpToPixel(200, context));
+                inventory.addView(cv, (int) convertDpToPixel(300, context), (int) convertDpToPixel(230, context));
                 btnComposite.setBackgroundResource(R.drawable.button_dark_65);
                 opComposite = true;
             } else {
@@ -290,18 +292,23 @@ public class Inventory extends DialogFragment {
         public void onClick(View view) {
 
             if (compositeAble) {
-                updatePlayerStatus(0,restore); //補血
-                for (int i = 0; i < cId.length; i++) {
-                    updateItem(Integer.parseInt(cId[i]),(int)Loading.i_countList.get(Loading.id_lootList.indexOf(String.valueOf(cId[i])))-1);
+                if (playerCurrentHP < playerMaxHP) {
+                    updatePlayerStatus(0, restore); //補血
+                    for (int i = 0; i < cId.length; i++) {
+                        updateItem(Integer.parseInt(cId[i]), (int) Loading.i_countList.get(Loading.id_lootList.indexOf(String.valueOf(cId[i]))) - 1);
+                    }
+                    cId = new String[]{"0", "0", "0", "0"};
+                    cItem1.setImageResource(0); //重置圖片
+                    cItem2.setImageResource(0);
+                    cItem3.setImageResource(0);
+                    cItem4.setImageResource(0);
+                    countRestore(cId);
+                    setBottomView();
+                    resetCombineText();
+
+                } else {
+                    Toast.makeText(context,"血量已滿",Toast.LENGTH_SHORT).show();
                 }
-                cId = new String[]{"0","0","0","0"};
-                cItem1.setImageResource(0); //重置圖片
-                cItem2.setImageResource(0);
-                cItem3.setImageResource(0);
-                cItem4.setImageResource(0);
-                countRestore(cId);
-                setBottomView();
-                resetCombineText();
             } else {
                 Toast.makeText(context,"請確定所有欄位放置物品再進行合成",Toast.LENGTH_SHORT).show();
             }
@@ -352,6 +359,7 @@ public class Inventory extends DialogFragment {
         }
     };
 
+    int playerCurrentHP, playerMaxHP;
     public void updatePlayerStatus(int addMoney, int addHp) {
         try {
             InputStream is = context.openFileInput("playerdata.json");
@@ -362,7 +370,15 @@ public class Inventory extends DialogFragment {
             Player playInfo = gson.fromJson(json, Player.class);
 
             playInfo.playerStatus.playerMoney += addMoney;
-            playInfo.playerStatus.playerCurrentHP += addHp;
+            playerMaxHP = playInfo.playerStatus.playerMaxHP;
+            if (  playInfo.playerStatus.playerCurrentHP < playInfo.playerStatus.playerMaxHP) {
+                playInfo.playerStatus.playerCurrentHP += addHp;
+                if (  playInfo.playerStatus.playerCurrentHP > playInfo.playerStatus.playerMaxHP)
+                    playInfo.playerStatus.playerCurrentHP = playerMaxHP;
+            }
+            else
+                playInfo.playerStatus.playerCurrentHP = playerMaxHP;
+            playerCurrentHP = playInfo.playerStatus.playerCurrentHP;
             String json_2 = gson.toJson(playInfo);
             Log.d("JSON", json_2);
 
@@ -370,8 +386,15 @@ public class Inventory extends DialogFragment {
             os.write(json_2.getBytes());
 
             MainActivity.tvPlayerMoney.setText("" + playInfo.playerStatus.playerMoney);
-            MainActivity.tvPlayerHP.setText("HP : " + playInfo.playerStatus.playerCurrentHP + " / " + playInfo.playerStatus.playerMaxHP);
+            MainActivity.tvPlayerHP.setText(playInfo.playerStatus.playerCurrentHP + " / " + playInfo.playerStatus.playerMaxHP);
+            cTvPlayerHP.setText("HP\t\t" + playerCurrentHP);
             btnPlayerMoney.setText("" + playInfo.playerStatus.playerMoney);
+
+            if (playInfo.playerStatus.playerCurrentHP > 0) {
+                MainActivity.playerHPBar.setScaleX((float) playInfo.playerStatus.playerCurrentHP / (float) playInfo.playerStatus.playerMaxHP);
+                float playerHPBarLocateX = MainActivity.playerHPBar.getX();
+                MainActivity.playerHPBar.setPivotX(playerHPBarLocateX);
+            }
 
             os.close();
             is.close();
