@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     String TAG = "MainDataTest";
     String TAG2 = "MainPlayerTest";
     TextView tvHP,tvEnemy,tvPollution;
+    ImageView pollutionBar;
     LinearLayout playerStatusBar;
     public static TextView tvPlayerID,tvPlayerHP,tvPlayerMoney;
     public static ImageView playerHPBar;
@@ -61,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
 //        getData("1");
         findViews();
         getPlayerStatus();
+        pollutionBar.setScaleX(0.5f);
+        pollutionBar.setPivotX(pollutionBar.getX());
         countMobs();
 
 //        Log.d(TAG, Loading.idList.toString());
@@ -101,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
         tvEnemy = (TextView) findViewById(R.id.tvEnemy);
         tvPollution = (TextView) findViewById(R.id.tvPollution);
         playerHPBar = (ImageView) playerStatusBar.findViewById(R.id.playerHPBar);
+        pollutionBar = (ImageView) findViewById(R.id.pollutionBar);
 
         Typeface font = Typeface.createFromAsset(getAssets(), "fonts/bank_gothic_medium_bt.ttf");
         tvPlayerID.setTypeface(font);

@@ -44,13 +44,22 @@
             android:background="#0000"
             app:srcCompat="@drawable/btn_left" />
 
-        <ImageView
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
+            android:gravity="left"
             android:layout_marginBottom="130dp"
             android:layout_marginLeft="150dp"
-            android:src="@drawable/pollution_top" />
+            android:background="@drawable/pollution_top"
+            >
+
+            <ImageView
+                android:id="@+id/pollutionBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/pollution_bottom"/>
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -76,10 +85,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
-                android:layout_margin="16dp"
+                android:layout_marginLeft="16dp"
                 android:text="Enemy : "
                 android:textColor="#FFF"
-                android:textSize="24sp" />
+                android:textSize="20sp" />
 
         </LinearLayout>
 
@@ -92,7 +101,7 @@
             android:layout_marginLeft="16dp"
             android:text="Pollution"
             android:textColor="#FFF"
-            android:textSize="24sp" />
+            android:textSize="20sp" />
 
         <LinearLayout
             android:layout_width="match_parent"

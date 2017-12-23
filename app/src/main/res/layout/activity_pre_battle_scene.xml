@@ -101,7 +101,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:scaleType="fitXY"
-            app:srcCompat="@drawable/book" />
+            app:srcCompat="@drawable/book"
+            android:onClick="btnHandBook"/>
 
         <ImageView
             android:id="@+id/imageView4"
@@ -109,7 +110,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:scaleType="fitXY"
-            app:srcCompat="@drawable/inventory" />
+            app:srcCompat="@drawable/inventory"
+            android:onClick="btnInventory"/>
 
         <ImageView
             android:id="@+id/imageView5"

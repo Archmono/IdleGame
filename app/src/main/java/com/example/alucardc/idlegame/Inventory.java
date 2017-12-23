@@ -387,13 +387,17 @@ public class Inventory extends DialogFragment {
 
             MainActivity.tvPlayerMoney.setText("" + playInfo.playerStatus.playerMoney);
             MainActivity.tvPlayerHP.setText(playInfo.playerStatus.playerCurrentHP + " / " + playInfo.playerStatus.playerMaxHP);
+            pre_battle_scene.tvPlayerMoney.setText("" + playInfo.playerStatus.playerMoney);
+            pre_battle_scene.tvPlayerHP.setText(playInfo.playerStatus.playerCurrentHP + " / " + playInfo.playerStatus.playerMaxHP);
             cTvPlayerHP.setText("HP\t\t" + playerCurrentHP);
             btnPlayerMoney.setText("" + playInfo.playerStatus.playerMoney);
 
             if (playInfo.playerStatus.playerCurrentHP > 0) {
                 MainActivity.playerHPBar.setScaleX((float) playInfo.playerStatus.playerCurrentHP / (float) playInfo.playerStatus.playerMaxHP);
+                pre_battle_scene.playerHPBar.setScaleX((float) playInfo.playerStatus.playerCurrentHP / (float) playInfo.playerStatus.playerMaxHP);
                 float playerHPBarLocateX = MainActivity.playerHPBar.getX();
                 MainActivity.playerHPBar.setPivotX(playerHPBarLocateX);
+                pre_battle_scene.playerHPBar.setPivotX(playerHPBarLocateX);
             }
 
             os.close();

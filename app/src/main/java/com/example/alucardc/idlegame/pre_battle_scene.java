@@ -1,5 +1,7 @@
 package com.example.alucardc.idlegame;
 
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -33,8 +35,9 @@ public class pre_battle_scene extends AppCompatActivity {
     Calendar rightNow = Calendar.getInstance(); //提取時間用的方法
 
     LinearLayout playerStatusBar;
-    TextView tvHP,tvPlayerID,tvPlayerHP,tvPlayerMoney;
-    ImageView playerHPBar;
+    TextView tvHP,tvPlayerID;
+    public static TextView tvPlayerHP,tvPlayerMoney;
+    public static ImageView playerHPBar;
 
     String TAG = "pre_battle_scene";
     ImageView modView[] = new ImageView[6];
@@ -74,6 +77,33 @@ public class pre_battle_scene extends AppCompatActivity {
         tvHP.setTypeface(font);
     }
 
+    /*------按鈕------*/
+
+    public void btnInventory(View v){
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+        // Create and show the dialog.
+        android.app.DialogFragment newFragment = new Inventory();
+        newFragment.show(ft, "dialog");
+        MainActivity.getItemCounts(this);
+    }
+
+    public void btnHandBook(View v){
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+        // Create and show the dialog.
+        android.app.DialogFragment newFragment = new MobsHandBook();
+        newFragment.show(ft, "dialog");
+    }
+
     public void start_fight(View v){
         if(!Loading.mobsSlotFilled_S1[0].equals("0")) {
             Intent it = new Intent();
@@ -83,6 +113,8 @@ public class pre_battle_scene extends AppCompatActivity {
             Toast.makeText(pre_battle_scene.this, "當前場景沒有怪物", Toast.LENGTH_SHORT).show();
         }
     }
+
+    /*------按鈕------*/
 
     public void randomViewPosition(){
         float posX,posY;
