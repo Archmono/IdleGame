@@ -175,7 +175,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginTop="50dp"
             android:onClick="btnDoom"
-            android:text="D"
+            android:background="#0000"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

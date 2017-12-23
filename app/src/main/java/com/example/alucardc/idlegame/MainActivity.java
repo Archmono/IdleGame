@@ -35,6 +35,15 @@ public class MainActivity extends AppCompatActivity {
     long newTime,oldTime; //運算用變數
 
     public static int hpRegKey = 10;   //回復HP的時間秒數
+
+    int maxScenes = 2; //最大場景數
+    public static int toScene; //前往場景編號
+    int[] enterIconR = {R.drawable.scene_1_icon, R.drawable.scene_2_icon};
+    int[] bgBottomR = {R.drawable.bg1_bottom, R.drawable.bg2_bottom};
+    int[] tvScenesNumR = {R.drawable.tv_scenes1, R.drawable.tv_scenes2};
+    int[] tvPlaceR = {R.drawable.tv_forest, R.drawable.tv_graveyard};
+    /*切換場景資源*/
+
     String lastRegTime;
     long tempNowTime;
     String tempOldTime,tempNextTime="0"; //暫存用變數
@@ -45,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     String TAG = "MainDataTest";
     String TAG2 = "MainPlayerTest";
     TextView tvHP,tvEnemy,tvPollution;
-    ImageView pollutionBar;
+    ImageView pollutionBar,enterIcon,bgBottom,tvScenesNum,tvPlace;
     LinearLayout playerStatusBar;
     public static TextView tvPlayerID,tvPlayerHP,tvPlayerMoney;
     public static ImageView playerHPBar;
@@ -105,6 +114,10 @@ public class MainActivity extends AppCompatActivity {
         tvPollution = (TextView) findViewById(R.id.tvPollution);
         playerHPBar = (ImageView) playerStatusBar.findViewById(R.id.playerHPBar);
         pollutionBar = (ImageView) findViewById(R.id.pollutionBar);
+        enterIcon = (ImageView) findViewById(R.id.enterIcon);
+        bgBottom = (ImageView) findViewById(R.id.bgBottom);
+        tvScenesNum = (ImageView) findViewById(R.id.tvScenesNum);
+        tvPlace = (ImageView) findViewById(R.id.tvPlace);
 
         Typeface font = Typeface.createFromAsset(getAssets(), "fonts/bank_gothic_medium_bt.ttf");
         tvPlayerID.setTypeface(font);
@@ -138,6 +151,26 @@ public class MainActivity extends AppCompatActivity {
         android.app.DialogFragment newFragment = new MobsHandBook();
         newFragment.show(ft, "dialog");
     }
+
+    int nowScene = 1;
+    public void onChangeScenes (View v) {
+
+            switch (v.getId()) {
+                case R.id.btnRight:
+                    nowScene++;
+                    break;
+                case R.id.btnLeft:
+                    nowScene--;
+                    break;
+            }
+        if (nowScene<1) nowScene =1;
+        if (nowScene>=maxScenes) nowScene = maxScenes;
+            enterIcon.setImageResource(enterIconR[nowScene-1]);
+            bgBottom.setImageResource(bgBottomR[nowScene-1]);
+            tvScenesNum.setImageResource(tvScenesNumR[nowScene-1]);
+            tvPlace.setImageResource(tvPlaceR[nowScene-1]);
+    }
+
     //=======================按鈕==========================
 
     public void getPlayerStatus(){
