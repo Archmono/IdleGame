@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
 
     int timeGap,nextTime; //運算用變數
     long newTime,oldTime; //運算用變數
+
+    MediaPlayer bgm01;
 
     public static int hpRegKey = 10;   //回復HP的時間秒數
     String lastRegTime;
@@ -196,8 +200,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static boolean settle =false;
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        bgm01.stop();
+    }
+
     @Override
     protected void onResume() {
+
+        bgm01 = MediaPlayer.create(MainActivity.this, R.raw.main_bgm_01);
+        bgm01.setLooping(true);
+        bgm01.start();
+
         super.onResume();
         if (settle){
             onSave();
@@ -314,6 +330,46 @@ public class MainActivity extends AppCompatActivity {
         super.finish();
         overridePendingTransition(0, 0);
     }
+
+//    public static void PlayBGM(final Context context, final SoundType type)
+//    {
+//        new Thread(new Runnable()
+//        {
+//            @Override
+//            public void run()
+//            {
+//                MediaPlayer mediaPlayer = new MediaPlayer();
+//                int resId = -1;
+//                switch (type)
+//                {
+//                    case INCOMING_NOTIFICATION:
+//                        resId=R.raw.noti_sound;
+//                        break;
+//                    case SEND_BETTING_SLIP:
+//                        resId=R.raw.slip_sent;
+//                        break;
+//                    case TRIVIA_RIGHT_ANSWER:
+//                        resId=R.raw.game_bonus;
+//                        break;
+//                    case TRIVIA_WRONG_ANSWER:
+//                        resId=R.raw.whistle_referee_trivia_bad_answer;
+//                        break;
+//                }
+//                if (resId != -1)
+//                {
+//                    mediaPlayer = MediaPlayer.create(context, resId);
+//                    mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+//                    mediaPlayer.setLooping(false);
+//                    mediaPlayer.start();
+//
+//                    while (mediaPlayer.isPlaying() == true)
+//                    {
+//                    }
+//                }
+//            }
+//        }).start();
+//
+//    }
 }
 
 
