@@ -8,11 +8,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Typeface;
+import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -95,14 +98,14 @@ public class MainActivity extends AppCompatActivity {
 
     void countMobs(){
         int sum=0;
-        textView2 = (TextView) findViewById(R.id.textView2);
+        tvEnemy = (TextView) findViewById(R.id.tvEnemy);
         for(int i=0; i<6; i++){
             System.out.println(Loading.mobsSlotFilled_S1[i]);
             if( !Loading.mobsSlotFilled_S1[i].equals("0") ) {
                 sum++;
             }
         }
-        textView2.setText(sum+"/ "+nextTime+"s");
+        tvEnemy.setText(sum+"/ "+nextTime+"s");
     }
 
     public void findViews(){
@@ -250,11 +253,6 @@ public class MainActivity extends AppCompatActivity {
         newFragment.show(ft, "dialog");
     }
 
-    @Override
-    public void onBackPressed() {  //返回鍵事件
-
-    }
-
     public static boolean settle =false;
 
     @Override
@@ -316,7 +314,7 @@ public class MainActivity extends AppCompatActivity {
         for(int i=0;i<6;i++) { //迴圈檢查，如怪物陣列滿了將不會進入
             if (Loading.mobsSlotFilled_S1[i].equals("0")) { //如果怪物陣列裡的ID為0
                 Loading.getRarity();
-                random = (int) (Math.random() * Loading.randMobTime); //隨機 5-30秒
+                random = (int) (Math.random() * Loading.randMobMaxTime - Loading.randMobMinTime) - Loading.randMobMinTime;
                 if(nextTime > 0) { //如果有紀錄上次未生成怪物時間
                     random = nextTime; //覆蓋掉隨機時間
                     nextTime = 0; //重置下次生怪時間
