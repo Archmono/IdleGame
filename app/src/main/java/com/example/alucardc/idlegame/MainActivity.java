@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     public static int hpRegKey = 10;   //回復HP的時間秒數
 
     int maxScenes = 2; //最大場景數
-    public static int toScene; //前往場景編號
+    public static int toScene = 1; //前往場景編號，初始為1
     int[] enterIconR = {R.drawable.scene_1_icon, R.drawable.scene_2_icon};
     int[] bgBottomR = {R.drawable.bg1_bottom, R.drawable.bg2_bottom};
     int[] tvScenesNumR = {R.drawable.tv_scenes1, R.drawable.tv_scenes2};
@@ -128,13 +128,15 @@ public class MainActivity extends AppCompatActivity {
         tvPollution.setTypeface(font);
     }
 
+    //=======================按鈕==========================
     public void enter_scene_1(View view){
+        toScene = nowScene;
         Intent it = new Intent();
         it.setClass(MainActivity.this,pre_battle_scene.class);
         it.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(it);
     }
-    //=======================按鈕==========================
+
     public void btnInventory(View v){
         showInventory();
         getItemCounts(this);
@@ -296,7 +298,7 @@ public class MainActivity extends AppCompatActivity {
         for(int i=0;i<6;i++) { //迴圈檢查，如怪物陣列滿了將不會進入
             if (Loading.mobsSlotFilled_S1[i].equals("0")) { //如果怪物陣列裡的ID為0
                 Loading.getRarity();
-                random = (int) (Math.random() * Loading.randMobTime); //隨機 5-30秒
+                random = (int) (Math.random() * Loading.randMobMaxTime - Loading.randMobMinTime) - Loading.randMobMinTime;
                 if(nextTime > 0) { //如果有紀錄上次未生成怪物時間
                     random = nextTime; //覆蓋掉隨機時間
                     nextTime = 0; //重置下次生怪時間
