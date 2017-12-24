@@ -2,6 +2,7 @@ package com.example.alucardc.idlegame;
 
 import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -81,7 +82,7 @@ public class Loading extends Activity {
     int timeGap,nextTime; //運算用變數
     long newTime,oldTime; //運算用變數
     String tempOldTime,tempNextTime="0"; //暫存用變數
-    String[][] mobsSlotFilled = new String[][] {mobsSlotFilled_S1,mobsSlotFilled_S2};
+    String[][] mobsSlotFilled = new String[][] {mobsSlotFilled_S1, mobsSlotFilled_S2};
     public static String[] mobsSlotFilled_S1 = new String[6];
     public static String[] mobsSlotFilled_S2 = new String[6];
     Calendar rightNow = Calendar.getInstance(); //提取時間用的方法

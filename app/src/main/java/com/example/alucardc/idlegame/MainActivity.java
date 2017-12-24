@@ -8,11 +8,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Typeface;
+import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -32,7 +35,18 @@ public class MainActivity extends AppCompatActivity {
     int timeGap,nextTime; //運算用變數
     long newTime,oldTime; //運算用變數
 
+    MediaPlayer bgm01;
+
     public static int hpRegKey = 10;   //回復HP的時間秒數
+
+    int maxScenes = 2; //最大場景數
+    public static int toScene = 1; //前往場景編號，初始為1
+    int[] enterIconR = {R.drawable.scene_1_icon, R.drawable.scene_2_icon};
+    int[] bgBottomR = {R.drawable.bg1_bottom, R.drawable.bg2_bottom};
+    int[] tvScenesNumR = {R.drawable.tv_scenes1, R.drawable.tv_scenes2};
+    int[] tvPlaceR = {R.drawable.tv_forest, R.drawable.tv_graveyard};
+    /*切換場景資源*/
+
     String lastRegTime;
     long tempNowTime;
     String tempOldTime,tempNextTime="0"; //暫存用變數
@@ -42,9 +56,11 @@ public class MainActivity extends AppCompatActivity {
 
     String TAG = "MainDataTest";
     String TAG2 = "MainPlayerTest";
-    TextView textView2;
+    TextView tvHP,tvEnemy,tvPollution;
+    ImageView pollutionBar,enterIcon,bgBottom,tvScenesNum,tvPlace;
     LinearLayout playerStatusBar;
     public static TextView tvPlayerID,tvPlayerHP,tvPlayerMoney;
+    public static ImageView playerHPBar;
 
     private SQLiteDatabase db;
 
@@ -58,6 +74,8 @@ public class MainActivity extends AppCompatActivity {
 //        getData("1");
         findViews();
         getPlayerStatus();
+        pollutionBar.setScaleX(0.5f);
+        pollutionBar.setPivotX(pollutionBar.getX());
         countMobs();
 
 //        Log.d(TAG, Loading.idList.toString());
@@ -80,14 +98,14 @@ public class MainActivity extends AppCompatActivity {
 
     void countMobs(){
         int sum=0;
-        textView2 = (TextView) findViewById(R.id.textView2);
+        tvEnemy = (TextView) findViewById(R.id.tvEnemy);
         for(int i=0; i<6; i++){
             System.out.println(Loading.mobsSlotFilled_S1[i]);
             if( !Loading.mobsSlotFilled_S1[i].equals("0") ) {
                 sum++;
             }
         }
-        textView2.setText(sum+"/ "+nextTime+"s");
+        tvEnemy.setText(sum+"/ "+nextTime+"s");
     }
 
     public void findViews(){
@@ -95,9 +113,28 @@ public class MainActivity extends AppCompatActivity {
         playerStatusBar = (LinearLayout)findViewById(R.id.playerStatusBar);
         tvPlayerHP = (TextView) playerStatusBar.findViewById(R.id.tvPlayerHP);
         tvPlayerMoney = (TextView) playerStatusBar.findViewById(R.id.tvPlayerMoney);
+        tvHP = (TextView) playerStatusBar.findViewById(R.id.tvHP);
+        tvEnemy = (TextView) findViewById(R.id.tvEnemy);
+        tvPollution = (TextView) findViewById(R.id.tvPollution);
+        playerHPBar = (ImageView) playerStatusBar.findViewById(R.id.playerHPBar);
+        pollutionBar = (ImageView) findViewById(R.id.pollutionBar);
+        enterIcon = (ImageView) findViewById(R.id.enterIcon);
+        bgBottom = (ImageView) findViewById(R.id.bgBottom);
+        tvScenesNum = (ImageView) findViewById(R.id.tvScenesNum);
+        tvPlace = (ImageView) findViewById(R.id.tvPlace);
+
+        Typeface font = Typeface.createFromAsset(getAssets(), "fonts/bank_gothic_medium_bt.ttf");
+        tvPlayerID.setTypeface(font);
+        tvPlayerHP.setTypeface(font);
+        tvPlayerMoney.setTypeface(font);
+        tvHP.setTypeface(font);
+        tvEnemy.setTypeface(font);
+        tvPollution.setTypeface(font);
     }
 
+    //=======================按鈕==========================
     public void enter_scene_1(View view){
+        toScene = nowScene;
         Intent it = new Intent();
         it.setClass(MainActivity.this,pre_battle_scene.class);
         it.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -120,6 +157,26 @@ public class MainActivity extends AppCompatActivity {
         android.app.DialogFragment newFragment = new MobsHandBook();
         newFragment.show(ft, "dialog");
     }
+
+    int nowScene = 1;
+    public void onChangeScenes (View v) {
+
+        switch (v.getId()) {
+            case R.id.btnRight:
+                nowScene++;
+                break;
+            case R.id.btnLeft:
+                nowScene--;
+                break;
+        }
+        if (nowScene<1) nowScene =1;
+        if (nowScene>=maxScenes) nowScene = maxScenes;
+        enterIcon.setImageResource(enterIconR[nowScene-1]);
+        bgBottom.setImageResource(bgBottomR[nowScene-1]);
+        tvScenesNum.setImageResource(tvScenesNumR[nowScene-1]);
+        tvPlace.setImageResource(tvPlaceR[nowScene-1]);
+    }
+
     //=======================按鈕==========================
 
     public void getPlayerStatus(){
@@ -144,9 +201,15 @@ public class MainActivity extends AppCompatActivity {
             playerMaxHP = playInfo.playerStatus.playerMaxHP;
             regPlayerHPbyTime();
 
-            tvPlayerID.setText("ID :" + playInfo.playerStatus.playerID);
-            tvPlayerMoney.setText("持有金錢 :" + playInfo.playerStatus.playerMoney);
-            tvPlayerHP.setText("HP : " + playInfo.playerStatus.playerCurrentHP + " / " + playInfo.playerStatus.playerMaxHP);
+            tvPlayerID.setText("ID : " + playInfo.playerStatus.playerID);
+            tvPlayerMoney.setText("" + playInfo.playerStatus.playerMoney);
+            tvPlayerHP.setText(playInfo.playerStatus.playerCurrentHP + " / " + playInfo.playerStatus.playerMaxHP);
+
+            if (playInfo.playerStatus.playerCurrentHP > 0) {
+                playerHPBar.setScaleX((float) playInfo.playerStatus.playerCurrentHP / (float) playInfo.playerStatus.playerMaxHP);
+                float playerHPBarLocateX = playerHPBar.getX();
+                playerHPBar.setPivotX(playerHPBarLocateX);
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -190,14 +253,21 @@ public class MainActivity extends AppCompatActivity {
         newFragment.show(ft, "dialog");
     }
 
-    @Override
-    public void onBackPressed() {  //返回鍵事件
+    public static boolean settle =false;
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        bgm01.stop();
     }
 
-    public static boolean settle =false;
     @Override
     protected void onResume() {
+
+        bgm01 = MediaPlayer.create(MainActivity.this, R.raw.main_bgm_01);
+        bgm01.setLooping(true);
+        bgm01.start();
+
         super.onResume();
         if (settle){
             onSave();
@@ -215,7 +285,7 @@ public class MainActivity extends AppCompatActivity {
 
     protected void restorePrefs() { //讀取的位置
         Log.d(TAG,"onResume");
-        SharedPreferences settings = getSharedPreferences(DATE_PREF, 0);
+        SharedPreferences settings = getSharedPreferences(Loading.DATE_PREF, 0);
         for(int i=0; i<6; i++){
             Loading.mobsSlotFilled_S1[i] = settings.getString(Loading.PREF_MOBS_SLOT_FILLED_S1[i], "");
         }
@@ -244,7 +314,7 @@ public class MainActivity extends AppCompatActivity {
         for(int i=0;i<6;i++) { //迴圈檢查，如怪物陣列滿了將不會進入
             if (Loading.mobsSlotFilled_S1[i].equals("0")) { //如果怪物陣列裡的ID為0
                 Loading.getRarity();
-                random = (int) (Math.random() * Loading.randMobTime); //隨機 5-30秒
+                random = (int) (Math.random() * Loading.randMobMaxTime - Loading.randMobMinTime) - Loading.randMobMinTime;
                 if(nextTime > 0) { //如果有紀錄上次未生成怪物時間
                     random = nextTime; //覆蓋掉隨機時間
                     nextTime = 0; //重置下次生怪時間
@@ -314,7 +384,51 @@ public class MainActivity extends AppCompatActivity {
         super.finish();
         overridePendingTransition(0, 0);
     }
-}
 
+//    public static void PlayBGM(final Context context, final SoundType type)
+//    {
+//        new Thread(new Runnable()
+//        {
+//            @Override
+//            public void run()
+//            {
+//                MediaPlayer mediaPlayer = new MediaPlayer();
+//                int resId = -1;
+//                switch (type)
+//                {
+//                    case INCOMING_NOTIFICATION:
+//                        resId=R.raw.noti_sound;
+//                        break;
+//                    case SEND_BETTING_SLIP:
+//                        resId=R.raw.slip_sent;
+//                        break;
+//                    case TRIVIA_RIGHT_ANSWER:
+//                        resId=R.raw.game_bonus;
+//                        break;
+//                    case TRIVIA_WRONG_ANSWER:
+//                        resId=R.raw.whistle_referee_trivia_bad_answer;
+//                        break;
+//                }
+//                if (resId != -1)
+//                {
+//                    mediaPlayer = MediaPlayer.create(context, resId);
+//                    mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+//                    mediaPlayer.setLooping(false);
+//                    mediaPlayer.start();
+//
+//                    while (mediaPlayer.isPlaying() == true)
+//                    {
+//                    }
+//                }
+//            }
+//        }).start();
+//
+//    }
+
+    @Override
+    public void onBackPressed() {  //返回鍵事件
+
+    }
+}
 
 
