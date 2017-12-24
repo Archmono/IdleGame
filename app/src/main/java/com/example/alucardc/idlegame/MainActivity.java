@@ -276,7 +276,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        if(!Loading.checkPoint) {
+        if(!Loading.checkPoint) { //只new
             bgm01 = MediaPlayer.create(MainActivity.this, R.raw.main_bgm_01);
         }
         bgm01.setLooping(true);
