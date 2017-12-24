@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                 sum++;
             }
         }
-        tvEnemy.setText(sum+"/ "+nextTime+"s");
+        tvEnemy.setText("Enemy " + sum+"/ "+nextTime+"s");
     }
 
     public void findViews(){
@@ -161,20 +161,20 @@ public class MainActivity extends AppCompatActivity {
     int nowScene = 1;
     public void onChangeScenes (View v) {
 
-            switch (v.getId()) {
-                case R.id.btnRight:
-                    nowScene++;
-                    break;
-                case R.id.btnLeft:
-                    nowScene--;
-                    break;
-            }
+        switch (v.getId()) {
+            case R.id.btnRight:
+                nowScene++;
+                break;
+            case R.id.btnLeft:
+                nowScene--;
+                break;
+        }
         if (nowScene<1) nowScene =1;
         if (nowScene>=maxScenes) nowScene = maxScenes;
-            enterIcon.setImageResource(enterIconR[nowScene-1]);
-            bgBottom.setImageResource(bgBottomR[nowScene-1]);
-            tvScenesNum.setImageResource(tvScenesNumR[nowScene-1]);
-            tvPlace.setImageResource(tvPlaceR[nowScene-1]);
+        enterIcon.setImageResource(enterIconR[nowScene-1]);
+        bgBottom.setImageResource(bgBottomR[nowScene-1]);
+        tvScenesNum.setImageResource(tvScenesNumR[nowScene-1]);
+        tvPlace.setImageResource(tvPlaceR[nowScene-1]);
     }
 
     //=======================按鈕==========================
@@ -257,22 +257,18 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        bgm01.stop();
         super.onPause();
-
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
+//        bgm01.stop();
     }
 
     @Override
     protected void onResume() {
 
-        bgm01 = MediaPlayer.create(MainActivity.this, R.raw.main_bgm_01);
-        bgm01.setLooping(true);
-        bgm01.start();
+        if(!Loading.checkPoint) {
+            bgm01 = MediaPlayer.create(MainActivity.this, R.raw.main_bgm_01);
+            bgm01.setLooping(true);
+            bgm01.start();
+        }
 
         super.onResume();
         if (settle){
@@ -291,7 +287,7 @@ public class MainActivity extends AppCompatActivity {
 
     protected void restorePrefs() { //讀取的位置
         Log.d(TAG,"onResume");
-        SharedPreferences settings = getSharedPreferences(DATE_PREF, 0);
+        SharedPreferences settings = getSharedPreferences(Loading.DATE_PREF, 0);
         for(int i=0; i<6; i++){
             Loading.mobsSlotFilled_S1[i] = settings.getString(Loading.PREF_MOBS_SLOT_FILLED_S1[i], "");
         }
@@ -436,6 +432,5 @@ public class MainActivity extends AppCompatActivity {
 
     }
 }
-
 
 

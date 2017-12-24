@@ -2,12 +2,14 @@ package com.example.alucardc.idlegame;
 
 import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -40,6 +42,9 @@ public class Loading extends Activity {
     public static String APP_NAME;
     public static int randMobMaxTime = 5; //最大生怪時間(秒)
     public static int randMobMinTime = 0; //最小生怪時間(秒)
+
+    DisplayMetrics metrics = new DisplayMetrics();
+    public static int metricsX, metricsY;
 
     /*↓SharedPreferences裡儲存的資料名稱↓*/
     public static final String DATE_PREF = "DATE_PREF";
@@ -81,10 +86,12 @@ public class Loading extends Activity {
     int timeGap,nextTime; //運算用變數
     long newTime,oldTime; //運算用變數
     String tempOldTime,tempNextTime="0"; //暫存用變數
-    String[][] mobsSlotFilled = new String[][] {mobsSlotFilled_S1,mobsSlotFilled_S2};
+    String[][] mobsSlotFilled = new String[][] {mobsSlotFilled_S1, mobsSlotFilled_S2};
     public static String[] mobsSlotFilled_S1 = new String[6];
     public static String[] mobsSlotFilled_S2 = new String[6];
     Calendar rightNow = Calendar.getInstance(); //提取時間用的方法
+
+    public static Boolean checkPoint = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +100,11 @@ public class Loading extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
         APP_NAME = getPackageName();
+
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);     //取得螢幕大小
+        metricsX = metrics.widthPixels;
+        metricsY = metrics.heightPixels;
+
         DBInfo.DB_FILE = getDatabasePath("idlegame.db")+"";    //database的絕對路徑
         copyDBFile();                                           //如果沒有db檔案存在目錄databases下,從RAW複製一份
         DBInfo.JSON_FILE = getFilesDir()+"/playerdata.json";    //json的檔案路徑

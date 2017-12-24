@@ -18,11 +18,24 @@
             android:text="NAME"
             android:textColor="#000" />
 
-        <ImageView
-            android:id="@+id/mobsImage"
+        <FrameLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@mipmap/ic_launcher" />
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/mobsImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@mipmap/ic_launcher" />
+
+            <ImageView
+                android:id="@+id/mobStatus"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:visibility="invisible"
+                app:srcCompat="@drawable/icon_dizzy" />
+
+        </FrameLayout>
 
         <RelativeLayout
             android:layout_width="60dp"
