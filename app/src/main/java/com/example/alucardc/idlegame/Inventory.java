@@ -148,7 +148,7 @@ public class Inventory extends DialogFragment {
             items[i].setOnClickListener(btnItem);
             img = getResources().getIdentifier(String.valueOf(Loading.i_image_RList.get((int) index.get(i))), "drawable", Loading.APP_NAME);
             items[i].setImageResource(img);
-            itemFrame[i].addView(items[i]);
+            itemFrame[i].addView(items[i],(int) convertDpToPixel(50, context), (int) convertDpToPixel(50, context));
             itemFrame[i].addView(itemFrameCounts[i]);
             inventory_bottomBag_showLine[(i / column)].addView(itemFrame[i]);
         }

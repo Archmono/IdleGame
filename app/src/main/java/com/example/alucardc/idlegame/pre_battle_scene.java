@@ -132,11 +132,11 @@ public class pre_battle_scene extends AppCompatActivity {
             posX = modView[i].getX();   //取得第1-6個modView位置x值
             posY = modView[i].getY();   //取得第1-6個modView位置y值
 
-            tempX[i] = (float) (Math.random()*2000) -1000;
-            if ( MainActivity.toScene==1 )
+            tempX[i] = (float) (Math.random()*Loading.metricsX*1.8f) -Loading.metricsX;
+            if ( MainActivity.toScene == 1 )
                 tempY[i] = (float) (Math.random()*650) -150;
-            else if ( MainActivity.toScene==2 )
-                tempY[i] = (float) (Math.random()*300) -150;
+            else if ( MainActivity.toScene == 2 )
+                tempY[i] = (float) (Math.random()*900) -150;
 
             if(tempY[i] < 100){
                 modView[i].setScaleX(0.5f);

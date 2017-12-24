@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                 sum++;
             }
         }
-        tvEnemy.setText(sum+"/ "+nextTime+"s");
+        tvEnemy.setText("Enemy " + sum+"/ "+nextTime+"s");
     }
 
     public void findViews(){

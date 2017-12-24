@@ -12,7 +12,7 @@
         android:layout_height="54dp"
         android:padding="8dp"
         app:srcCompat="@drawable/i100101"
-        android:background="@drawable/bottom_light"/>
+        android:background="@drawable/bottom_light_65"/>
 
     <TextView
         android:id="@+id/text1"

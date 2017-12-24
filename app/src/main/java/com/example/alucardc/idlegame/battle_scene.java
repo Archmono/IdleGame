@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -67,11 +68,13 @@ public class battle_scene extends AppCompatActivity {
     long tempNowTime;
     //時間變數
 
+    ImageView battleBG;
+    int[] battleBGR = {R.drawable.bg001,R.drawable.bg002};
     TextView tvPrepareFight,playerHP;
     LinearLayout questionLayout,blockView;
     LinearLayout[] mobs;
     ProgressBar[] actionbar;
-    ImageView[] playerCtrBut,questionImg,mobsImage,mobsHPbar;
+    ImageView[] playerCtrBut,questionImg,mobStatus,mobsImage,mobsHPbar;
     TextView[] mobsName;
     int[] mobsQid = {R.drawable.fire,R.drawable.water,R.drawable.wood,R.drawable.light,R.drawable.dark,R.drawable.heart};
     int[] playerCtrB = {R.id.playerCtrB1,R.id.playerCtrB2,R.id.playerCtrB3,R.id.playerCtrB4,R.id.playerCtrB5,R.id.playerCtrB6};
@@ -249,8 +252,11 @@ public class battle_scene extends AppCompatActivity {
         tvPrepareFight = (TextView)findViewById(R.id.tvPrepareFight);
         questionLayout = (LinearLayout)findViewById(R.id.questionLayout);
         playerHP = (TextView)findViewById(R.id.healthPointCounts);
+        battleBG =(ImageView)findViewById(R.id.battleBG);
+        battleBG.setImageResource(battleBGR[MainActivity.toScene-1]);
 
         mobs = new LinearLayout[6];
+        mobStatus = new ImageView[6];
         mobsName = new TextView[6];
         mobsImage = new ImageView[6];
         actionbar = new ProgressBar[6];
@@ -275,10 +281,13 @@ public class battle_scene extends AppCompatActivity {
         for (int i = 0; i < 6; i++)
         {
             mobs[i] = (LinearLayout)findViewById(mobsInclude[i]);
+            mobs[i].setScaleX(0.8f);
+            mobs[i].setScaleY(0.8f);
             Log.d("mobs", ""+mobsInclude[i]);
             questionImg[i] = new ImageView(this);
             playerCtrBut[i] = (ImageView)findViewById(playerCtrB[i]);
             playerCtrBut[i].setOnClickListener(playerCtrListener);
+            mobStatus[i] = mobs[i].findViewById(R.id.mobStatus);
             mobsName[i] = mobs[i].findViewById(R.id.mobsName);
             mobsImage[i] = mobs[i].findViewById(R.id.mobsImage);
             actionbar[i] = mobs[i].findViewById(R.id.progressBarAction);
@@ -434,6 +443,7 @@ public class battle_scene extends AppCompatActivity {
                 } else if (right && questionLayout.getChildCount() == 1) { //清除最後一顆屬性時
                     //接入怪物可被攻擊狀態
                     questionLayout.removeViewAt(0);
+                    mobStatus[mobIndex].setVisibility(View.VISIBLE);
                     attackable[mobIndex] = true;
                     now = 0;
 
