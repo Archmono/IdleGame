@@ -95,7 +95,7 @@ public class SettlementDialog extends DialogFragment {
                 new String[]{"img","item","num"},
                 new int[]{R.id.img, R.id.text1, R.id.text2});
         listView.setAdapter(adapter);
-        Loading.mobsSlotFilled_S1 = new String[] {"0","0","0","0","0","0"};
+        Loading.mobsSlotFilled[MainActivity.toScene-1] = new String[] {"0","0","0","0","0","0"};
 
         return v;
     }

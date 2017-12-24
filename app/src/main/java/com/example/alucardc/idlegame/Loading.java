@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -39,8 +40,11 @@ public class Loading extends Activity {
     String TAG2 = "MainPlayerTest";
 
     public static String APP_NAME;
-    public static int randMobMaxTime = 5; //最大生怪時間(秒)
-    public static int randMobMinTime = 0; //最小生怪時間(秒)
+    public static int randMobMaxTime = 30; //最大生怪時間(秒)
+    public static int randMobMinTime = 5; //最小生怪時間(秒)
+
+    DisplayMetrics metrics = new DisplayMetrics();
+    public static int metricsX, metricsY;
 
     /*↓SharedPreferences裡儲存的資料名稱↓*/
     public static final String DATE_PREF = "DATE_PREF";
@@ -82,9 +86,9 @@ public class Loading extends Activity {
     int timeGap,nextTime; //運算用變數
     long newTime,oldTime; //運算用變數
     String tempOldTime,tempNextTime="0"; //暫存用變數
-    String[][] mobsSlotFilled = new String[][] {mobsSlotFilled_S1, mobsSlotFilled_S2};
     public static String[] mobsSlotFilled_S1 = new String[6];
     public static String[] mobsSlotFilled_S2 = new String[6];
+    public static String[][] mobsSlotFilled = new String[][] {mobsSlotFilled_S1, mobsSlotFilled_S2};
     Calendar rightNow = Calendar.getInstance(); //提取時間用的方法
 
     @Override
@@ -94,6 +98,9 @@ public class Loading extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
         APP_NAME = getPackageName();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);     //取得螢幕大小
+        metricsX = metrics.widthPixels;
+        metricsY = metrics.heightPixels;
         DBInfo.DB_FILE = getDatabasePath("idlegame.db")+"";    //database的絕對路徑
         copyDBFile();                                           //如果沒有db檔案存在目錄databases下,從RAW複製一份
         DBInfo.JSON_FILE = getFilesDir()+"/playerdata.json";    //json的檔案路徑
@@ -189,9 +196,9 @@ public class Loading extends Activity {
 
     int random;
     void DateTest () {
-        timeGap = (int)(newTime-oldTime)/1000; //計算上次開啟遊戲與本次開啟遊戲時間差
         for (int s = 0; s < mobsSlotFilled.length; s++ ) { //根據場景數跑迴圈生怪
-            getData((s+1)+""); //取得場景一隨機怪物ID (變數存在RandomTest.cId)
+            timeGap = (int)(newTime-oldTime)/1000; //計算上次開啟遊戲與本次開啟遊戲時間差
+            getData((s+1)+"", this); //取得場景一隨機怪物ID (變數存在RandomTest.cId)
             for (int i = 0; i < 6; i++) { //迴圈檢查，如怪物陣列滿了將不會進入
                 if (mobsSlotFilled[s][i].equals("0")) { //如果怪物陣列裡的ID為0
                     getRarity();
@@ -212,8 +219,10 @@ public class Loading extends Activity {
         }
     }
 
-    public void getData(String scene){
-        GameDBHelper helper = GameDBHelper.getInstance(this);
+    public static ArrayList tempRarityList = new ArrayList();
+    public static void getData(String scene, Context context){
+        tempRarityList.clear();
+        GameDBHelper helper = GameDBHelper.getInstance(context);
 //        String[] column = { "_id", "rareWeight","scene_1", "scene_2"};
         Cursor c = helper.getReadableDatabase().query("mobsdata", null, "scene_" + scene + "=?", new String[]{"1"}, null, null, null);
 
@@ -242,6 +251,7 @@ public class Loading extends Activity {
             nameList.add(name);
             healthPointList.add(hp);
             rarityList.add(rarity);
+            tempRarityList.add(rarity);
             speedList.add(speed);
             qCountsList.add(qCounts);
             qTypesList.add(qTypes);
@@ -288,9 +298,9 @@ public class Loading extends Activity {
 
     static void getRarity() {
 
-        int[] raritygArray =  new int[rarityList.size()]; //ArrayList轉int[]
-        for(int i=0; i< rarityList.size(); i++) {
-            raritygArray[i] = Integer.parseInt(rarityList.get(i).toString());
+        int[] raritygArray =  new int[tempRarityList.size()]; //ArrayList轉int[]
+        for(int i=0; i< tempRarityList.size(); i++) {
+            raritygArray[i] = Integer.parseInt(tempRarityList.get(i).toString());
         }
         RandomTest randomTest = new RandomTest(raritygArray); //將資料庫稀有度帶入隨機生怪
         randomTest.randomTest(); //執行運算方法

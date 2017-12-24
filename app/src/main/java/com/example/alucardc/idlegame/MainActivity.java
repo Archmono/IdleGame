@@ -27,7 +27,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Calendar;
 
-import static com.example.alucardc.idlegame.Loading.DATE_PREF;
 import static com.example.alucardc.idlegame.Loading.LAST_REG_HP_TIME;
 
 public class MainActivity extends AppCompatActivity {
@@ -100,12 +99,12 @@ public class MainActivity extends AppCompatActivity {
         int sum=0;
         tvEnemy = (TextView) findViewById(R.id.tvEnemy);
         for(int i=0; i<6; i++){
-            System.out.println(Loading.mobsSlotFilled_S1[i]);
-            if( !Loading.mobsSlotFilled_S1[i].equals("0") ) {
+            System.out.println(Loading.mobsSlotFilled[nowScene-1][i]);
+            if( !Loading.mobsSlotFilled[nowScene-1][i].equals("0") ) {
                 sum++;
             }
         }
-        tvEnemy.setText(sum+"/ "+nextTime+"s");
+        tvEnemy.setText("Enemy  " + sum+"/ "+nextTime+"s");
     }
 
     public void findViews(){
@@ -171,6 +170,7 @@ public class MainActivity extends AppCompatActivity {
         }
         if (nowScene<1) nowScene =1;
         if (nowScene>=maxScenes) nowScene = maxScenes;
+        countMobs();
         enterIcon.setImageResource(enterIconR[nowScene-1]);
         bgBottom.setImageResource(bgBottomR[nowScene-1]);
         tvScenesNum.setImageResource(tvScenesNumR[nowScene-1]);
@@ -288,6 +288,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences settings = getSharedPreferences(Loading.DATE_PREF, 0);
         for(int i=0; i<6; i++){
             Loading.mobsSlotFilled_S1[i] = settings.getString(Loading.PREF_MOBS_SLOT_FILLED_S1[i], "");
+            Loading.mobsSlotFilled_S2[i] = settings.getString(Loading.PREF_MOBS_SLOT_FILLED_S2[i], "");
         }
         tempNextTime = settings.getString(Loading.DATE_NEXT_DATE, "");
         tempOldTime = settings.getString(Loading.PREF_OLD_TIME, "");
@@ -298,10 +299,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     protected void onSave() { //儲存的位置
-        SharedPreferences settings = getSharedPreferences(DATE_PREF, 0);
+        SharedPreferences settings = getSharedPreferences(Loading.DATE_PREF, 0);
         settings.edit().putString(Loading.PREF_OLD_TIME, String.valueOf(rightNow.getTimeInMillis())).commit();
         for(int i=0; i<6; i++){
             settings.edit().putString(Loading.PREF_MOBS_SLOT_FILLED_S1[i], Loading.mobsSlotFilled_S1[i]).commit();
+            settings.edit().putString(Loading.PREF_MOBS_SLOT_FILLED_S2[i], Loading.mobsSlotFilled_S2[i]).commit();
         }
         settings.edit().putString(Loading.DATE_NEXT_DATE, String.valueOf(nextTime)).commit();
     }
@@ -309,23 +311,23 @@ public class MainActivity extends AppCompatActivity {
     int random;
     void DateTest () {
         timeGap = (int)(newTime-oldTime)/1000; //計算上次開啟遊戲與本次開啟遊戲時間差
-        Log.d("LOGDATE_timeGap", timeGap + "");
-        Log.d("LOGDATE_NextTime", nextTime+"");
-        for(int i=0;i<6;i++) { //迴圈檢查，如怪物陣列滿了將不會進入
-            if (Loading.mobsSlotFilled_S1[i].equals("0")) { //如果怪物陣列裡的ID為0
-                Loading.getRarity();
-                random = (int) (Math.random() * Loading.randMobMaxTime - Loading.randMobMinTime) - Loading.randMobMinTime;
-                if(nextTime > 0) { //如果有紀錄上次未生成怪物時間
-                    random = nextTime; //覆蓋掉隨機時間
-                    nextTime = 0; //重置下次生怪時間
-                }
-                Log.d("LOGDATE_Random"+i+":", random + "");
-                timeGap -= random; //利用時間差運算是否繼續生怪
-                if (timeGap < 0) { //無時間繼續生怪
-                    nextTime = (-timeGap); //將剩餘時間存入下次生怪時間
-                    break; //跳出迴圈
-                } else {
-                    Loading.mobsSlotFilled_S1[i] = RandomTest.cId; //放入生怪ID至怪物陣列
+        for (int s = 0; s < Loading.mobsSlotFilled.length; s++ ) { //根據場景數跑迴圈生怪
+            Loading.getData((s+1)+"", this); //取得場景一隨機怪物ID (變數存在RandomTest.cId)
+            for (int i = 0; i < 6; i++) { //迴圈檢查，如怪物陣列滿了將不會進入
+                if (Loading.mobsSlotFilled[s][i].equals("0")) { //如果怪物陣列裡的ID為0
+                    Loading.getRarity();
+                    random = (int) (Math.random() * Loading.randMobMaxTime - Loading.randMobMinTime) - Loading.randMobMinTime;
+                    if (nextTime > 0) { //如果有紀錄上次未生成怪物時間
+                        random = nextTime; //覆蓋掉隨機時間
+                        nextTime = 0; //重置下次生怪時間
+                    }
+                    timeGap -= random; //利用時間差運算是否繼續生怪
+                    if (timeGap < 0) { //無時間繼續生怪
+                        nextTime = (-timeGap); //將剩餘時間存入下次生怪時間
+                        break; //跳出迴圈
+                    } else {
+                        Loading.mobsSlotFilled[s][i] = RandomTest.cId; //放入生怪ID至怪物陣列
+                    }
                 }
             }
         }
@@ -333,7 +335,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void regPlayerHPbyTime(){
         boolean isHealed = false;
-        SharedPreferences settings = getSharedPreferences(DATE_PREF, 0);
+        SharedPreferences settings = getSharedPreferences(Loading.DATE_PREF, 0);
         rightNow = Calendar.getInstance();
         tempNowTime = rightNow.getTimeInMillis();
         lastRegTime = settings.getString(LAST_REG_HP_TIME,"");

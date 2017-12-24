@@ -111,7 +111,7 @@ public class pre_battle_scene extends AppCompatActivity {
     }
 
     public void start_fight(View v){
-        if(!Loading.mobsSlotFilled_S1[0].equals("0")) {
+        if(!Loading.mobsSlotFilled[MainActivity.toScene-1][0].equals("0")) {
             Intent it = new Intent();
             it.setClass(this, battle_scene.class);
             startActivity(it);
@@ -125,18 +125,18 @@ public class pre_battle_scene extends AppCompatActivity {
     public void randomViewPosition(){
         float posX,posY;
         float afterPosX,afterPosY;
-        float tempX[] = new float[Loading.mobsSlotFilled_S1.length];
-        float tempY[] = new float[Loading.mobsSlotFilled_S1.length];
+        float tempX[] = new float[Loading.mobsSlotFilled[MainActivity.toScene-1].length];
+        float tempY[] = new float[Loading.mobsSlotFilled[MainActivity.toScene-1].length];
 
-        for(int i = 0; i<Loading.mobsSlotFilled_S1.length; i++){
+        for(int i = 0; i<Loading.mobsSlotFilled[MainActivity.toScene-1].length; i++){
             posX = modView[i].getX();   //取得第1-6個modView位置x值
             posY = modView[i].getY();   //取得第1-6個modView位置y值
 
-            tempX[i] = (float) (Math.random()*2000) -1000;
-            if ( MainActivity.toScene==1 )
+            tempX[i] = (float) (Math.random()*Loading.metricsX*1.8f) -Loading.metricsX;
+            if ( MainActivity.toScene == 1 )
                 tempY[i] = (float) (Math.random()*650) -150;
-            else if ( MainActivity.toScene==2 )
-                tempY[i] = (float) (Math.random()*300) -150;
+            else if ( MainActivity.toScene == 2 )
+                tempY[i] = (float) (Math.random()*900) -150;
 
             if(tempY[i] < 100){
                 modView[i].setScaleX(0.5f);
@@ -155,7 +155,7 @@ public class pre_battle_scene extends AppCompatActivity {
             afterPosX = modView[i].getX();   //取得第1-6個modView位置x值
             afterPosY = modView[i].getY();   //取得第1-6個modView位置y值
 
-            for(int j = 0; j<Loading.mobsSlotFilled_S1.length; j++){
+            for(int j = 0; j<Loading.mobsSlotFilled[MainActivity.toScene-1].length; j++){
                 if(modView[j].getY() > afterPosY){
                     Log.d("Position", "i=" + i + " j=" + j + " 計算後的當前圖片Y:" + afterPosY + "  比對的圖片J的Y值:" + modView[j].getY());
                     modView[j].bringToFront();
@@ -201,13 +201,13 @@ public class pre_battle_scene extends AppCompatActivity {
 //    }
 
     void setVisible () {
-        for(int i=0; i<Loading.mobsSlotFilled_S1.length; i++) {
-            if(Loading.mobsSlotFilled_S1[i].equals("0"))
+        for(int i=0; i < Loading.mobsSlotFilled[MainActivity.toScene-1].length; i++) {
+            if( Loading.mobsSlotFilled[MainActivity.toScene-1][i].equals("0") )
                 modView[i].setVisibility(View.INVISIBLE);
-            else if (Loading.mobsSlotFilled_S1[i]==null) {
+            else if (Loading.mobsSlotFilled[MainActivity.toScene-1][i]==null) {
                 Toast.makeText(pre_battle_scene.this, "資料未存取", Toast.LENGTH_SHORT).show();
             } else {
-                int inx = Loading.idList.indexOf(Loading.mobsSlotFilled_S1[i]);
+                int inx = Loading.idList.indexOf(Loading.mobsSlotFilled[MainActivity.toScene-1][i]);
                 int mobs_img_resID = getResources().getIdentifier((String)Loading.imageList.get(inx), "drawable", getPackageName());
                 modView[i].setImageResource(mobs_img_resID);
             }
@@ -230,6 +230,7 @@ public class pre_battle_scene extends AppCompatActivity {
         SharedPreferences settings = getSharedPreferences(Loading.DATE_PREF, 0);
         for(int i=0; i<6; i++){
             Loading.mobsSlotFilled_S1[i] = settings.getString(Loading.PREF_MOBS_SLOT_FILLED_S1[i], "");
+            Loading.mobsSlotFilled_S2[i] = settings.getString(Loading.PREF_MOBS_SLOT_FILLED_S2[i], "");
         }
         tempNextTime = settings.getString(Loading.DATE_NEXT_DATE, "");
         tempOldTime = settings.getString(Loading.PREF_OLD_TIME, "");
@@ -244,30 +245,32 @@ public class pre_battle_scene extends AppCompatActivity {
         settings.edit().putString(Loading.PREF_OLD_TIME, String.valueOf(rightNow.getTimeInMillis())).commit();
         for(int i=0; i<6; i++){
             settings.edit().putString(Loading.PREF_MOBS_SLOT_FILLED_S1[i], Loading.mobsSlotFilled_S1[i]).commit();
+            settings.edit().putString(Loading.PREF_MOBS_SLOT_FILLED_S2[i], Loading.mobsSlotFilled_S2[i]).commit();
         }
         settings.edit().putString(Loading.DATE_NEXT_DATE, String.valueOf(nextTime)).commit();
     }
 
     int random;
+
     void DateTest () {
         timeGap = (int)(newTime-oldTime)/1000; //計算上次開啟遊戲與本次開啟遊戲時間差
-        Log.d("LOGDATE_timeGap", timeGap + "");
-        Log.d("LOGDATE_NextTime", nextTime+"");
-        for(int i=0;i<6;i++) { //迴圈檢查，如怪物陣列滿了將不會進入
-            if (Loading.mobsSlotFilled_S1[i].equals("0")) { //如果怪物陣列裡的ID為0
-                Loading.getRarity();
-                random = (int) (Math.random() * Loading.randMobMaxTime - Loading.randMobMinTime) - Loading.randMobMinTime;
-                if(nextTime > 0) { //如果有紀錄上次未生成怪物時間
-                    random = nextTime; //覆蓋掉隨機時間
-                    nextTime = 0; //重置下次生怪時間
-                }
-                Log.d("LOGDATE_Random"+i+":", random + "");
-                timeGap -= random; //利用時間差運算是否繼續生怪
-                if (timeGap < 0) { //無時間繼續生怪
-                    nextTime = (-timeGap); //將剩餘時間存入下次生怪時間
-                    break; //跳出迴圈
-                } else {
-                    Loading.mobsSlotFilled_S1[i] = RandomTest.cId; //放入生怪ID至怪物陣列
+        for (int s = 0; s < Loading.mobsSlotFilled.length; s++ ) { //根據場景數跑迴圈生怪
+            Loading.getData((s+1)+"", this); //取得場景一隨機怪物ID (變數存在RandomTest.cId)
+            for (int i = 0; i < 6; i++) { //迴圈檢查，如怪物陣列滿了將不會進入
+                if (Loading.mobsSlotFilled[s][i].equals("0")) { //如果怪物陣列裡的ID為0
+                    Loading.getRarity();
+                    random = (int) (Math.random() * Loading.randMobMaxTime - Loading.randMobMinTime) - Loading.randMobMinTime;
+                    if (nextTime > 0) { //如果有紀錄上次未生成怪物時間
+                        random = nextTime; //覆蓋掉隨機時間
+                        nextTime = 0; //重置下次生怪時間
+                    }
+                    timeGap -= random; //利用時間差運算是否繼續生怪
+                    if (timeGap < 0) { //無時間繼續生怪
+                        nextTime = (-timeGap); //將剩餘時間存入下次生怪時間
+                        break; //跳出迴圈
+                    } else {
+                        Loading.mobsSlotFilled[s][i] = RandomTest.cId; //放入生怪ID至怪物陣列
+                    }
                 }
             }
         }

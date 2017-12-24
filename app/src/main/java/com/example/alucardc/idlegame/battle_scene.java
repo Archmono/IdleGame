@@ -158,11 +158,11 @@ public class battle_scene extends AppCompatActivity {
 
     void setMobs() {
         countMobs();
-        for(int i=0; i<Loading.mobsSlotFilled_S1.length; i++) {
-            if(Loading.mobsSlotFilled_S1[i].equals("0"))
+        for(int i=0; i<Loading.mobsSlotFilled[MainActivity.toScene-1].length; i++) {
+            if(Loading.mobsSlotFilled[MainActivity.toScene-1].equals("0"))
                 mobs[i].setVisibility(View.GONE);
             else {
-                int inx = Loading.idList.indexOf(Loading.mobsSlotFilled_S1[i]);
+                int inx = Loading.idList.indexOf(Loading.mobsSlotFilled[MainActivity.toScene-1][i]);
                 int mobs_img_resID = getResources().getIdentifier((String)Loading.imageList.get(inx), "drawable", getPackageName());
                 mobsImage[i].setImageResource(mobs_img_resID);
                 elementTypes[i] = (int)Loading.qTypesList.get(inx);
@@ -536,7 +536,7 @@ public class battle_scene extends AppCompatActivity {
                 Log.d("TAG", LootFail.lootSet+"");
                 updatePlayerHP();   //更新目前血量到JSON
                 for(int i = 0; i<mobSum; i++){
-                    String str = Loading.mobsSlotFilled_S1[i];
+                    String str = Loading.mobsSlotFilled[MainActivity.toScene-1][i];
                     unlockStatus(Integer.parseInt(str),"image",1);
                     unlockStatus(Integer.parseInt(str),"name",1);
                 }
@@ -578,8 +578,8 @@ public class battle_scene extends AppCompatActivity {
     void countMobs() {
         mobSum = 0;
         for (int i = 0; i < 6; i++) {
-            System.out.println(Loading.mobsSlotFilled_S1[i]);
-            if (!Loading.mobsSlotFilled_S1[i].equals("0")) {
+            System.out.println(Loading.mobsSlotFilled[MainActivity.toScene-1][i]);
+            if (!Loading.mobsSlotFilled[MainActivity.toScene-1][i].equals("0")) {
                 mobSum++;
             }
         }

@@ -17,7 +17,7 @@ public class LootFail {
 
     public LootFail () {
         for (int i =0; i<6; i++)
-            this.cId[i] = Loading.idList.indexOf(Loading.mobsSlotFilled_S1[i]);
+            this.cId[i] = Loading.idList.indexOf(Loading.mobsSlotFilled[MainActivity.toScene-1][i]);
     }
 
     Boolean again;
