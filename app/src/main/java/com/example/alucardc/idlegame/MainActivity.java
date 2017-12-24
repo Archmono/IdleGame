@@ -258,15 +258,17 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        bgm01.stop();
+//        bgm01.stop();
     }
 
     @Override
     protected void onResume() {
 
-        bgm01 = MediaPlayer.create(MainActivity.this, R.raw.main_bgm_01);
-        bgm01.setLooping(true);
-        bgm01.start();
+        if(!Loading.checkPoint) {
+            bgm01 = MediaPlayer.create(MainActivity.this, R.raw.main_bgm_01);
+            bgm01.setLooping(true);
+            bgm01.start();
+        }
 
         super.onResume();
         if (settle){
