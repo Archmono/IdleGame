@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     int timeGap,nextTime; //運算用變數
     long newTime,oldTime; //運算用變數
 
-    MediaPlayer bgm01;
+    public static MediaPlayer bgm01;
 
     public static int hpRegKey = 10;   //回復HP的時間秒數
 
@@ -271,15 +271,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-//        bgm01.stop();
+        bgm01.pause();
     }
 
     @Override
     protected void onResume() {
-
         if(!Loading.checkPoint) {
             bgm01 = MediaPlayer.create(MainActivity.this, R.raw.main_bgm_01);
-            bgm01.setLooping(true);
+        }
+        bgm01.setLooping(true);
+        if(!bgm01.isPlaying()) {
             bgm01.start();
         }
 
