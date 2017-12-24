@@ -9,7 +9,9 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -47,6 +49,11 @@ public class MainActivity extends AppCompatActivity {
     int[] tvPlaceR = {R.drawable.tv_forest, R.drawable.tv_graveyard};
     /*切換場景資源*/
 
+    //音效用變數
+    SoundPool soundPool;
+    private int menuBtnSFX;
+    //音效用變數
+
     String lastRegTime;
     long tempNowTime;
     String tempOldTime,tempNextTime="0"; //暫存用變數
@@ -76,7 +83,11 @@ public class MainActivity extends AppCompatActivity {
         getPlayerStatus();
         pollutionBar.setScaleX(0.5f);
         pollutionBar.setPivotX(pollutionBar.getX());
+
         countMobs();
+        soundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 5);
+        menuBtnSFX = soundPool.load(MainActivity.this, R.raw.menu_sfx, 1);
+
 
 //        Log.d(TAG, Loading.idList.toString());
 //        Log.d(TAG, Loading.nameList.toString());
@@ -142,11 +153,13 @@ public class MainActivity extends AppCompatActivity {
     }
     //=======================按鈕==========================
     public void btnInventory(View v){
+        soundPool.play(menuBtnSFX, 1.0F, 1.0F, 0, 0, 1.0F);
         showInventory();
         getItemCounts(this);
     }
 
     public void btnHandBook(View v){
+        soundPool.play(menuBtnSFX, 1.0F, 1.0F, 0, 0, 1.0F);
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         Fragment prev = getFragmentManager().findFragmentByTag("dialog");
         if (prev != null) {

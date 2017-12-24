@@ -7,6 +7,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -54,6 +56,9 @@ public class Inventory extends DialogFragment {
     private SQLiteDatabase db;
     int img;
 
+    SoundPool soundPool;
+    private int soldItemSFX;
+
     @RequiresApi(api = Build.VERSION_CODES.M)
 
     @Override
@@ -72,6 +77,9 @@ public class Inventory extends DialogFragment {
         findViews();
         updatePlayerStatus(0,0);
         setBottomView();
+
+        soundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 5);
+        soldItemSFX = soundPool.load(context, R.raw.item_sold_sfx, 1);
 //        Log.d("Inventory", index.size()+"");
 
         return v;
@@ -326,6 +334,7 @@ public class Inventory extends DialogFragment {
         @Override
         public void onClick(View view) {
             if (index.size() > 0) {
+                soundPool.play(soldItemSFX, 1.0F, 1.0F, 0, 0, 1.0F);
                 updateItem(Integer.parseInt(Loading.id_lootList.get((int) index.get(tag)) + ""), Integer.parseInt(Loading.i_countList.get((int) index.get(tag)) + "") - 1);
                 updatePlayerStatus(Integer.parseInt(Loading.i_priceList.get((int) index.get(tag)) + ""), 0);
                 itemFrameCounts[tag].setText((Loading.i_countList.get((int) index.get(tag)) + "") + "");
