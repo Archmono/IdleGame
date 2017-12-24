@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.os.Build;
 import android.os.Handler;
@@ -43,6 +44,7 @@ import static com.example.alucardc.idlegame.Loading.LAST_REG_HP_TIME;
 public class battle_scene extends AppCompatActivity {
 
     private SQLiteDatabase db;
+    MediaPlayer battle_bgm_01;
 
     ProgressBar PB;
     int prepareTime = 3;
@@ -141,11 +143,12 @@ public class battle_scene extends AppCompatActivity {
 
         soundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 5);
         getHit = soundPool.load(this, R.raw.get_hitted, 1);
-        hitMobs = soundPool.load(this, R.raw.mobs_hitted, 1);
+        hitMobs = soundPool.load(this, R.raw.player_attack, 1);
     }
 
     @Override
     protected void onPause() {
+        battle_bgm_01.pause();
         if(!endFight){
             Message msg = mHandler.obtainMessage();
             msg.what = 3;                           //msg3訊息內容為遮擋view的顯示 & 中央提示暫停文字顯示
@@ -154,6 +157,14 @@ public class battle_scene extends AppCompatActivity {
             isPaused = true;
         }
         super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        battle_bgm_01 = MediaPlayer.create(battle_scene.this, R.raw.battle_bgm_01);
+        battle_bgm_01.setLooping(true);
+        battle_bgm_01.start();
+        super.onResume();
     }
 
     void setMobs() {
