@@ -91,6 +91,8 @@ public class Loading extends Activity {
     public static String[] mobsSlotFilled_S2 = new String[6];
     Calendar rightNow = Calendar.getInstance(); //提取時間用的方法
 
+    public static Boolean checkPoint = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,  //隱藏狀態列
@@ -98,7 +100,7 @@ public class Loading extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
         APP_NAME = getPackageName();
-        
+
         getWindowManager().getDefaultDisplay().getMetrics(metrics);     //取得螢幕大小
         metricsX = metrics.widthPixels;
         metricsY = metrics.heightPixels;
