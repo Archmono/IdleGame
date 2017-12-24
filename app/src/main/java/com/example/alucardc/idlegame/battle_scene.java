@@ -147,6 +147,7 @@ public class battle_scene extends AppCompatActivity {
         soundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 5);
         getHit = soundPool.load(this, R.raw.get_hitted, 1);
         hitMobs = soundPool.load(this, R.raw.player_attack, 1);
+        MainActivity.bgm01.pause();
     }
 
     @Override

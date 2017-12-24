@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     int timeGap,nextTime; //運算用變數
     long newTime,oldTime; //運算用變數
 
-    public static MediaPlayer bgm01;
+    static MediaPlayer bgm01;
 
     public static int hpRegKey = 10;   //回復HP的時間秒數
 
@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     /*切換場景資源*/
 
     //音效用變數
-    SoundPool soundPool;
+    static SoundPool soundPool;
     private int menuBtnSFX;
     //音效用變數
 
@@ -83,10 +83,11 @@ public class MainActivity extends AppCompatActivity {
         getPlayerStatus();
         pollutionBar.setScaleX(0.5f);
         pollutionBar.setPivotX(pollutionBar.getX());
-
         countMobs();
+
         soundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 5);
         menuBtnSFX = soundPool.load(MainActivity.this, R.raw.menu_sfx, 1);
+        bgm01 = MediaPlayer.create(MainActivity.this, R.raw.main_bgm_01);
 
 
 //        Log.d(TAG, Loading.idList.toString());
@@ -276,13 +277,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        if(!Loading.checkPoint) {
-            bgm01 = MediaPlayer.create(MainActivity.this, R.raw.main_bgm_01);
-        }
-        bgm01.setLooping(true);
-        if(!bgm01.isPlaying()) {
+
+//        if(!Loading.checkPoint) {
+            bgm01.setLooping(true);
             bgm01.start();
-        }
+//        }
 
         super.onResume();
         if (settle){

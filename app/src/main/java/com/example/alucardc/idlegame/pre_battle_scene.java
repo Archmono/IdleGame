@@ -6,7 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Bundle;
+import android.support.annotation.MainThread;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -35,6 +38,11 @@ public class pre_battle_scene extends AppCompatActivity {
     public static TextView tvPlayerHP,tvPlayerMoney;
     public static ImageView playerHPBar;
 
+    //音效用變數
+    SoundPool soundPool;
+    private int menuBtnSFX;
+    //音效用變數
+
     String TAG = "pre_battle_scene";
     ImageView modView[] = new ImageView[6];
     ImageView prepareBG;
@@ -50,6 +58,9 @@ public class pre_battle_scene extends AppCompatActivity {
         Loading.checkPoint = true;
         getPlayerStatus();
         randomViewPosition();
+
+        soundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 5);
+        menuBtnSFX = soundPool.load(pre_battle_scene.this, R.raw.menu_sfx, 1);
 
         Context context = this;
         MainActivity.getItemCounts(context);
@@ -83,6 +94,7 @@ public class pre_battle_scene extends AppCompatActivity {
     /*------按鈕------*/
 
     public void btnInventory(View v){
+        soundPool.play(menuBtnSFX, 1.0F, 1.0F, 0, 0, 1.0F);
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         Fragment prev = getFragmentManager().findFragmentByTag("dialog");
         if (prev != null) {
@@ -96,6 +108,7 @@ public class pre_battle_scene extends AppCompatActivity {
     }
 
     public void btnHandBook(View v){
+        soundPool.play(menuBtnSFX, 1.0F, 1.0F, 0, 0, 1.0F);
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         Fragment prev = getFragmentManager().findFragmentByTag("dialog");
         if (prev != null) {
@@ -211,21 +224,24 @@ public class pre_battle_scene extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MainActivity.bgm01.pause();
-    }
 
     @Override
     protected void onResume() {
         super.onResume();
-        MainActivity.bgm01.start();
+        if(!MainActivity.bgm01.isPlaying()){
+            MainActivity.bgm01.start();
+        }
         newTime = Calendar.getInstance().getTimeInMillis();
         restorePrefs();
         DateTest();
         setVisible();
         onSave();
+    }
+
+    @Override
+    protected void onPause() {
+        MainActivity.bgm01.pause();
+        super.onPause();
     }
 
     protected void restorePrefs() { //讀取的位置
